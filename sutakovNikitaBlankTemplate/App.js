@@ -1,5 +1,5 @@
-import { SafeAreaView, Text, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import { SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
 
 export default function App() {
   const [clicks, setClicks] = useState(0);
@@ -8,15 +8,15 @@ export default function App() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      if(seconds > 0) {
+      if (seconds > 0) {
         setSeconds(seconds - 1);
       }
     }, 1000);
     return () => clearInterval(timer);
   }, [seconds]);
 
-  if(seconds == 0) {
-    if(clicks > result) {
+  if (seconds == 0) {
+    if (clicks > result) {
       setResult(clicks);
     }
     setClicks(0);
@@ -24,35 +24,36 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView 
-      style = {{
+    <SafeAreaView
+      style={{
         flex: 1,
-        backgroundColor: '#000000',
-        alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: "#000000",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <Text
-        style = {{
+        style={{
           color: "white",
-          fontSize: 30
+          fontSize: 30,
         }}
-      >Click per second test
+      >
+        Click per second test
       </Text>
       <Text
-        style = {{
+        style={{
           color: "white",
           marginTop: 30,
-          fontSize: 20
+          fontSize: 20,
         }}
       >
         Best result: {result} clicks
       </Text>
       <Text
-        style = {{
+        style={{
           color: "white",
           marginTop: 30,
-          fontSize: 20
+          fontSize: 20,
         }}
       >
         Remaining time: {seconds} seconds
@@ -65,14 +66,15 @@ export default function App() {
           backgroundColor: "white",
           padding: 10,
           borderRadius: 10,
-          marginTop: 30
+          marginTop: 30,
         }}
       >
         <Text
-          style = {{
-            color: "black"
+          style={{
+            color: "black",
           }}
-        >Restart timer
+        >
+          Restart timer
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -83,21 +85,22 @@ export default function App() {
           backgroundColor: "white",
           padding: 100,
           borderRadius: 120,
-          marginTop: 30
+          marginTop: 30,
         }}
       >
         <Text
-          style = {{
-            color: "black"
+          style={{
+            color: "black",
           }}
-        >Click!
+        >
+          Click!
         </Text>
       </TouchableOpacity>
       <Text
-        style = {{
+        style={{
           color: "white",
           marginTop: 30,
-          fontSize: 20
+          fontSize: 20,
         }}
       >
         Clicks: {clicks}
