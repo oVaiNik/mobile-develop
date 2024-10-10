@@ -8,8 +8,12 @@ export default function App() {
     <View style={styles.container}>
       <Text style={styles.defaultStyle}>{number}</Text>
       <Text style={styles.defaultStyle}>Нажимай</Text>
-      <Button title="на меня" onPress={() => setNumber(number + 1)} />
-      <Button title="не сюда" onPress={() => setNumber(-9999)} />
+      <View style={styles.defaultStyle}>
+        <Button title="на меня" onPress={() => setNumber(number + 1)} />
+      </View>
+      <View style={styles.defaultStyle}>
+        <Button title="не сюда" onPress={() => setNumber(-9999)} />
+      </View>
     </View>
   );
 }
@@ -23,6 +27,6 @@ const styles = StyleSheet.create({
   },
   defaultStyle: {
     fontSize: 20,
-    marginBottom: 20,
+    marginTop: 20,
   },
 });
