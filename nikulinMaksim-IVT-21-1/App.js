@@ -10,12 +10,12 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <View style={{alignItems: "center"}}>
         <View style={styles.countContainer}>
-          <Text>Count: {count}</Text>
+          <Text>You clicked: {count}</Text>
         </View>
         <TouchableOpacity style={styles.button} onPress={onPress}>
-          <Text>Press Here</Text>
+          <Text>Press this button</Text>
         </TouchableOpacity>
       </View>
 
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
     padding: 10,
+    width: 200, 
   },
   countContainer: {
     alignItems: 'center',
