@@ -1,10 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState } from 'react';
 
 export default function App() {
+  const [number, setNumber] = useState(0);
+  const onChangeText = (value) => {
+    setNumber(value.length);
+  }
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangeText}
+        placeholder="Введите текст"
+      />
+      <Text>{number}</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -17,4 +27,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  input: {
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5
+  }
 });
