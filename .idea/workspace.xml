@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="17fc4cc5-f1c4-4904-ba42-f93460825d14" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/BolshakovPetr/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/app/(tabs)/_layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/app/(tabs)/explore.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/app/(tabs)/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/app/+html.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/app/+not-found.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/app/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/BolshakovPetr/app/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BolshakovPetr/app/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/BolshakovPetr/app/index.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "guratsuki"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/guratsuki/mobile-develop-2024-Bolshakov-Petr_FIIT21",
+    "accountId": "9d66962b-9b7d-4508-b32e-39e150096299"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2nET18qk9kjKIXBlihCu3WBX3G4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/bolsp/Documents/Github/mobile-develop-2024-Bolshakov-Petr_FIIT21",
+    "settings.editor.selected.configurable": "device.mirroring"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="17fc4cc5-f1c4-4904-ba42-f93460825d14" name="Changes" comment="" />
+      <created>1728537017804</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1728537017804</updated>
+    </task>
+    <servers />
+  </component>
+</project>

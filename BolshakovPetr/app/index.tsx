@@ -6,60 +6,56 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 const colors : string[] = ["black","red","blue","green","yellow","purple"];
-const colorsText: string[] = ["Цвет квадрата черный","Цвет квадрата красный","Цвет квадрата синий","Цвет квадрата зелёный","Цвет квадрата жёлтый","Цвет квадрата фиолетовый"]
+const colorsText: string[] = ["Черный","Красный","Синий","Зелёный","Жёлтый","Фиолетовый"]
 export default function HomeScreen() {
 
-  const [colorIndex, setColorIndex] = useState(0); // Меняет цвет
-  const [colorChangeCount, setColorChangeCount] = useState(0); // Счётчик кликов на квадрат
-  const [displayText, setDisplayText] = useState(colorsText[0]); // Говорит какого цвета квадрат
-  return (
-      <SafeAreaView style={{ flex: 1, display: "flex" }}>
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+const [colorIndex, setColorIndex] = useState(0);
+const [boxSize, setBoxSize] = useState(100);
 
-            <Text style={{ marginTop: 20 }}>{displayText}</Text>
-              <View
-                style={{
-                  backgroundColor: colors[colorIndex],
-                  width: 100,
-                  height: 100,
-                }}
-              />
-               <TouchableOpacity
-                        onPress={() => {
-                          setColorIndex((colorIndex + 1) % colors.length); //
-                          setColorChangeCount(colorChangeCount + 1); //
-                          setDisplayText(colorsText[(colorIndex + 1) % colors.length]); // Текст цвета
-                        }}
-                        style={{
-                          backgroundColor: "green",
-                          padding: 10,
-                          borderRadius: 10,
-                          marginTop: 10,
-                        }}
-                      >
-                        <Text style={{ color: "white" }}>Не нажимай!</Text>
-               </TouchableOpacity>
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
-               <TouchableOpacity
-                                       onPress={() => {
-                                         setColorIndex((colorIndex + 1) % colors.length); // Меняет цвет
+const [displayText, setDisplayText] = useState(colorsText[0]);
 
-                                         setColorChangeCount(colorChangeCount + 1); // Счётчик
-                                         //setDisplayText((displayText + 1) % 3);
-                                         setDisplayText(colorsText[(colorIndex + 1) % colors.length]); // Текст цвета
-                                       }}
-                                       style={{
-                                         backgroundColor: "green",
-                                         padding: 10,
-                                         borderRadius: 10,
-                                         marginTop: 10,
-                                       }}
-                                     >
-                                       <Text style={{ color: "white" }}>Не нажимай!</Text>
-                              </TouchableOpacity>
-
-                      <Text style={{ marginTop: 20 }}> Цвет поменялся: {colorChangeCount} раз </Text>
-                    </View>
-                  </SafeAreaView>
-                );
-              }
+return (
+    <SafeAreaView style={{ flex: 1, display: "flex" }}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+    style={{
+        backgroundColor: colors[colorIndex],
+        width: boxSize,
+        height: boxSize,
+        }}
+    />
+    <TouchableOpacity
+    onPress={() => {
+        setColorIndex((colorIndex + 1) % colors.length);
+        setDisplayText(colorsText[(colorIndex + 1) % colors.length]);
+        }}
+    style={{
+        backgroundColor: "green",
+        padding: 10,
+        borderRadius: 10,
+        marginTop: 10,
+        }}
+    >
+    <Text style={{ color: "white" }}>Поменяй цвет</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+    onPress={() => {
+        setBoxSize(randomInt(100, 150));
+        }}
+    style={{
+        backgroundColor: "green",
+        padding: 10,
+        borderRadius: 10,
+        marginTop: 10,
+        }}
+    >
+    <Text style={{ color: "white" }}>Поменяй размер</Text>
+    </TouchableOpacity>
+    <Text style={{ marginTop: 20 }}>Текущий цвет - {displayText}</Text>
+    </View>
+    </SafeAreaView>
+    );
+}
