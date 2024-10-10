@@ -46,7 +46,7 @@ return (
         setBoxSize(randomInt(100, 150));
         }}
     style={{
-        backgroundColor: "green",
+        backgroundColor: "yellow",
         padding: 10,
         borderRadius: 10,
         marginTop: 10,
