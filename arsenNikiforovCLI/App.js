@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Animated, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Animated,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+} from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 // Генерация случайного цвета
 const randomColor = () => {
@@ -19,7 +27,7 @@ const randomPosition = () => ({
   left: Math.random() * (width - 100),
 });
 
-const Bubble = ({ id, removeBubble }) => {
+const Bubble = ({id, removeBubble}) => {
   const [scale] = useState(new Animated.Value(0));
   const [opacity] = useState(new Animated.Value(1));
   const [position] = useState(randomPosition());
@@ -46,7 +54,7 @@ const Bubble = ({ id, removeBubble }) => {
         styles.bubble,
         {
           backgroundColor: color,
-          transform: [{ scale }],
+          transform: [{scale}],
           opacity,
           top: position.top,
           left: position.left,
@@ -63,7 +71,7 @@ const App = () => {
 
   const addBubble = () => {
     const id = Date.now();
-    setBubbles([...bubbles, { id }]);
+    setBubbles([...bubbles, {id}]);
 
     if (showHint) {
       Animated.timing(hintOpacity, {
@@ -74,24 +82,25 @@ const App = () => {
     }
   };
 
-  const removeBubble = (id) => {
-    setBubbles((bubbles) => bubbles.filter((bubble) => bubble.id !== id));
+  const removeBubble = id => {
+    setBubbles(bubbles => bubbles.filter(bubble => bubble.id !== id));
   };
 
   return (
     <ImageBackground
       source={require('./assets/mountain.png')} // путь к картинке
       style={styles.backgroundImage}
-      resizeMode="cover"
-    >
+      resizeMode="cover">
       <TouchableOpacity style={styles.touchable} onPress={addBubble}>
-        {bubbles.map((bubble) => (
+        {bubbles.map(bubble => (
           <Bubble key={bubble.id} id={bubble.id} removeBubble={removeBubble} />
         ))}
 
         {showHint && (
-          <Animated.View style={[styles.hintContainer, { opacity: hintOpacity }]}>
-            <Text style={styles.hintText}>Нажми на экран, чтобы создать пузырь!</Text>
+          <Animated.View style={[styles.hintContainer, {opacity: hintOpacity}]}>
+            <Text style={styles.hintText}>
+              Нажми на экран, чтобы создать пузырь!
+            </Text>
           </Animated.View>
         )}
       </TouchableOpacity>
