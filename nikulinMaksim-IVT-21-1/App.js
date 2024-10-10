@@ -22,7 +22,9 @@ export default function App() {
       <View style={styles.boxContainer}>
         <TouchableOpacity onPress={() => {
           setColorIndex((colorIndex + 1) % 3)
-        }}>
+        }}
+        style={{alignItems: "center"}}>
+          <Text>Color is <Text style={{color: colors[colorIndex]}}>{colors[colorIndex]}</Text></Text>
           <View style={{height: 100, width: 100, backgroundColor: colors[colorIndex]}}></View>
         </TouchableOpacity>
       </View>
@@ -36,6 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 10,
   },
+
   button: {
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
@@ -45,6 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
   },
+  
   boxContainer: {
     alignItems: "center",
     marginTop: 20,
