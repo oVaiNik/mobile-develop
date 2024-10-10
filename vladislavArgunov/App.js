@@ -19,7 +19,7 @@ export default function App()
       />
       <Button 
         title='не сюда' 
-        onPress={()=> setNumber(number = -9999)}
+        onPress={()=> setNumber(-9999)}
       />
     </View>
   );
