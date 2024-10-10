@@ -1,34 +1,19 @@
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Lab1 from "./screens/lab1";
+import Lab2 from "./screens/lab2";
+import { NavigationContainer } from "@react-navigation/native";
 const colors = ["black", "red", "yellow"];
 
+const Tab = createBottomTabNavigator();
 export default function App() {
-  const [colorIndex, setColorIndex] = useState(0);
   return (
-    <SafeAreaView style={{ flex: 1, display: "flex" }}>
-      <Text>hello</Text>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <View
-          style={{
-            backgroundColor: colors[colorIndex],
-            width: 100,
-            height: 100,
-          }}
-        />
-        <TouchableOpacity
-          onPress={() => {
-            setColorIndex((colorIndex + 1) % 3);
-          }}
-          style={{
-            backgroundColor: "green",
-            padding: 10,
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-          <Text style={{ color: "white" }}>Press me!</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Lab1" component={Lab1} />
+        <Tab.Screen name="Lab2" component={Lab2} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
