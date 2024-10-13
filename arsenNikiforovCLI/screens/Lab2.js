@@ -16,6 +16,7 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 // Создаем контекст для глобального состояния
@@ -90,6 +91,7 @@ const Lab2 = ({ navigation }) => {
   const updateGlobalData = useCallback(() => {
     if (data) {
       setGlobalData(data);
+      Alert.alert('Успешно', 'Изображение сохранено в избранное!');
     }
   }, [data, setGlobalData]);
 
@@ -134,8 +136,22 @@ const Lab2 = ({ navigation }) => {
           <Text style={styles.buttonText}>Загрузить другое изображение</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.globalButton} onPress={updateGlobalData}>
-          <Text style={styles.globalButtonText}>Обновить глобальное состояние</Text>
+          <Text style={styles.globalButtonText}>Сохранить в избранное</Text>
         </TouchableOpacity>
+
+        {globalData && (
+          <View style={styles.savedDataContainer}>
+            <Text style={styles.savedDataTitle}>Сохраненное изображение:</Text>
+            <Text style={styles.savedDataText}>{globalData.title}</Text>
+            <Text style={styles.savedDataText}>Дата: {globalData.date}</Text>
+            <TouchableOpacity 
+              style={styles.viewSavedButton}
+              onPress={() => navigation.navigate('SavedImage', { data: globalData })}
+            >
+              <Text style={styles.viewSavedButtonText}>Просмотреть</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     </ImageBackground>
   );
@@ -220,6 +236,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#32cd32',
     padding: 15,
     borderRadius: 5,
+    marginBottom: 20,
   },
   globalButtonText: {
     color: '#fff',
@@ -243,6 +260,34 @@ const styles = StyleSheet.create({
   videoText: {
     color: '#fff',
     fontSize: 18,
+  },
+  savedDataContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  savedDataTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  savedDataText: {
+    color: '#ccc',
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  viewSavedButton: {
+    backgroundColor: '#1e90ff',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  viewSavedButtonText: {
+    color: '#fff',
+    fontSize: 14,
   },
 });
 
