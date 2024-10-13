@@ -25,24 +25,22 @@ const randomPosition = () => ({
 
 const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
   const [scale] = useState(new Animated.Value(0));
-  const [opacity] = useState(new Animated.Value(1));
-  const position = randomPosition();
-  const [pan] = useState(new Animated.ValueXY(position));
+  const initialPosition = randomPosition();
+  const [pan] = useState(new Animated.ValueXY({ x: initialPosition.x, y: initialPosition.y }));
   const [color] = useState(randomColor());
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(scale, {
-        toValue: 1,
-        duration: 3000,
-        useNativeDriver: false,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 3000,
-        useNativeDriver: false,
-      })
-    ]).start(() => removeBubble(id));
+    const scaleAnimation = Animated.timing(scale, {
+      toValue: 1.5, // Максимальный размер пузыря
+      duration: 5000, // Длительность увеличения
+      useNativeDriver: false,
+    });
+    scaleAnimation.start(({ finished }) => {
+      if (finished) {
+        // Если пузырь достиг максимального размера, он лопается
+        removeBubble(id);
+      }
+    });
   }, []);
 
   const panResponder = PanResponder.create({
@@ -61,11 +59,14 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
       pan.flattenOffset();
       const { x, y } = pan.__getValue();
 
+      // Учитываем размер пузыря при проверке попадания в корзину
+      const bubbleSize = 80 * scale.__getValue();
+
       if (
-        x + 50 > basket.x &&
-        x + 50 < basket.x + basket.width &&
-        y + 50 > basket.y &&
-        y + 50 < basket.y + basket.height
+        x + bubbleSize / 2 > basket.x &&
+        x + bubbleSize / 2 < basket.x + basket.width &&
+        y + bubbleSize / 2 > basket.y &&
+        y + bubbleSize / 2 < basket.y + basket.height
       ) {
         onDrag();
         removeBubble(id);
@@ -79,19 +80,15 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
       style={[
         styles.bubble,
         {
-          left: position.x,
-          top: position.y,
-          opacity,
+          backgroundColor: color,
           transform: [
-            { scale },
             { translateX: pan.x },
-            { translateY: pan.y }
+            { translateY: pan.y },
+            { scale: scale },
           ],
         },
       ]}
-    >
-      <Animated.View style={[styles.innerBubble, { backgroundColor: color }]} />
-    </Animated.View>
+    />
   );
 };
 
@@ -109,7 +106,7 @@ const Lab1 = ({ navigation }) => {
   };
 
   const addBubble = useCallback(() => {
-    const id = Date.now();
+    const id = Date.now() + Math.random();
     setBubbles((prevBubbles) => [...prevBubbles, { id }]);
   }, []);
 
@@ -118,12 +115,12 @@ const Lab1 = ({ navigation }) => {
   }, []);
 
   const onDrag = useCallback(() => {
-    setScore((prevScore) => prevScore + 1);
+    setScore((prevScore) => prevScore + 5);
   }, []);
 
   useEffect(() => {
     if (!gameOver) {
-      const interval = setInterval(addBubble, 1000);
+      const interval = setInterval(addBubble, 2000);
       return () => clearInterval(interval);
     }
   }, [addBubble, gameOver]);
@@ -131,7 +128,7 @@ const Lab1 = ({ navigation }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setGameOver(true);
-    }, 15000);
+    }, 20000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -149,17 +146,17 @@ const Lab1 = ({ navigation }) => {
     >
       <View style={styles.header}>
         <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.infoButtonText}>Info</Text>
+          <Text style={styles.infoButtonText}>Инфо</Text>
         </TouchableOpacity>
         <View style={styles.scoreContainer}>
-          <Text style={styles.scoreText}>Score: {score}</Text>
+          <Text style={styles.scoreText}>Счет: {score}</Text>
         </View>
         <TouchableOpacity style={styles.switchButton} onPress={() => navigation.navigate('Lab2')}>
           <Text style={styles.switchButtonText}>Lab2</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.gameArea}>
+      <TouchableOpacity style={styles.touchable} onPress={addBubble}>
         {bubbles.map((bubble) => (
           <Bubble
             key={bubble.id}
@@ -182,19 +179,19 @@ const Lab1 = ({ navigation }) => {
             },
           ]}
         >
-          <Text style={styles.basketText}>Basket</Text>
+          <Text style={styles.basketText}>Корзина</Text>
         </View>
-      </View>
+      </TouchableOpacity>
 
       <Modal transparent={true} visible={modalVisible} animationType="fade">
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>How to Play</Text>
+            <Text style={styles.modalTitle}>Как играть</Text>
             <Text style={styles.modalText}>
-              Neon bubbles will appear and grow on the screen. Drag them into the basket before they disappear! You have 15 seconds.
+              Создавайте пузырьки и перетаскивайте их в корзину, чтобы заработать очки!
             </Text>
             <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.closeButtonText}>Закрыть</Text>
             </Pressable>
           </View>
         </View>
@@ -202,10 +199,10 @@ const Lab1 = ({ navigation }) => {
 
       {gameOver && (
         <View style={styles.gameOverContainer}>
-          <Text style={styles.gameOverText}>Game Over!</Text>
-          <Text style={styles.finalScoreText}>Bubbles Caught: {score}</Text>
+          <Text style={styles.gameOverText}>Игра окончена!</Text>
+          <Text style={styles.finalScoreText}>Ваш счет: {score}</Text>
           <TouchableOpacity style={styles.restartButton} onPress={resetGame}>
-            <Text style={styles.restartButtonText}>Play Again</Text>
+            <Text style={styles.restartButtonText}>Играть снова</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -217,20 +214,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  gameArea: {
+  touchable: {
     flex: 1,
   },
   bubble: {
     position: 'absolute',
-    width: 100,
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  innerBubble: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 50,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     borderWidth: 2,
     borderColor: '#00ffff',
   },
