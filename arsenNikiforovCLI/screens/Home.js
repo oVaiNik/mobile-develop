@@ -23,7 +23,7 @@ const Home = ({ navigation }) => {
           style={styles.button}
           onPress={() => navigation.navigate('Lab2')}
         >
-          <Text style={styles.buttonText}>Joke Generator</Text>
+          <Text style={styles.buttonText}>NASA API</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

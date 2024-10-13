@@ -1,4 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useContext,
+  createContext,
+  useCallback,
+  useMemo,
+} from 'react';
 import {
   View,
   Text,
@@ -6,104 +14,236 @@ import {
   TouchableOpacity,
   ImageBackground,
   ActivityIndicator,
+  Image,
+  ScrollView,
 } from 'react-native';
 
-const Lab2 = ({ navigation }) => {
-  const [joke, setJoke] = useState(null);
-  const [loading, setLoading] = useState(false);
+// Создаем контекст для глобального состояния
+const GlobalStateContext = createContext();
 
-  const fetchJoke = () => {
-    setLoading(true);
-    fetch('https://official-joke-api.appspot.com/random_joke')
-      .then((response) => response.json())
-      .then((data) => {
-        setJoke(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });
-  };
+// Начальное состояние
+const initialState = {
+  data: null,
+  loading: false,
+  error: null,
+};
+
+// Редюсер для управления состоянием
+const dataReducer = (state, action) => {
+  switch (action.type) {
+    case 'FETCH_INIT':
+      return { ...state, loading: true, error: null };
+    case 'FETCH_SUCCESS':
+      return { data: action.payload, loading: false, error: null };
+    case 'FETCH_FAILURE':
+      return { data: null, loading: false, error: action.payload };
+    default:
+      throw new Error();
+  }
+};
+
+// Пользовательский хук для получения данных из NASA APOD API
+const useAPOD = (date) => {
+  const [state, dispatch] = useReducer(dataReducer, initialState);
+
+  const fetchData = useCallback(async () => {
+    dispatch({ type: 'FETCH_INIT' });
+    try {
+      const response = await fetch(
+        `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`
+      );
+      const result = await response.json();
+      dispatch({ type: 'FETCH_SUCCESS', payload: result });
+    } catch (error) {
+      dispatch({ type: 'FETCH_FAILURE', payload: error.message });
+    }
+  }, [date]);
 
   useEffect(() => {
-    fetchJoke();
+    fetchData();
+  }, [fetchData]);
+
+  return state;
+};
+
+// Компонент Lab2
+const Lab2 = ({ navigation }) => {
+  const [date, setDate] = useState(null);
+  const { data, loading, error } = useAPOD(date);
+  const { globalData, setGlobalData } = useContext(GlobalStateContext);
+
+  const loadRandomAPOD = useCallback(() => {
+    const randomDate = new Date(
+      Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 365)
+    )
+      .toISOString()
+      .slice(0, 10);
+    setDate(randomDate);
   }, []);
+
+  const memoizedData = useMemo(() => data, [data]);
+
+  useEffect(() => {
+    loadRandomAPOD();
+  }, [loadRandomAPOD]);
+
+  const updateGlobalData = useCallback(() => {
+    if (data) {
+      setGlobalData(data);
+    }
+  }, [data, setGlobalData]);
 
   return (
     <ImageBackground
-      source={require('../assets/lab2.jpg')}
+      source={require('../assets/space.jpg')}
       style={styles.container}
     >
       <View style={styles.header}>
-        <TouchableOpacity style={styles.switchButton} onPress={() => navigation.navigate('Lab1')}>
+        <TouchableOpacity
+          style={styles.switchButton}
+          onPress={() => navigation.navigate('Lab1')}
+        >
           <Text style={styles.switchButtonText}>Lab1</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.content}>
         {loading ? (
-          <ActivityIndicator size="large" color="#00ffff" />
-        ) : (
+          <ActivityIndicator size="large" color="#ffffff" />
+        ) : error ? (
+          <Text style={styles.errorText}>Ошибка: {error}</Text>
+        ) : memoizedData ? (
           <>
-            <Text style={styles.setupText}>{joke?.setup || 'Loading joke...'}</Text>
-            <Text style={styles.punchlineText}>{joke?.punchline}</Text>
+            <Text style={styles.titleText}>{memoizedData.title || 'Название недоступно'}</Text>
+            {memoizedData.media_type === 'image' ? (
+              <Image
+                source={{ uri: memoizedData.url }}
+                style={styles.image}
+              />
+            ) : (
+              <View style={styles.videoContainer}>
+                <Text style={styles.videoText}>Видео не поддерживается</Text>
+              </View>
+            )}
+            <Text style={styles.dateText}>Дата: {memoizedData.date}</Text>
+            <Text style={styles.explanationText}>{memoizedData.explanation}</Text>
           </>
+        ) : (
+          <Text style={styles.errorText}>Данные не загружены</Text>
         )}
-        <TouchableOpacity style={styles.button} onPress={fetchJoke}>
-          <Text style={styles.buttonText}>New Joke</Text>
+        <TouchableOpacity style={styles.button} onPress={loadRandomAPOD}>
+          <Text style={styles.buttonText}>Загрузить другое изображение</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity style={styles.globalButton} onPress={updateGlobalData}>
+          <Text style={styles.globalButtonText}>Обновить глобальное состояние</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </ImageBackground>
   );
 };
 
+// Провайдер глобального состояния
+const GlobalStateProvider = ({ children }) => {
+  const [globalData, setGlobalData] = useState(null);
+
+  return (
+    <GlobalStateContext.Provider value={{ globalData, setGlobalData }}>
+      {children}
+    </GlobalStateContext.Provider>
+  );
+};
+
+// Оборачиваем Lab2 в провайдер
+const Lab2WithProvider = (props) => (
+  <GlobalStateProvider>
+    <Lab2 {...props} />
+  </GlobalStateProvider>
+);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    backgroundColor: '#000',
   },
   header: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    zIndex: 1,
+    marginTop: 40,
+    alignItems: 'flex-end',
+    marginRight: 20,
   },
   switchButton: {
-    backgroundColor: 'rgba(0, 255, 255, 0.2)',
+    backgroundColor: '#1e1e1e',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 5,
   },
   switchButtonText: {
-    color: '#00ffff',
-    fontSize: 18,
+    color: '#fff',
+    fontSize: 16,
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
     alignItems: 'center',
+    padding: 20,
   },
-  setupText: {
-    color: '#00ffff',
-    fontSize: 24,
-    textAlign: 'center',
+  titleText: {
+    color: '#fff',
+    fontSize: 28,
     marginBottom: 20,
-  },
-  punchlineText: {
-    color: '#ffffff',
-    fontSize: 20,
     textAlign: 'center',
-    marginBottom: 40,
+  },
+  dateText: {
+    color: '#ccc',
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  explanationText: {
+    color: '#ccc',
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'justify',
+  },
+  errorText: {
+    color: '#f00',
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#00ffff',
+    backgroundColor: '#1e90ff',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 5,
+    marginBottom: 10,
   },
   buttonText: {
-    color: '#001f3f',
+    color: '#fff',
+    fontSize: 16,
+  },
+  globalButton: {
+    backgroundColor: '#32cd32',
+    padding: 15,
+    borderRadius: 5,
+  },
+  globalButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  image: {
+    width: 300,
+    height: 300,
+    marginBottom: 20,
+    borderRadius: 10,
+  },
+  videoContainer: {
+    width: 300,
+    height: 300,
+    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#444',
+    borderRadius: 10,
+  },
+  videoText: {
+    color: '#fff',
     fontSize: 18,
   },
 });
 
-export default Lab2;
+export default Lab2WithProvider;
