@@ -55,42 +55,6 @@ return (
      <Text style={{ color: "white" }}>Поменяй размер</Text>
      </TouchableOpacity>
      <Text style={{ marginTop: 20 }}>Текущий цвет - {displayText}</Text>
-
-//          <Text style={{ marginBottom: 20 }}>{characters[nextChar-1].name}</Text>
-//              <img
-//                 src = {characters[nextChar-1].image}
-//             />
-//
-//             <TouchableOpacity
-//             onPress={() => {
-//                 PrevFunc(nextChar)
-//                 }}
-//             style={{
-//                 backgroundColor: "green",
-//                 padding: 10,
-//                 borderRadius: 10,
-//                 marginTop: 10,
-//                 }}
-//             >
-//
-//             <Text style={{ color: "white" }}>Предыдущий</Text>
-//             </TouchableOpacity>
-//             <TouchableOpacity
-//             onPress={() => {
-//                 NextFunc(nextChar)
-//                 }
-//             }
-//             style={{
-//                 backgroundColor: "green",
-//                 padding: 10,
-//                 borderRadius: 10,
-//                 marginTop: 10,
-//                 }}
-//             >
-//             <Text style={{ color: "white" }}>Следующий</Text>
-//             </TouchableOpacity>
-//             <Text style={{ marginTop: 20 }}>Текущий цвет - {nextChar}</Text>
-//             <Text style={{ marginTop: 20 }}>Текущий цвет - {characters[nextChar-1].id}</Text>
     </View>
     </SafeAreaView>
     );
