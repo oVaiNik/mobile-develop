@@ -3,14 +3,14 @@ import { Text } from "react-native";
 import { SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function Lab1() {
-  const emoji = ['🍉','🍌','🍓','🍏', '🍊','🍑'];
+  const emoji = ["🍉", "🍌", "🍓", "🍏", "🍊", "🍑"];
 
   const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   const changeEmo = () => {
     setCurrent((prevIndex) => (prevIndex + 1) % emoji.length);
-    setCount((prev) => (prev + 1));
+    setCount((prev) => prev + 1);
   };
 
   return (
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   header: {
     fontSize: 40,
@@ -37,14 +37,14 @@ const styles = StyleSheet.create({
   },
   emojiContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   emoji: {
     fontSize: 100,
   },
-  counter:{
+  counter: {
     fontSize: 30,
     marginTop: 20,
-  }
+  },
 });
