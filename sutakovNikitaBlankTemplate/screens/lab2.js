@@ -32,19 +32,7 @@ const Lab2 = () => {
   useEffect(() => {
     if (Object.keys(weatherData).length > 0) {
       setTextMessage(
-        `Погода в: ${weatherData.data.name}` +
-          `${"\n"}` +
-          `Температура воздуха: ${weatherData.data.main.temp}` +
-          `${"\n"}` +
-          `Ощущается как: ${weatherData.data.main.feels_like}` +
-          `${"\n"}` +
-          `Погода: ${weatherData.data.weather[0].main}` +
-          `${"\n"}` +
-          `Описание: ${weatherData.data.weather[0].description}` +
-          `${"\n"}` +
-          `Скорость ветра: ${weatherData.data.wind.speed}` +
-          `${"\n"}` +
-          `Влажность воздуха: ${weatherData.data.main.humidity}`
+        `Погода в: ${weatherData.data.name}\nТемпература воздуха: ${weatherData.data.main.temp}\nОщущается как: ${weatherData.data.main.feels_like}\nПогода: ${weatherData.data.weather[0].main}\nОписание: ${weatherData.data.weather[0].description}\nСкорость ветра: ${weatherData.data.wind.speed}\nВлажность воздуха: ${weatherData.data.main.humidity}`
       );
     }
   }, [weatherData]);
