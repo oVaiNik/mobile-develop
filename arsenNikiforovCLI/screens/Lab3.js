@@ -1,0 +1,285 @@
+import React, { useState, useMemo, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+  Animated,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+
+const OPERATIONS = ['+', '-', '*', '/'];
+const MAX_LEVEL = 10;
+
+const Lab3 = ({ navigation }) => {
+  const [level, setLevel] = useState(1);
+  const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [currentProblem, setCurrentProblem] = useState(null);
+  const [userAnswer, setUserAnswer] = useState('');
+  const [shakeAnimation] = useState(new Animated.Value(0));
+
+  const generateProblem = useCallback((level) => {
+    const operation = OPERATIONS[Math.floor(Math.random() * OPERATIONS.length)];
+    let num1, num2;
+    switch (operation) {
+      case '+':
+        num1 = Math.floor(Math.random() * (10 * level)) + 1;
+        num2 = Math.floor(Math.random() * (10 * level)) + 1;
+        break;
+      case '-':
+        num1 = Math.floor(Math.random() * (10 * level)) + 1;
+        num2 = Math.floor(Math.random() * num1) + 1;
+        break;
+      case '*':
+        num1 = Math.floor(Math.random() * (5 * level)) + 1;
+        num2 = Math.floor(Math.random() * 5) + 1;
+        break;
+      case '/':
+        num2 = Math.floor(Math.random() * 5) + 1;
+        num1 = num2 * (Math.floor(Math.random() * (5 * level)) + 1);
+        break;
+    }
+    return { num1, num2, operation };
+  }, []);
+
+  const calculateAnswer = useCallback((problem) => {
+    const { num1, num2, operation } = problem;
+    switch (operation) {
+      case '+': return num1 + num2;
+      case '-': return num1 - num2;
+      case '*': return num1 * num2;
+      case '/': return num1 / num2;
+    }
+  }, []);
+
+  const memoizedProblem = useMemo(() => {
+    if (!currentProblem) {
+      const newProblem = generateProblem(level);
+      setCurrentProblem(newProblem);
+      return newProblem;
+    }
+    return currentProblem;
+  }, [level, currentProblem, generateProblem]);
+
+  const memoizedAnswer = useMemo(() => {
+    return calculateAnswer(memoizedProblem);
+  }, [memoizedProblem, calculateAnswer]);
+
+  const checkAnswer = useCallback(() => {
+    const userAnswerNum = parseFloat(userAnswer);
+    if (Math.abs(userAnswerNum - memoizedAnswer) < 0.01) {
+      ReactNativeHapticFeedback.trigger('notificationSuccess');
+      setScore(score + level * 10);
+      if (level < MAX_LEVEL) {
+        setLevel(level + 1);
+      } else {
+        setGameOver(true);
+      }
+      setCurrentProblem(null);
+    } else {
+      ReactNativeHapticFeedback.trigger('notificationError');
+      Animated.sequence([
+        Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 0, duration: 100, useNativeDriver: true })
+      ]).start();
+    }
+    setUserAnswer('');
+  }, [userAnswer, memoizedAnswer, level, score, shakeAnimation]);
+
+  const restartGame = useCallback(() => {
+    setLevel(1);
+    setScore(0);
+    setGameOver(false);
+    setCurrentProblem(null);
+    setUserAnswer('');
+  }, []);
+
+  const renderKeypad = useCallback(() => {
+    const keys = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '.', '0', '⌫'];
+    return keys.map((key) => (
+      <TouchableOpacity
+        key={key}
+        style={styles.keypadButton}
+        onPress={() => {
+          ReactNativeHapticFeedback.trigger('selection');
+          if (key === '⌫') {
+            setUserAnswer(userAnswer.slice(0, -1));
+          } else if (userAnswer.length < 8) {
+            setUserAnswer(userAnswer + key);
+          }
+        }}
+      >
+        <Text style={styles.keypadButtonText}>{key}</Text>
+      </TouchableOpacity>
+    ));
+  }, [userAnswer]);
+
+  if (gameOver) {
+    return (
+      <ImageBackground
+        source={require('../assets/space_victory.jpg')}
+        style={styles.container}
+      >
+        <View style={styles.gameOverContainer}>
+          <Text style={styles.gameOverText}>Галактика спасена!</Text>
+          <Text style={styles.finalScoreText}>Финальный счет: {score}</Text>
+          <TouchableOpacity style={styles.restartButton} onPress={restartGame}>
+            <Text style={styles.restartButtonText}>Начать новую миссию</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    );
+  }
+
+  return (
+    <ImageBackground
+      source={require('../assets/space_battle.jpg')}
+      style={styles.container}
+    >
+      <LinearGradient
+        colors={['rgba(0,0,0,0.7)', 'transparent']}
+        style={styles.gradient}
+      >
+        <View style={styles.header}>
+          <Text style={styles.levelText}>Уровень: {level}</Text>
+          <Text style={styles.scoreText}>Счет: {score}</Text>
+        </View>
+        <View style={styles.problemContainer}>
+          <Animated.Text
+            style={[
+              styles.problemText,
+              { transform: [{ translateX: shakeAnimation }] }
+            ]}
+          >
+            {`${memoizedProblem.num1} ${memoizedProblem.operation} ${memoizedProblem.num2} = ?`}
+          </Animated.Text>
+        </View>
+        <View style={styles.answerContainer}>
+          <Text style={styles.answerText}>{userAnswer}</Text>
+        </View>
+        <View style={styles.keypadContainer}>
+          {renderKeypad()}
+        </View>
+        <TouchableOpacity style={styles.submitButton} onPress={checkAnswer}>
+          <Text style={styles.submitButtonText}>Уничтожить захватчиков</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </ImageBackground>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: '100%',
+    padding: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  levelText: {
+    fontSize: 24,
+    color: '#FFD700',
+    fontWeight: 'bold',
+  },
+  scoreText: {
+    fontSize: 24,
+    color: '#4CAF50',
+    fontWeight: 'bold',
+  },
+  problemContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  problemText: {
+    fontSize: 32,
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  answerContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+    minWidth: 150,
+    alignItems: 'center',
+  },
+  answerText: {
+    fontSize: 28,
+    color: '#FFFFFF',
+  },
+  keypadContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  keypadButton: {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    margin: 5,
+    borderRadius: 35,
+  },
+  keypadButtonText: {
+    fontSize: 24,
+    color: '#FFFFFF',
+  },
+  submitButton: {
+    backgroundColor: '#4CAF50',
+    padding: 15,
+    borderRadius: 10,
+  },
+  submitButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  gameOverContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  gameOverText: {
+    fontSize: 36,
+    color: '#FFD700',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  finalScoreText: {
+    fontSize: 24,
+    color: '#FFFFFF',
+    marginBottom: 20,
+  },
+  restartButton: {
+    backgroundColor: '#4CAF50',
+    padding: 15,
+    borderRadius: 10,
+  },
+  restartButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+  },
+});
+
+export default Lab3;

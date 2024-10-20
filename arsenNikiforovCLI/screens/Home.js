@@ -25,6 +25,12 @@ const Home = ({ navigation }) => {
         >
           <Text style={styles.buttonText}>NASA API</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Lab3')}
+        >
+          <Text style={styles.buttonText}>Space calculator</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
