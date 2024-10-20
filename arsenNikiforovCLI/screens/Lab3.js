@@ -12,6 +12,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const OPERATIONS = ['+', '-', '*', '/'];
 const MAX_LEVEL = 10;
+const MAX_MISTAKES = 3;
 
 const Lab3 = ({ navigation }) => {
   const [level, setLevel] = useState(1);
@@ -19,6 +20,7 @@ const Lab3 = ({ navigation }) => {
   const [gameOver, setGameOver] = useState(false);
   const [currentProblem, setCurrentProblem] = useState(null);
   const [userAnswer, setUserAnswer] = useState('');
+  const [mistakes, setMistakes] = useState(0);
   const [shakeAnimation] = useState(new Animated.Value(0));
 
   const generateProblem = useCallback((level) => {
@@ -81,6 +83,10 @@ const Lab3 = ({ navigation }) => {
       setCurrentProblem(null);
     } else {
       ReactNativeHapticFeedback.trigger('notificationError');
+      setMistakes(mistakes + 1);
+      if (mistakes + 1 >= MAX_MISTAKES) {
+        setGameOver(true);
+      }
       Animated.sequence([
         Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
         Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
@@ -89,7 +95,7 @@ const Lab3 = ({ navigation }) => {
       ]).start();
     }
     setUserAnswer('');
-  }, [userAnswer, memoizedAnswer, level, score, shakeAnimation]);
+  }, [userAnswer, memoizedAnswer, level, score, mistakes, shakeAnimation]);
 
   const restartGame = useCallback(() => {
     setLevel(1);
@@ -97,6 +103,7 @@ const Lab3 = ({ navigation }) => {
     setGameOver(false);
     setCurrentProblem(null);
     setUserAnswer('');
+    setMistakes(0);
   }, []);
 
   const renderKeypad = useCallback(() => {
@@ -122,11 +129,13 @@ const Lab3 = ({ navigation }) => {
   if (gameOver) {
     return (
       <ImageBackground
-        source={require('../assets/space_victory.jpg')}
+        source={mistakes >= MAX_MISTAKES ? require('../assets/space_defeat.jpg') : require('../assets/space_victory.jpg')}
         style={styles.container}
       >
         <View style={styles.gameOverContainer}>
-          <Text style={styles.gameOverText}>Галактика спасена!</Text>
+          <Text style={styles.gameOverText}>
+            {mistakes >= MAX_MISTAKES ? 'Галактика захвачена!' : 'Галактика спасена!'}
+          </Text>
           <Text style={styles.finalScoreText}>Финальный счет: {score}</Text>
           <TouchableOpacity style={styles.restartButton} onPress={restartGame}>
             <Text style={styles.restartButtonText}>Начать новую миссию</Text>
@@ -148,6 +157,7 @@ const Lab3 = ({ navigation }) => {
         <View style={styles.header}>
           <Text style={styles.levelText}>Уровень: {level}</Text>
           <Text style={styles.scoreText}>Счет: {score}</Text>
+          <Text style={styles.mistakesText}>Ошибки: {mistakes}/{MAX_MISTAKES}</Text>
         </View>
         <View style={styles.problemContainer}>
           <Animated.Text
@@ -202,6 +212,11 @@ const styles = StyleSheet.create({
     color: '#4CAF50',
     fontWeight: 'bold',
   },
+  mistakesText: {
+    fontSize: 24,
+    color: '#FF4500',
+    fontWeight: 'bold',
+  },
   problemContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     padding: 20,
@@ -236,49 +251,45 @@ const styles = StyleSheet.create({
     height: 70,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     margin: 5,
-    borderRadius: 35,
+    borderRadius: 10,
   },
   keypadButtonText: {
     fontSize: 24,
     color: '#FFFFFF',
   },
   submitButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1E90FF',
     padding: 15,
     borderRadius: 10,
   },
   submitButtonText: {
+    fontSize: 24,
     color: '#FFFFFF',
-    fontSize: 18,
-    textAlign: 'center',
   },
   gameOverContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: 20,
-    borderRadius: 10,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   gameOverText: {
     fontSize: 36,
-    color: '#FFD700',
+    color: '#FFFFFF',
     marginBottom: 20,
-    textAlign: 'center',
   },
   finalScoreText: {
-    fontSize: 24,
+    fontSize: 28,
     color: '#FFFFFF',
     marginBottom: 20,
   },
   restartButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#1E90FF',
     padding: 15,
     borderRadius: 10,
   },
   restartButtonText: {
+    fontSize: 24,
     color: '#FFFFFF',
-    fontSize: 18,
   },
 });
 
