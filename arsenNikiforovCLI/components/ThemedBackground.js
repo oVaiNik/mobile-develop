@@ -7,8 +7,8 @@ const ThemedBackground = ({ children }) => {
   const theme = useSelector(state => state.theme);
 
   const backgroundImage = theme === 'light'
-    ? require('../assets/lab4_dark.jpg') 
-    : require('../assets/lab4_light.jpg'); 
+    ? require('../assets/lab4_light.jpg') 
+    : require('../assets/lab4_dark.jpg'); 
 
   return (
     <ImageBackground

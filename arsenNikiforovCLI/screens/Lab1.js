@@ -143,7 +143,7 @@ const Lab1 = ({ navigation }) => {
 
   return (
     <ThemedBackground
-      source={require('../assets/lab1.jpg')}
+      source={require('../assets/mountain.png')}
       style={styles.container}
     >
       <View style={styles.header}>
