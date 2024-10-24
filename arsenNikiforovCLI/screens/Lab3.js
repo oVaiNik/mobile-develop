@@ -1,3 +1,4 @@
+import ThemedBackground from '../components/ThemedBackground';
 import React, { useState, useMemo, useCallback } from 'react';
 import {
   View,
@@ -158,7 +159,7 @@ const Lab3 = ({ navigation }) => {
   }
 
   return (
-    <ImageBackground
+    <ThemedBackground
       source={require('../assets/space_battle.jpg')}
       style={styles.container}
     >
@@ -191,7 +192,7 @@ const Lab3 = ({ navigation }) => {
           <Text style={styles.submitButtonText}>Уничтожить захватчиков</Text>
         </TouchableOpacity>
       </LinearGradient>
-    </ImageBackground>
+    </ThemedBackground>
   );
 };
 

@@ -1,14 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
 const Home = ({ navigation }) => {
+  const { colors } = useTheme();
+
   const handleNavigation = (path) => {
-    if (navigation?.navigate) {
-      navigation.navigate(path);
-    } else {
-      console.log(`Navigating to ${path}`);
-      // позже добавлю  логику веб-навигации если не забуду
-    }
+    navigation.navigate(path);
   };
 
   const menuItems = [
@@ -20,24 +18,20 @@ const Home = ({ navigation }) => {
 
   return (
     <ImageBackground 
-      source={require('../assets/background.jpg')}  // Укажите правильный путь к вашему изображению
+      source={require('../assets/background.jpg')}
       style={styles.container}
     >
-      {/* Наложение анимированного градиента */}
-      <View style={styles.overlay} />
-      
       <View style={styles.content}>
         <View style={styles.card}>
-          {/* Заголовок */}
-          <Text style={styles.title}>CyberLabs 2077</Text>
-          <Text style={styles.subtitle}>Лабораторные работы</Text>
+          <Text style={[styles.title, { color: colors.text }]}>CyberLabs 2077</Text>
+          <Text style={[styles.subtitle, { color: colors.text }]}>Лабораторные работы</Text>
 
           <View style={styles.studentInfo}>
-            <Text style={styles.studentText}>Студент: Никифоров Арсен</Text>
-            <Text style={styles.studentText}>Группа: ФИИТ-21</Text>
+            <Text style={[styles.studentText, { color: colors.text }]}>Студент: Никифоров Арсен</Text>
+            <Text style={[styles.studentText, { color: colors.text }]}>Группа: ФИИТ-21</Text>
           </View>
 
-          <Text style={styles.selectionText}>Выберите экран:</Text>
+          <Text style={[styles.selectionText, { color: colors.text }]}>Выберите экран:</Text>
 
           <View style={styles.menuContainer}>
             {menuItems.map(({ path, text, icon }) => (
@@ -48,10 +42,8 @@ const Home = ({ navigation }) => {
               >
                 <View style={styles.menuItemContent}>
                   <Text style={styles.icon}>{icon}</Text>
-                  <Text style={styles.menuText}>{text}</Text>
+                  <Text style={[styles.menuText, { color: colors.text }]}>{text}</Text>
                 </View>
-                {/* Анимированный эффект свечения при наведении */}
-                <View style={styles.glowEffect} />
               </TouchableOpacity>
             ))}
           </View>
@@ -60,7 +52,6 @@ const Home = ({ navigation }) => {
     </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

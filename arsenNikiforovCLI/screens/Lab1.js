@@ -1,3 +1,5 @@
+// Lab1.js
+import ThemedBackground from '../components/ThemedBackground';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -140,7 +142,7 @@ const Lab1 = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground
+    <ThemedBackground
       source={require('../assets/lab1.jpg')}
       style={styles.container}
     >
@@ -209,7 +211,7 @@ const Lab1 = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       )}
-    </ImageBackground>
+    </ThemedBackground>
   );
 };
 

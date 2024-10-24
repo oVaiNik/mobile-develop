@@ -1,3 +1,4 @@
+import ThemedBackground from '../components/ThemedBackground';
 import React, { useState, useEffect, useCallback, useMemo, useReducer } from 'react'; 
 import {
   View,
@@ -11,7 +12,6 @@ import {
   Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { incrementCounter, decrementCounter } from '../store/store';
 
 
 // Начальное состояние
@@ -91,7 +91,7 @@ const Lab2 = ({ navigation }) => {
   }, [data]);
 
   return (
-    <ImageBackground
+    <ThemedBackground
       source={require('../assets/space.jpg')}
       style={styles.container}
     >
@@ -128,22 +128,7 @@ const Lab2 = ({ navigation }) => {
           <Text style={styles.errorText}>Данные не загружены</Text>
         )}
         
-        {/* Redux Counter Section */}
-        <View style={styles.reduxContainer}>
-          <Text style={styles.reduxText}>Redux Counter: {counter}</Text>
-          <TouchableOpacity 
-            style={styles.reduxButton} 
-            onPress={() => dispatch(incrementCounter())}
-          >
-            <Text style={styles.reduxButtonText}>Increment Counter</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.reduxButton} 
-            onPress={() => dispatch(decrementCounter())}
-          >
-            <Text style={styles.reduxButtonText}>Decrement Counter</Text>
-          </TouchableOpacity>
-        </View>
+
 
         <TouchableOpacity style={styles.button} onPress={loadRandomAPOD}>
           <Text style={styles.buttonText}>Загрузить другое изображение</Text>
@@ -166,7 +151,7 @@ const Lab2 = ({ navigation }) => {
           </View>
         )}
       </ScrollView>
-    </ImageBackground>
+    </ThemedBackground>
   );
 };
 
