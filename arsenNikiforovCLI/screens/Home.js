@@ -130,8 +130,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   card: {
-    padding: 30,
-    borderRadius: 30,
+    padding: 20, // Уменьшено для компактности
+    borderRadius: 20, // Уменьшено для компактности
     borderWidth: 3,
     shadowOffset: {width: 0, height: 5},
     shadowOpacity: 0.5,
@@ -139,41 +139,41 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   title: {
-    fontSize: 42,
+    fontSize: 36, // Уменьшено для компактности
     fontWeight: 'bold',
     fontFamily: 'CyberFont',
     textAlign: 'center',
-    marginBottom: 15,
+    marginBottom: 10, // Уменьшено для компактности
     textShadowOffset: {width: 0, height: 3},
     textShadowRadius: 15,
   },
   subtitle: {
-    fontSize: 26,
+    fontSize: 22, // Уменьшено для компактности
     textAlign: 'center',
-    marginBottom: 25,
+    marginBottom: 20, // Уменьшено для компактности
   },
   studentInfo: {
-    marginBottom: 15,
+    marginBottom: 10, // Уменьшено для компактности
     alignItems: 'center',
   },
   studentText: {
-    fontSize: 20,
+    fontSize: 18, // Уменьшено для компактности
   },
   selectionText: {
-    fontSize: 22,
-    marginTop: 20,
+    fontSize: 20, // Уменьшено для компактности
+    marginTop: 10, // Уменьшено для компактности
     textAlign: 'center',
   },
   menuContainer: {
-    marginTop: 30,
+    marginTop: 20, // Уменьшено для компактности
     width: '100%',
   },
   menuItem: {
-    paddingVertical: 25,
-    paddingHorizontal: 25,
-    borderRadius: 20,
+    paddingVertical: 20, // Уменьшено для компактности
+    paddingHorizontal: 20, // Уменьшено для компактности
+    borderRadius: 15, // Уменьшено для компактности
     borderWidth: 2,
-    marginBottom: 20,
+    marginBottom: 15, // Уменьшено для компактности
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
@@ -183,11 +183,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    fontSize: 30,
-    marginRight: 20,
+    fontSize: 28, // Уменьшено для компактности
+    marginRight: 15, // Уменьшено для компактности
   },
   menuText: {
-    fontSize: 22,
+    fontSize: 20, // Уменьшено для компактности
   },
 });
 

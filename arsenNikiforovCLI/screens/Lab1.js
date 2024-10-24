@@ -1,7 +1,3 @@
-import ThemedBackground from '../components/ThemedBackground'; 
-import { ThemedText, TitleText, InfoText } from '../components/ThemedText'; 
-
-
 import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
@@ -13,10 +9,12 @@ import {
   PanResponder,
   Modal,
   Pressable,
-  ImageBackground,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {incrementCounter} from '../store/store';
+import ThemedBackground from '../components/ThemedBackground';
+import {ThemedText, InfoText} from '../components/ThemedText';
+import {Easing} from 'react-native'; // Добавляем импорт Easing
 
 const {width, height} = Dimensions.get('window');
 
@@ -29,6 +27,7 @@ const randomPosition = () => ({
 
 const Bubble = ({id, removeBubble, onDrag, basket, gameOver}) => {
   const [scale] = useState(new Animated.Value(0));
+  const [popAnimation] = useState(new Animated.Value(1)); // Создаем анимацию лопания
   const initialPosition = randomPosition();
   const [pan] = useState(
     new Animated.ValueXY({x: initialPosition.x, y: initialPosition.y}),
@@ -46,7 +45,16 @@ const Bubble = ({id, removeBubble, onDrag, basket, gameOver}) => {
         removeBubble(id);
       }
     });
-  }, []);
+  }, [removeBubble, id]);
+
+  const handlePop = useCallback(() => {
+    Animated.timing(popAnimation, {
+      toValue: 0,
+      duration: 300,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: true,
+    }).start(() => removeBubble(id));
+  }, [popAnimation, removeBubble, id]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => !gameOver,
@@ -72,6 +80,9 @@ const Bubble = ({id, removeBubble, onDrag, basket, gameOver}) => {
         y + bubbleSize / 2 < basket.y + basket.height
       ) {
         onDrag();
+        handlePop(); // Вызываем анимацию лопания
+      } else {
+        // Если не попали в корзину, просто убираем смещение
         removeBubble(id);
       }
     },
@@ -84,7 +95,11 @@ const Bubble = ({id, removeBubble, onDrag, basket, gameOver}) => {
         styles.bubble,
         {
           backgroundColor: color,
-          transform: [{translateX: pan.x}, {translateY: pan.y}, {scale: scale}],
+          transform: [
+            {translateX: pan.x},
+            {translateY: pan.y},
+            {scale: Animated.multiply(scale, popAnimation)}, // Применяем анимацию лопания
+          ],
         },
       ]}
     />
@@ -99,12 +114,13 @@ const Lab1 = ({navigation}) => {
   const counter = useSelector(state => state.counter);
   const dispatch = useDispatch();
 
-  const basket = {
-    x: width / 2 - 50,
-    y: height - 150,
-    width: 100,
-    height: 100,
-  };
+const basket = {
+  x: width / 2 - 50,
+  y: height - 200, 
+  width: 100,
+  height: 100,
+};
+
 
   const addBubble = useCallback(() => {
     const id = Date.now() + Math.random();
@@ -152,14 +168,9 @@ const Lab1 = ({navigation}) => {
           <InfoText style={styles.infoButtonText}>Инфо</InfoText>
         </TouchableOpacity>
         <View style={styles.scoreContainer}>
-        <ThemedText style={styles.scoreText}>Счет: {score}</ThemedText>
-
+          <ThemedText style={styles.scoreText}>Счет: {score}</ThemedText>
         </View>
-        <TouchableOpacity
-          style={styles.switchButton}
-          onPress={() => navigation.navigate('Lab2')}>
-          <Text style={styles.switchButtonText}>Lab2</Text>
-        </TouchableOpacity>
+
         <View style={styles.reduxContainer}>
           <Text style={styles.reduxText}>Redux Counter: {counter}</Text>
         </View>

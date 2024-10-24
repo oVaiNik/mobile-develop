@@ -1,11 +1,9 @@
 import {createStore} from 'redux';
 
-
 const initialState = {
   theme: 'light', // По умолчанию светлая тема
-  counter: 0, 
+  counter: 0,
 };
-
 
 const SET_THEME = 'SET_THEME';
 const INCREMENT_COUNTER = 'INCREMENT_COUNTER';

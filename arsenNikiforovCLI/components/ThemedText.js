@@ -2,7 +2,6 @@ import React from 'react';
 import {Text} from 'react-native';
 import {useSelector} from 'react-redux';
 
-
 export const ThemedText = ({style, ...props}) => {
   const theme = useSelector(state => state.theme);
 
@@ -10,7 +9,7 @@ export const ThemedText = ({style, ...props}) => {
     <Text
       style={[
         {
-          color: theme === 'light' ? '#000' : '#FFF', 
+          color: theme === 'light' ? '#000' : '#FFF',
         },
         style,
       ]}
@@ -18,7 +17,6 @@ export const ThemedText = ({style, ...props}) => {
     />
   );
 };
-
 
 export const TitleText = ({style, ...props}) => (
   <ThemedText

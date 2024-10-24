@@ -12,35 +12,21 @@ import SavedImage from './screens/SavedImage';
 
 const Stack = createNativeStackNavigator();
 
-const LightTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: '#FFFFFF',
-    text: '#000000',
-    primary: '#007AFF',
-    card: '#FFFFFF',
-  },
-};
-
-const CustomDarkTheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    background: '#000000',
-    text: '#FFFFFF',
-    primary: '#007AFF',
-    card: '#000000',
-  },
-};
-
 const App = () => {
   const theme = useSelector(state => state.theme);
-  const navigationTheme = theme === 'light' ? LightTheme : CustomDarkTheme;
+  const navigationTheme = theme === 'light' ? DefaultTheme : DarkTheme;
 
   return (
     <NavigationContainer theme={navigationTheme}>
-      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: theme === 'light' ? '#fff' : '#000',
+          },
+          headerTintColor: theme === 'light' ? '#000' : '#fff',
+        }}
+      >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Lab1" component={Lab1} />
         <Stack.Screen name="Lab2" component={Lab2} />

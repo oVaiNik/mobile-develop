@@ -1,11 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Switch,
-  Text,
-} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Switch, Text} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {setTheme, incrementCounter, decrementCounter} from '../store/store';
 import {useTheme} from '@react-navigation/native';
