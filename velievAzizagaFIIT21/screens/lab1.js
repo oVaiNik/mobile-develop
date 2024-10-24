@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
 
-export default function HomeScreen() {
+export default function lab1() {
   const [count, setCount] = useState(0);
 
   return (
@@ -16,9 +16,8 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.counterContainer}>
-        <Button title="Увеличить x2" onPress={() => setCount(count*2)} />
+        <Button title="Увеличить x2" onPress={() => setCount(count * 2)} />
       </View>
-      
     </SafeAreaView>
   );
 }
@@ -26,11 +25,11 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   counterContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 20,
   },
   text: {
