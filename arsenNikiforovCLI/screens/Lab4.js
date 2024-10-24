@@ -1,10 +1,10 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   Switch,
-  Animated,
+  Text,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {setTheme, incrementCounter, decrementCounter} from '../store/store';
@@ -22,14 +22,9 @@ const Lab4 = ({navigation}) => {
     dispatch(setTheme(newTheme));
   };
 
-  const counterAnimation = useRef(new Animated.Value(counter)).current;
-
   useEffect(() => {
-    Animated.timing(counterAnimation, {
-      toValue: counter,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
+    // Этот эффект следит за обновлением счетчика и вызывает рендер при изменении
+    console.log('Counter updated:', counter);
   }, [counter]);
 
   return (
@@ -50,13 +45,13 @@ const Lab4 = ({navigation}) => {
         />
 
         <View style={styles.counterContainer}>
-          <Animated.Text
+          <Text
             style={[
               styles.counterText,
               {color: theme === 'light' ? '#333' : '#fff'},
             ]}>
-            Redux Counter: {Math.round(counterAnimation.__getValue())}
-          </Animated.Text>
+            Redux Counter: {counter}
+          </Text>
 
           <TouchableOpacity
             style={[
@@ -83,17 +78,43 @@ const Lab4 = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          style={[
-            styles.navigationButton,
-            {
-              backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-              borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-            },
-          ]}
-          onPress={() => navigation.navigate('Lab1')}>
-          <ThemedText style={styles.buttonText}>Перейти к Lab 1</ThemedText>
-        </TouchableOpacity>
+        <View style={styles.navigationButtonsContainer}>
+          <TouchableOpacity
+            style={[
+              styles.navigationButton,
+              {
+                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
+                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
+              },
+            ]}
+            onPress={() => navigation.navigate('Lab1')}>
+            <ThemedText style={styles.buttonText}>Перейти к Lab 1</ThemedText>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.navigationButton,
+              {
+                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
+                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
+              },
+            ]}
+            onPress={() => navigation.navigate('Lab2')}>
+            <ThemedText style={styles.buttonText}>Перейти к Lab 2</ThemedText>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.navigationButton,
+              {
+                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
+                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
+              },
+            ]}
+            onPress={() => navigation.navigate('Lab3')}>
+            <ThemedText style={styles.buttonText}>Перейти к Lab 3</ThemedText>
+          </TouchableOpacity>
+        </View>
       </View>
     </ThemedBackground>
   );
@@ -148,12 +169,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
   },
+  navigationButtonsContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 30,
+  },
   navigationButton: {
     padding: 15,
     borderRadius: 30,
     alignItems: 'center',
     width: 250,
     borderWidth: 2,
+    marginVertical: 10,
     shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.3,
     shadowRadius: 5,
