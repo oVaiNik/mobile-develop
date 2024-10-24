@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const OPERATIONS = ['+', '-', '*', '/'];
-const MAX_LEVEL = 10;
+const MAX_LEVEL = 5;
 const MAX_MISTAKES = 3;
 
 const Lab3 = ({ navigation }) => {
@@ -28,20 +28,20 @@ const Lab3 = ({ navigation }) => {
     let num1, num2;
     switch (operation) {
       case '+':
-        num1 = Math.floor(Math.random() * (10 * level)) + 1;
-        num2 = Math.floor(Math.random() * (10 * level)) + 1;
+        num1 = Math.floor(Math.random() * (20 * level)) + 1;
+        num2 = Math.floor(Math.random() * (20 * level)) + 1;
         break;
       case '-':
-        num1 = Math.floor(Math.random() * (10 * level)) + 1;
+        num1 = Math.floor(Math.random() * (20 * level)) + 1;
         num2 = Math.floor(Math.random() * num1) + 1;
         break;
       case '*':
-        num1 = Math.floor(Math.random() * (5 * level)) + 1;
-        num2 = Math.floor(Math.random() * 5) + 1;
+        num1 = Math.floor(Math.random() * (10 * level)) + 1;
+        num2 = Math.floor(Math.random() * (10 * level)) + 1;
         break;
       case '/':
-        num2 = Math.floor(Math.random() * 5) + 1;
-        num1 = num2 * (Math.floor(Math.random() * (5 * level)) + 1);
+        num2 = Math.floor(Math.random() * (10 * level)) + 1;
+        num1 = num2 * (Math.floor(Math.random() * (10 * level)) + 1);
         break;
     }
     return { num1, num2, operation };
@@ -107,22 +107,32 @@ const Lab3 = ({ navigation }) => {
   }, []);
 
   const renderKeypad = useCallback(() => {
-    const keys = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '.', '0', '⌫'];
-    return keys.map((key) => (
-      <TouchableOpacity
-        key={key}
-        style={styles.keypadButton}
-        onPress={() => {
-          ReactNativeHapticFeedback.trigger('selection');
-          if (key === '⌫') {
-            setUserAnswer(userAnswer.slice(0, -1));
-          } else if (userAnswer.length < 8) {
-            setUserAnswer(userAnswer + key);
-          }
-        }}
-      >
-        <Text style={styles.keypadButtonText}>{key}</Text>
-      </TouchableOpacity>
+    const keys = [
+      ['7', '8', '9'],
+      ['4', '5', '6'],
+      ['1', '2', '3'],
+      ['.', '0', '⌫']
+    ];
+
+    return keys.map((row, rowIndex) => (
+      <View key={`row-${rowIndex}`} style={styles.keypadRow}>
+        {row.map((key) => (
+          <TouchableOpacity
+            key={key}
+            style={styles.keypadButton}
+            onPress={() => {
+              ReactNativeHapticFeedback.trigger('selection');
+              if (key === '⌫') {
+                setUserAnswer(userAnswer.slice(0, -1));
+              } else if (userAnswer.length < 8) {
+                setUserAnswer(userAnswer + key);
+              }
+            }}
+          >
+            <Text style={styles.keypadButtonText}>{key}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     ));
   }, [userAnswer]);
 
@@ -186,15 +196,9 @@ const Lab3 = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   gradient: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: '100%',
+    flex: 1,
     padding: 20,
   },
   header: {
@@ -222,6 +226,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
+    alignItems: 'center',
   },
   problemText: {
     fontSize: 32,
@@ -241,10 +246,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   keypadContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
+  },
+  keypadRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   keypadButton: {
     width: 70,
@@ -263,12 +271,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E90FF',
     padding: 15,
     borderRadius: 10,
+    alignSelf: 'center',
   },
   submitButtonText: {
     fontSize: 24,
     color: '#FFFFFF',
   },
   gameOverContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -276,6 +286,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     color: '#FFFFFF',
     marginBottom: 20,
+    textAlign: 'center',
   },
   finalScoreText: {
     fontSize: 28,
