@@ -1,20 +1,8 @@
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native'
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-})
+import Lab1 from './src/screens/Lab1'
 
 const App: React.FC = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Initial Project</Text>
-    </View>
-  )
+  return <Lab1 />
 }
 
 export default App
