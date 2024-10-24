@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Button ,Text, TextInput, FlatList, StyleSheet, SafeAreaView , ThemeProvider, textColor} from 'react-native';
 
 export default function Lab3() {
   const [searchTerm, setSearchTerm] = useState('');
-  
+  const [textColor, setTextColor] = useState('black');
+
   const users = [
     'Alice',
     'Bob',
@@ -21,6 +22,10 @@ export default function Lab3() {
     return users.filter(user => user.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [searchTerm, users]);
 
+  const changeTextColor = () => {
+    setTextColor(prevColor => (prevColor === 'black' ? 'blue' : 'black'));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -32,9 +37,11 @@ export default function Lab3() {
       <FlatList
         data={filteredUsers}
         keyExtractor={(item) => item}
-        renderItem={({ item }) => <Text style={styles.user}>{item}</Text>}
+        renderItem={({ item }) => <Text style={[styles.user,{color: textColor}]}>{item}</Text>}
       />
+      <Button title="Изменить цвет текста" onPress={changeTextColor} />
     </SafeAreaView>
+    
   );
 }
 
@@ -54,4 +61,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingVertical: 5,
   },
+  
 });
