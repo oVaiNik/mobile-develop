@@ -1,12 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  useContext,
-  createContext,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useReducer } from 'react'; 
 import {
   View,
   Text,
@@ -18,9 +10,9 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { incrementCounter, decrementCounter } from '../store/store';
 
-// Создаем контекст для глобального состояния
-const GlobalStateContext = createContext();
 
 // Начальное состояние
 const initialState = {
@@ -67,11 +59,14 @@ const useAPOD = (date) => {
   return state;
 };
 
-// Компонент Lab2
 const Lab2 = ({ navigation }) => {
   const [date, setDate] = useState(null);
   const { data, loading, error } = useAPOD(date);
-  const { globalData, setGlobalData } = useContext(GlobalStateContext);
+  const [savedData, setSavedData] = useState(null);
+  
+  // Redux hooks
+  const counter = useSelector(state => state.counter);
+  const dispatch = useDispatch();
 
   const loadRandomAPOD = useCallback(() => {
     const randomDate = new Date(
@@ -88,12 +83,12 @@ const Lab2 = ({ navigation }) => {
     loadRandomAPOD();
   }, [loadRandomAPOD]);
 
-  const updateGlobalData = useCallback(() => {
+  const updateSavedData = useCallback(() => {
     if (data) {
-      setGlobalData(data);
+      setSavedData(data);
       Alert.alert('Успешно', 'Изображение сохранено в избранное!');
     }
-  }, [data, setGlobalData]);
+  }, [data]);
 
   return (
     <ImageBackground
@@ -132,21 +127,39 @@ const Lab2 = ({ navigation }) => {
         ) : (
           <Text style={styles.errorText}>Данные не загружены</Text>
         )}
+        
+        {/* Redux Counter Section */}
+        <View style={styles.reduxContainer}>
+          <Text style={styles.reduxText}>Redux Counter: {counter}</Text>
+          <TouchableOpacity 
+            style={styles.reduxButton} 
+            onPress={() => dispatch(incrementCounter())}
+          >
+            <Text style={styles.reduxButtonText}>Increment Counter</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.reduxButton} 
+            onPress={() => dispatch(decrementCounter())}
+          >
+            <Text style={styles.reduxButtonText}>Decrement Counter</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity style={styles.button} onPress={loadRandomAPOD}>
           <Text style={styles.buttonText}>Загрузить другое изображение</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.globalButton} onPress={updateGlobalData}>
+        <TouchableOpacity style={styles.globalButton} onPress={updateSavedData}>
           <Text style={styles.globalButtonText}>Сохранить в избранное</Text>
         </TouchableOpacity>
 
-        {globalData && (
+        {savedData && (
           <View style={styles.savedDataContainer}>
             <Text style={styles.savedDataTitle}>Сохраненное изображение:</Text>
-            <Text style={styles.savedDataText}>{globalData.title}</Text>
-            <Text style={styles.savedDataText}>Дата: {globalData.date}</Text>
+            <Text style={styles.savedDataText}>{savedData.title}</Text>
+            <Text style={styles.savedDataText}>Дата: {savedData.date}</Text>
             <TouchableOpacity 
               style={styles.viewSavedButton}
-              onPress={() => navigation.navigate('SavedImage', { data: globalData })}
+              onPress={() => navigation.navigate('SavedImage', { data: savedData })}
             >
               <Text style={styles.viewSavedButtonText}>Просмотреть</Text>
             </TouchableOpacity>
@@ -156,24 +169,6 @@ const Lab2 = ({ navigation }) => {
     </ImageBackground>
   );
 };
-
-// Провайдер глобального состояния
-const GlobalStateProvider = ({ children }) => {
-  const [globalData, setGlobalData] = useState(null);
-
-  return (
-    <GlobalStateContext.Provider value={{ globalData, setGlobalData }}>
-      {children}
-    </GlobalStateContext.Provider>
-  );
-};
-
-// Оборачиваем Lab2 в провайдер
-const Lab2WithProvider = (props) => (
-  <GlobalStateProvider>
-    <Lab2 {...props} />
-  </GlobalStateProvider>
-);
 
 const styles = StyleSheet.create({
   container: {
@@ -289,6 +284,32 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
   },
+  reduxContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: 'rgba(30, 144, 255, 0.1)',
+    padding: 15,
+    borderRadius: 10,
+    width: '100%',
+  },
+  reduxText: {
+    color: '#fff',
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  reduxButton: {
+    backgroundColor: '#1e90ff',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  reduxButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
 });
 
-export default Lab2WithProvider;
+export default Lab2;

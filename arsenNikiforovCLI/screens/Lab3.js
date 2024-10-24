@@ -70,6 +70,8 @@ const Lab3 = ({ navigation }) => {
     return calculateAnswer(memoizedProblem);
   }, [memoizedProblem, calculateAnswer]);
 
+  
+
   const checkAnswer = useCallback(() => {
     const userAnswerNum = parseFloat(userAnswer);
     if (Math.abs(userAnswerNum - memoizedAnswer) < 0.01) {
