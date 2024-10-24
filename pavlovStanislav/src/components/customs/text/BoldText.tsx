@@ -1,8 +1,8 @@
 import React from 'react'
 import {Text} from 'react-native'
-import {CustomText} from '../../../constants/types'
+import {ICustomText} from '../../../interfaces/custom-text.interface'
 
-const BoldText: React.FC<CustomText> = ({style, children}) => {
+const BoldText: React.FC<ICustomText> = ({style, children}) => {
   return (
     <Text style={[style, {fontFamily: 'Montserrat-Bold'}]}>{children}</Text>
   )
