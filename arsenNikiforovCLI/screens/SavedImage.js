@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
 
-const SavedImage = ({ route }) => {
-  const { data } = route.params;
+const SavedImage = ({route}) => {
+  const {data} = route.params;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{data.title}</Text>
-      <Image source={{ uri: data.url }} style={styles.image} />
+      <Image source={{uri: data.url}} style={styles.image} />
       <Text style={styles.dateText}>Дата: {data.date}</Text>
       <Text style={styles.explanationText}>{data.explanation}</Text>
     </ScrollView>

@@ -1,8 +1,14 @@
 import ThemedBackground from '../components/ThemedBackground';
-import React, { useState, useEffect, useCallback, useMemo, useReducer } from 'react'; 
+import { ThemedText, ScoreText, InfoText, TitleText } from '../components/ThemedText';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useReducer,
+} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
@@ -11,44 +17,40 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
-
-// Начальное состояние
 const initialState = {
   data: null,
   loading: false,
   error: null,
 };
 
-// Редюсер для управления состоянием
 const dataReducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_INIT':
-      return { ...state, loading: true, error: null };
+      return {...state, loading: true, error: null};
     case 'FETCH_SUCCESS':
-      return { data: action.payload, loading: false, error: null };
+      return {data: action.payload, loading: false, error: null};
     case 'FETCH_FAILURE':
-      return { data: null, loading: false, error: action.payload };
+      return {data: null, loading: false, error: action.payload};
     default:
       throw new Error();
   }
 };
 
-// Пользовательский хук для получения данных из NASA APOD API
-const useAPOD = (date) => {
+const useAPOD = date => {
   const [state, dispatch] = useReducer(dataReducer, initialState);
 
   const fetchData = useCallback(async () => {
-    dispatch({ type: 'FETCH_INIT' });
+    dispatch({type: 'FETCH_INIT'});
     try {
       const response = await fetch(
-        `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`
+        `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`,
       );
       const result = await response.json();
-      dispatch({ type: 'FETCH_SUCCESS', payload: result });
+      dispatch({type: 'FETCH_SUCCESS', payload: result});
     } catch (error) {
-      dispatch({ type: 'FETCH_FAILURE', payload: error.message });
+      dispatch({type: 'FETCH_FAILURE', payload: error.message});
     }
   }, [date]);
 
@@ -59,18 +61,17 @@ const useAPOD = (date) => {
   return state;
 };
 
-const Lab2 = ({ navigation }) => {
+const Lab2 = ({navigation}) => {
   const [date, setDate] = useState(null);
-  const { data, loading, error } = useAPOD(date);
+  const {data, loading, error} = useAPOD(date);
   const [savedData, setSavedData] = useState(null);
-  
-  // Redux hooks
+
   const counter = useSelector(state => state.counter);
   const dispatch = useDispatch();
 
   const loadRandomAPOD = useCallback(() => {
     const randomDate = new Date(
-      Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 365)
+      Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 365),
     )
       .toISOString()
       .slice(0, 10);
@@ -93,60 +94,55 @@ const Lab2 = ({ navigation }) => {
   return (
     <ThemedBackground
       source={require('../assets/space.jpg')}
-      style={styles.container}
-    >
+      style={styles.container}>
+      
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.switchButton}
-          onPress={() => navigation.navigate('Lab1')}
-        >
-          <Text style={styles.switchButtonText}>Lab1</Text>
+        <TouchableOpacity style={styles.button} onPress={loadRandomAPOD}>
+          <ThemedText style={styles.buttonText}>Загрузить другое изображение</ThemedText>
         </TouchableOpacity>
       </View>
+      
       <ScrollView contentContainerStyle={styles.content}>
         {loading ? (
           <ActivityIndicator size="large" color="#ffffff" />
         ) : error ? (
-          <Text style={styles.errorText}>Ошибка: {error}</Text>
+          <ThemedText style={styles.errorText}>Ошибка: {error}</ThemedText>
         ) : memoizedData ? (
           <>
-            <Text style={styles.titleText}>{memoizedData.title || 'Название недоступно'}</Text>
+            <TitleText style={styles.titleText}>
+              {memoizedData.title || 'Название недоступно'}
+            </TitleText>
             {memoizedData.media_type === 'image' ? (
-              <Image
-                source={{ uri: memoizedData.url }}
-                style={styles.image}
-              />
+              <Image source={{uri: memoizedData.url}} style={styles.image} />
             ) : (
               <View style={styles.videoContainer}>
-                <Text style={styles.videoText}>Видео не поддерживается</Text>
+                <ThemedText style={styles.videoText}>Видео не поддерживается</ThemedText>
               </View>
             )}
-            <Text style={styles.dateText}>Дата: {memoizedData.date}</Text>
-            <Text style={styles.explanationText}>{memoizedData.explanation}</Text>
+            <InfoText style={styles.dateText}>Дата: {memoizedData.date}</InfoText>
+            <InfoText style={styles.explanationText}>
+              {memoizedData.explanation}
+            </InfoText>
           </>
         ) : (
-          <Text style={styles.errorText}>Данные не загружены</Text>
+          <ThemedText style={styles.errorText}>Данные не загружены</ThemedText>
         )}
-        
 
-
-        <TouchableOpacity style={styles.button} onPress={loadRandomAPOD}>
-          <Text style={styles.buttonText}>Загрузить другое изображение</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.globalButton} onPress={updateSavedData}>
-          <Text style={styles.globalButtonText}>Сохранить в избранное</Text>
+          <ThemedText style={styles.globalButtonText}>Сохранить в избранное</ThemedText>
         </TouchableOpacity>
 
         {savedData && (
           <View style={styles.savedDataContainer}>
-            <Text style={styles.savedDataTitle}>Сохраненное изображение:</Text>
-            <Text style={styles.savedDataText}>{savedData.title}</Text>
-            <Text style={styles.savedDataText}>Дата: {savedData.date}</Text>
-            <TouchableOpacity 
+            <TitleText style={styles.savedDataTitle}>Сохраненное изображение:</TitleText>
+            <InfoText style={styles.savedDataText}>{savedData.title}</InfoText>
+            <InfoText style={styles.savedDataText}>Дата: {savedData.date}</InfoText>
+            <TouchableOpacity
               style={styles.viewSavedButton}
-              onPress={() => navigation.navigate('SavedImage', { data: savedData })}
-            >
-              <Text style={styles.viewSavedButtonText}>Просмотреть</Text>
+              onPress={() =>
+                navigation.navigate('SavedImage', {data: savedData})
+              }>
+              <ThemedText style={styles.viewSavedButtonText}>Просмотреть</ThemedText>
             </TouchableOpacity>
           </View>
         )}
@@ -165,13 +161,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginRight: 20,
   },
-  switchButton: {
-    backgroundColor: '#1e1e1e',
-    padding: 10,
+  button: {
+    backgroundColor: '#1e90ff',
+    padding: 15,
     borderRadius: 5,
   },
-  switchButtonText: {
-    color: '#fff',
+  buttonText: {
     fontSize: 16,
   },
   content: {
@@ -179,38 +174,24 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   titleText: {
-    color: '#fff',
     fontSize: 28,
     marginBottom: 20,
     textAlign: 'center',
   },
   dateText: {
-    color: '#ccc',
     fontSize: 16,
     marginBottom: 10,
     textAlign: 'center',
   },
   explanationText: {
-    color: '#ccc',
     fontSize: 16,
     marginBottom: 20,
     textAlign: 'justify',
   },
   errorText: {
-    color: '#f00',
     fontSize: 18,
     marginBottom: 20,
     textAlign: 'center',
-  },
-  button: {
-    backgroundColor: '#1e90ff',
-    padding: 15,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
   },
   globalButton: {
     backgroundColor: '#32cd32',
@@ -219,7 +200,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   globalButtonText: {
-    color: '#fff',
     fontSize: 16,
   },
   image: {
@@ -238,7 +218,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   videoText: {
-    color: '#fff',
     fontSize: 18,
   },
   savedDataContainer: {
@@ -249,13 +228,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   savedDataTitle: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   savedDataText: {
-    color: '#ccc',
     fontSize: 14,
     marginBottom: 5,
   },
@@ -266,34 +243,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   viewSavedButtonText: {
-    color: '#fff',
     fontSize: 14,
-  },
-  reduxContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-    backgroundColor: 'rgba(30, 144, 255, 0.1)',
-    padding: 15,
-    borderRadius: 10,
-    width: '100%',
-  },
-  reduxText: {
-    color: '#fff',
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  reduxButton: {
-    backgroundColor: '#1e90ff',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
-  reduxButtonText: {
-    color: '#fff',
-    fontSize: 16,
   },
 });
 

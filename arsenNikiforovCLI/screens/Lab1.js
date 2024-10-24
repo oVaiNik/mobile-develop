@@ -1,6 +1,8 @@
-// Lab1.js
-import ThemedBackground from '../components/ThemedBackground';
-import React, { useState, useEffect, useCallback } from 'react';
+import ThemedBackground from '../components/ThemedBackground'; 
+import { ThemedText, TitleText, InfoText } from '../components/ThemedText'; 
+
+
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -13,10 +15,10 @@ import {
   Pressable,
   ImageBackground,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { incrementCounter } from '../store/store';
+import {useSelector, useDispatch} from 'react-redux';
+import {incrementCounter} from '../store/store';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const randomColor = () => `hsl(${Math.random() * 360}, 100%, 50%)`;
 
@@ -25,10 +27,12 @@ const randomPosition = () => ({
   y: Math.random() * (height - 300),
 });
 
-const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
+const Bubble = ({id, removeBubble, onDrag, basket, gameOver}) => {
   const [scale] = useState(new Animated.Value(0));
   const initialPosition = randomPosition();
-  const [pan] = useState(new Animated.ValueXY({ x: initialPosition.x, y: initialPosition.y }));
+  const [pan] = useState(
+    new Animated.ValueXY({x: initialPosition.x, y: initialPosition.y}),
+  );
   const [color] = useState(randomColor());
 
   useEffect(() => {
@@ -37,7 +41,7 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
       duration: 5000,
       useNativeDriver: false,
     });
-    scaleAnimation.start(({ finished }) => {
+    scaleAnimation.start(({finished}) => {
       if (finished) {
         removeBubble(id);
       }
@@ -51,14 +55,14 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
         x: pan.x._value,
         y: pan.y._value,
       });
-      pan.setValue({ x: 0, y: 0 });
+      pan.setValue({x: 0, y: 0});
     },
-    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
+    onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
       useNativeDriver: false,
     }),
     onPanResponderRelease: () => {
       pan.flattenOffset();
-      const { x, y } = pan.__getValue();
+      const {x, y} = pan.__getValue();
       const bubbleSize = 80 * scale.__getValue();
 
       if (
@@ -80,18 +84,14 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
         styles.bubble,
         {
           backgroundColor: color,
-          transform: [
-            { translateX: pan.x },
-            { translateY: pan.y },
-            { scale: scale },
-          ],
+          transform: [{translateX: pan.x}, {translateY: pan.y}, {scale: scale}],
         },
       ]}
     />
   );
 };
 
-const Lab1 = ({ navigation }) => {
+const Lab1 = ({navigation}) => {
   const [bubbles, setBubbles] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -108,7 +108,7 @@ const Lab1 = ({ navigation }) => {
 
   const addBubble = useCallback(() => {
     const id = Date.now() + Math.random();
-    setBubbles(prevBubbles => [...prevBubbles, { id }]);
+    setBubbles(prevBubbles => [...prevBubbles, {id}]);
   }, []);
 
   const removeBubble = useCallback(id => {
@@ -144,16 +144,20 @@ const Lab1 = ({ navigation }) => {
   return (
     <ThemedBackground
       source={require('../assets/mountain.png')}
-      style={styles.container}
-    >
+      style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.infoButtonText}>Инфо</Text>
+        <TouchableOpacity
+          style={styles.infoButton}
+          onPress={() => setModalVisible(true)}>
+          <InfoText style={styles.infoButtonText}>Инфо</InfoText>
         </TouchableOpacity>
         <View style={styles.scoreContainer}>
-          <Text style={styles.scoreText}>Счет: {score}</Text>
+        <ThemedText style={styles.scoreText}>Счет: {score}</ThemedText>
+
         </View>
-        <TouchableOpacity style={styles.switchButton} onPress={() => navigation.navigate('Lab2')}>
+        <TouchableOpacity
+          style={styles.switchButton}
+          onPress={() => navigation.navigate('Lab2')}>
           <Text style={styles.switchButtonText}>Lab2</Text>
         </TouchableOpacity>
         <View style={styles.reduxContainer}>
@@ -182,9 +186,8 @@ const Lab1 = ({ navigation }) => {
               width: basket.width,
               height: basket.height,
             },
-          ]}
-        >
-          <Text style={styles.basketText}>Корзина</Text>
+          ]}>
+          <InfoText style={styles.basketText}>Корзина</InfoText>
         </View>
       </TouchableOpacity>
 
@@ -193,9 +196,12 @@ const Lab1 = ({ navigation }) => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Как играть</Text>
             <Text style={styles.modalText}>
-              Создавайте пузырьки и перетаскивайте их в корзину, чтобы заработать очки!
+              Создавайте пузырьки и перетаскивайте их в корзину, чтобы
+              заработать очки!
             </Text>
-            <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
+            <Pressable
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}>
               <Text style={styles.closeButtonText}>Закрыть</Text>
             </Pressable>
           </View>
@@ -228,7 +234,6 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 2,
-    borderColor: '#00ffff',
   },
   header: {
     position: 'absolute',
@@ -245,7 +250,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   infoButtonText: {
-    color: '#00ffff',
     fontSize: 18,
   },
   switchButton: {
@@ -285,7 +289,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   basketText: {
-    color: '#00ffff',
     fontSize: 16,
   },
   modalBackground: {

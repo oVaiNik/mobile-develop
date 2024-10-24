@@ -1,5 +1,5 @@
 import ThemedBackground from '../components/ThemedBackground';
-import React, { useState, useMemo, useCallback } from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ const OPERATIONS = ['+', '-', '*', '/'];
 const MAX_LEVEL = 5;
 const MAX_MISTAKES = 3;
 
-const Lab3 = ({ navigation }) => {
+const Lab3 = ({navigation}) => {
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -24,7 +24,7 @@ const Lab3 = ({ navigation }) => {
   const [mistakes, setMistakes] = useState(0);
   const [shakeAnimation] = useState(new Animated.Value(0));
 
-  const generateProblem = useCallback((level) => {
+  const generateProblem = useCallback(level => {
     const operation = OPERATIONS[Math.floor(Math.random() * OPERATIONS.length)];
     let num1, num2;
     switch (operation) {
@@ -45,16 +45,20 @@ const Lab3 = ({ navigation }) => {
         num1 = num2 * (Math.floor(Math.random() * (10 * level)) + 1);
         break;
     }
-    return { num1, num2, operation };
+    return {num1, num2, operation};
   }, []);
 
-  const calculateAnswer = useCallback((problem) => {
-    const { num1, num2, operation } = problem;
+  const calculateAnswer = useCallback(problem => {
+    const {num1, num2, operation} = problem;
     switch (operation) {
-      case '+': return num1 + num2;
-      case '-': return num1 - num2;
-      case '*': return num1 * num2;
-      case '/': return num1 / num2;
+      case '+':
+        return num1 + num2;
+      case '-':
+        return num1 - num2;
+      case '*':
+        return num1 * num2;
+      case '/':
+        return num1 / num2;
     }
   }, []);
 
@@ -70,8 +74,6 @@ const Lab3 = ({ navigation }) => {
   const memoizedAnswer = useMemo(() => {
     return calculateAnswer(memoizedProblem);
   }, [memoizedProblem, calculateAnswer]);
-
-  
 
   const checkAnswer = useCallback(() => {
     const userAnswerNum = parseFloat(userAnswer);
@@ -91,10 +93,26 @@ const Lab3 = ({ navigation }) => {
         setGameOver(true);
       }
       Animated.sequence([
-        Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
-        Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
-        Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
-        Animated.timing(shakeAnimation, { toValue: 0, duration: 100, useNativeDriver: true })
+        Animated.timing(shakeAnimation, {
+          toValue: 10,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shakeAnimation, {
+          toValue: -10,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shakeAnimation, {
+          toValue: 10,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shakeAnimation, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }),
       ]).start();
     }
     setUserAnswer('');
@@ -114,12 +132,12 @@ const Lab3 = ({ navigation }) => {
       ['7', '8', '9'],
       ['4', '5', '6'],
       ['1', '2', '3'],
-      ['.', '0', '⌫']
+      ['.', '0', '⌫'],
     ];
 
     return keys.map((row, rowIndex) => (
       <View key={`row-${rowIndex}`} style={styles.keypadRow}>
-        {row.map((key) => (
+        {row.map(key => (
           <TouchableOpacity
             key={key}
             style={styles.keypadButton}
@@ -130,8 +148,7 @@ const Lab3 = ({ navigation }) => {
               } else if (userAnswer.length < 8) {
                 setUserAnswer(userAnswer + key);
               }
-            }}
-          >
+            }}>
             <Text style={styles.keypadButtonText}>{key}</Text>
           </TouchableOpacity>
         ))}
@@ -142,12 +159,17 @@ const Lab3 = ({ navigation }) => {
   if (gameOver) {
     return (
       <ImageBackground
-        source={mistakes >= MAX_MISTAKES ? require('../assets/space_defeat.jpg') : require('../assets/space_victory.jpg')}
-        style={styles.container}
-      >
+        source={
+          mistakes >= MAX_MISTAKES
+            ? require('../assets/space_defeat.jpg')
+            : require('../assets/space_victory.jpg')
+        }
+        style={styles.container}>
         <View style={styles.gameOverContainer}>
           <Text style={styles.gameOverText}>
-            {mistakes >= MAX_MISTAKES ? 'Галактика захвачена!' : 'Галактика спасена!'}
+            {mistakes >= MAX_MISTAKES
+              ? 'Галактика захвачена!'
+              : 'Галактика спасена!'}
           </Text>
           <Text style={styles.finalScoreText}>Финальный счет: {score}</Text>
           <TouchableOpacity style={styles.restartButton} onPress={restartGame}>
@@ -160,34 +182,31 @@ const Lab3 = ({ navigation }) => {
 
   return (
     <ThemedBackground
-      source={require('../assets/space_battle.jpg')}
-      style={styles.container}
-    >
+      source={require('../assets/space.jpg')}
+      style={styles.container}>
       <LinearGradient
         colors={['rgba(0,0,0,0.7)', 'transparent']}
-        style={styles.gradient}
-      >
+        style={styles.gradient}>
         <View style={styles.header}>
           <Text style={styles.levelText}>Уровень: {level}</Text>
           <Text style={styles.scoreText}>Счет: {score}</Text>
-          <Text style={styles.mistakesText}>Ошибки: {mistakes}/{MAX_MISTAKES}</Text>
+          <Text style={styles.mistakesText}>
+            Ошибки: {mistakes}/{MAX_MISTAKES}
+          </Text>
         </View>
         <View style={styles.problemContainer}>
           <Animated.Text
             style={[
               styles.problemText,
-              { transform: [{ translateX: shakeAnimation }] }
-            ]}
-          >
+              {transform: [{translateX: shakeAnimation}]},
+            ]}>
             {`${memoizedProblem.num1} ${memoizedProblem.operation} ${memoizedProblem.num2} = ?`}
           </Animated.Text>
         </View>
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>{userAnswer}</Text>
         </View>
-        <View style={styles.keypadContainer}>
-          {renderKeypad()}
-        </View>
+        <View style={styles.keypadContainer}>{renderKeypad()}</View>
         <TouchableOpacity style={styles.submitButton} onPress={checkAnswer}>
           <Text style={styles.submitButtonText}>Уничтожить захватчиков</Text>
         </TouchableOpacity>

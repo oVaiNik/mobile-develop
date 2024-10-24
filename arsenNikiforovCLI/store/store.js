@@ -1,20 +1,17 @@
-//  store/store.js
+import {createStore} from 'redux';
 
-import { createStore } from 'redux';
 
-// Начальное состояние
 const initialState = {
   theme: 'light', // По умолчанию светлая тема
-  counter: 0,     // Дополнительный счетчик, если потребуется
+  counter: 0, 
 };
 
-// Действия
+
 const SET_THEME = 'SET_THEME';
 const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
 const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
 
-// Создаем действия
-export const setTheme = (theme) => ({
+export const setTheme = theme => ({
   type: SET_THEME,
   payload: theme,
 });
@@ -27,7 +24,6 @@ export const decrementCounter = () => ({
   type: DECREMENT_COUNTER,
 });
 
-// Редьюсер
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_THEME:
@@ -50,7 +46,6 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-// Создаем store
 const store = createStore(reducer);
 
 export default store;
