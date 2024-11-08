@@ -12,7 +12,6 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Lab1" component={Lab1} />
-
       </Tab.Navigator>
     </NavigationContainer>
   );
