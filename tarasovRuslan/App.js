@@ -1,9 +1,8 @@
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
-import { useState } from 'react';
+import { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Lab1 from "../../screens/Lab1";
-
-import { NavigationContainer } from '@react-navigation/native';
+import Lab1 from "./screens/Lab1";
+import { NavigationContainer } from "@react-navigation/native";
 const colors = ["black", "red", "yellow"];
 
 const Tab = createBottomTabNavigator();
