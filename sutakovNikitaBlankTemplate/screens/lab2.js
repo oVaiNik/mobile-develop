@@ -1,11 +1,14 @@
-import { SafeAreaView, Text, TextInput } from "react-native";
+import { Text, TextInput, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import ThemedSafeAreaView from "../components/ThemedSafeAreaView";
+import useTheme from "../hooks/useTheme";
 
 const Lab2 = () => {
   const [city, setCity] = useState("");
   const [weatherData, setWeatherData] = useState({});
   const [textMessage, setTextMessage] = useState("");
+  const { backgroundColor, textColor } = useTheme();
 
   const getWeatherData = () => {
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=fb55c434b593d7e53d17f9a7911897f4`;
@@ -38,47 +41,40 @@ const Lab2 = () => {
   }, [weatherData]);
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 30,
-        }}
-      >
-        Погода
-      </Text>
-      <Text
-        style={{
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
+    <ThemedSafeAreaView>
+      <Text style={[styles.title, { color: textColor }]}>Погода</Text>
+      <Text style={[styles.text, { color: textColor }]}>
         Введите название вашего города:
       </Text>
       <TextInput
-        style={{
-          height: 40,
-          borderWidth: 1,
-          marginTop: 20,
-        }}
+        style={[styles.input, { color: textColor, borderColor: textColor }]}
         value={city}
         onChangeText={setCity}
       />
-      <Text
-        style={{
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
-        {textMessage}
-      </Text>
-    </SafeAreaView>
+      <Text style={[styles.message, { color: textColor }]}>{textMessage}</Text>
+    </ThemedSafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 30,
+  },
+  text: {
+    fontSize: 20,
+    marginTop: 30,
+  },
+  input: {
+    height: 40,
+    borderWidth: 1,
+    marginTop: 20,
+    width: "80%",
+  },
+  message: {
+    marginTop: 30,
+    fontSize: 18,
+    textAlign: "center",
+  },
+});
 
 export default Lab2;
