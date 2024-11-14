@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
 const Lab2 = () => {
   const [fact, setFact] = useState('');

@@ -1,4 +1,4 @@
-import { View, Button, StyleSheet, TextInput } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import React, { useState, useMemo, useEffect } from 'react';
 
 const Lab3 = () => {
@@ -12,7 +12,6 @@ const Lab3 = () => {
 
   // Используем useMemo для сохранения стилей квадрата
     const squareStyle = useMemo(() => {
-        console.log("Changing square");
         return {
             width: size,
             height: size,
@@ -20,14 +19,13 @@ const Lab3 = () => {
         };
     }, [size, colorIndex]);
 
-    //Меняем цвет фона постоянно
+    // Меняем цвет фона постоянно
     useEffect(() => {
         let index = 0;
     
         const interval = setInterval(() => {
             setColor(colors[index]);
             index = (index + 1) % colors.length;
-            console.log("Changing background color")
         }, 500);
         
         return () => clearInterval(interval);
