@@ -1,64 +1,51 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
-import {useRoute} from '@react-navigation/native';
-import ThemedBackground from '../components/ThemedBackground';
-import {TitleText, InfoText} from '../components/ThemedText';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 
-const SavedImage = () => {
-  const route = useRoute();
-  const {data} = route.params;
-
-  if (!data) {
-    return (
-      <ThemedBackground style={styles.container}>
-        <TitleText style={styles.errorText}>
-          Нет сохраненных данных изображения.
-        </TitleText>
-      </ThemedBackground>
-    );
-  }
+const SavedImage = ({ route, navigation }) => {
+  const { data } = route.params;
 
   return (
-    <ThemedBackground style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <TitleText style={styles.title}>{data.title}</TitleText>
-        {data.media_type === 'image' ? (
-          <Image source={{uri: data.url}} style={styles.image} />
-        ) : (
-          <View style={styles.videoContainer}>
-            <InfoText style={styles.videoText}>
-              Видео не поддерживается.
-            </InfoText>
-          </View>
-        )}
-        <InfoText style={styles.dateText}>Дата: {data.date}</InfoText>
-        <InfoText style={styles.explanationText}>{data.explanation}</InfoText>
-      </ScrollView>
-    </ThemedBackground>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>{data.title}</Text>
+      {data.media_type === 'image' ? (
+        <Image source={{ uri: data.url }} style={styles.image} resizeMode="contain" />
+      ) : (
+        <View style={styles.videoPlaceholder}>
+          <Text style={styles.videoText}>Видео не поддерживается в этом компоненте</Text>
+        </View>
+      )}
+      <Text style={styles.dateText}>Дата: {data.date}</Text>
+      <Text style={styles.explanationText}>{data.explanation}</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Назад</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  content: {
-    alignItems: 'center',
     padding: 20,
+    alignItems: 'center',
+    backgroundColor: '#0f0c29',
   },
   title: {
     fontSize: 28,
+    color: '#FF00FF',
     marginBottom: 20,
     textAlign: 'center',
+    textShadowColor: '#FF00FF80',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
   },
   image: {
-    width: 300,
+    width: '100%',
     height: 300,
     marginBottom: 20,
     borderRadius: 10,
   },
-  videoContainer: {
-    width: 300,
+  videoPlaceholder: {
+    width: '100%',
     height: 300,
     marginBottom: 20,
     justifyContent: 'center',
@@ -68,21 +55,30 @@ const styles = StyleSheet.create({
   },
   videoText: {
     fontSize: 18,
+    color: '#FFFFFF',
   },
   dateText: {
     fontSize: 16,
+    color: '#FFFFFF',
     marginBottom: 10,
-    textAlign: 'center',
   },
   explanationText: {
     fontSize: 16,
-    marginBottom: 20,
+    color: '#FFFFFF',
     textAlign: 'justify',
+    lineHeight: 24,
   },
-  errorText: {
-    fontSize: 20,
-    textAlign: 'center',
-    marginTop: 50,
+  backButton: {
+    marginTop: 20,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: '#00FFFF',
+    width: '100%',
+    alignItems: 'center',
+  },
+  backButtonText: {
+    fontSize: 18,
+    color: '#000000',
   },
 });
 
