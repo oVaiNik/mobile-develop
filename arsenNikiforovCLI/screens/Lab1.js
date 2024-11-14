@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -9,39 +9,52 @@ import {
   PanResponder,
   Modal,
   Pressable,
-  ImageBackground,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {incrementCounter} from '../store/store';
+import ThemedBackground from '../components/ThemedBackground';
+import {ThemedText, InfoText} from '../components/ThemedText';
+import {Easing} from 'react-native'; // Добавляем импорт Easing
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-const randomColor = () => {
-  return `hsl(${Math.random() * 360}, 100%, 50%)`;
-};
+const randomColor = () => `hsl(${Math.random() * 360}, 100%, 50%)`;
 
 const randomPosition = () => ({
   x: Math.random() * (width - 100),
   y: Math.random() * (height - 300),
 });
 
-const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
+const Bubble = ({id, removeBubble, onDrag, basket, gameOver}) => {
   const [scale] = useState(new Animated.Value(0));
+  const [popAnimation] = useState(new Animated.Value(1)); // Создаем анимацию лопания
   const initialPosition = randomPosition();
-  const [pan] = useState(new Animated.ValueXY({ x: initialPosition.x, y: initialPosition.y }));
+  const [pan] = useState(
+    new Animated.ValueXY({x: initialPosition.x, y: initialPosition.y}),
+  );
   const [color] = useState(randomColor());
 
   useEffect(() => {
     const scaleAnimation = Animated.timing(scale, {
-      toValue: 1.5, // Максимальный размер пузыря
-      duration: 5000, // Длительность увеличения
+      toValue: 1.5,
+      duration: 5000,
       useNativeDriver: false,
     });
-    scaleAnimation.start(({ finished }) => {
+    scaleAnimation.start(({finished}) => {
       if (finished) {
-        // Если пузырь достиг максимального размера, он лопается
         removeBubble(id);
       }
     });
-  }, []);
+  }, [removeBubble, id]);
+
+  const handlePop = useCallback(() => {
+    Animated.timing(popAnimation, {
+      toValue: 0,
+      duration: 300,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: true,
+    }).start(() => removeBubble(id));
+  }, [popAnimation, removeBubble, id]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => !gameOver,
@@ -50,16 +63,14 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
         x: pan.x._value,
         y: pan.y._value,
       });
-      pan.setValue({ x: 0, y: 0 });
+      pan.setValue({x: 0, y: 0});
     },
-    onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
+    onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
       useNativeDriver: false,
     }),
     onPanResponderRelease: () => {
       pan.flattenOffset();
-      const { x, y } = pan.__getValue();
-
-      // Учитываем размер пузыря при проверке попадания в корзину
+      const {x, y} = pan.__getValue();
       const bubbleSize = 80 * scale.__getValue();
 
       if (
@@ -69,6 +80,9 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
         y + bubbleSize / 2 < basket.y + basket.height
       ) {
         onDrag();
+        handlePop(); // Вызываем анимацию лопания
+      } else {
+        // Если не попали в корзину, просто убираем смещение
         removeBubble(id);
       }
     },
@@ -82,9 +96,9 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
         {
           backgroundColor: color,
           transform: [
-            { translateX: pan.x },
-            { translateY: pan.y },
-            { scale: scale },
+            {translateX: pan.x},
+            {translateY: pan.y},
+            {scale: Animated.multiply(scale, popAnimation)}, // Применяем анимацию лопания
           ],
         },
       ]}
@@ -92,31 +106,35 @@ const Bubble = ({ id, removeBubble, onDrag, basket, gameOver }) => {
   );
 };
 
-const Lab1 = ({ navigation }) => {
+const Lab1 = ({navigation}) => {
   const [bubbles, setBubbles] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const counter = useSelector(state => state.counter);
+  const dispatch = useDispatch();
 
-  const basket = {
-    x: width / 2 - 50,
-    y: height - 150,
-    width: 100,
-    height: 100,
-  };
+const basket = {
+  x: width / 2 - 50,
+  y: height - 200, 
+  width: 100,
+  height: 100,
+};
+
 
   const addBubble = useCallback(() => {
     const id = Date.now() + Math.random();
-    setBubbles((prevBubbles) => [...prevBubbles, { id }]);
+    setBubbles(prevBubbles => [...prevBubbles, {id}]);
   }, []);
 
-  const removeBubble = useCallback((id) => {
-    setBubbles((prevBubbles) => prevBubbles.filter((bubble) => bubble.id !== id));
+  const removeBubble = useCallback(id => {
+    setBubbles(prevBubbles => prevBubbles.filter(bubble => bubble.id !== id));
   }, []);
 
   const onDrag = useCallback(() => {
-    setScore((prevScore) => prevScore + 5);
-  }, []);
+    setScore(prevScore => prevScore + 5);
+    dispatch(incrementCounter());
+  }, [dispatch]);
 
   useEffect(() => {
     if (!gameOver) {
@@ -140,24 +158,26 @@ const Lab1 = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../assets/lab1.jpg')}
-      style={styles.container}
-    >
+    <ThemedBackground
+      source={require('../assets/mountain.png')}
+      style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.infoButtonText}>Инфо</Text>
+        <TouchableOpacity
+          style={styles.infoButton}
+          onPress={() => setModalVisible(true)}>
+          <InfoText style={styles.infoButtonText}>Инфо</InfoText>
         </TouchableOpacity>
         <View style={styles.scoreContainer}>
-          <Text style={styles.scoreText}>Счет: {score}</Text>
+          <ThemedText style={styles.scoreText}>Счет: {score}</ThemedText>
         </View>
-        <TouchableOpacity style={styles.switchButton} onPress={() => navigation.navigate('Lab2')}>
-          <Text style={styles.switchButtonText}>Lab2</Text>
-        </TouchableOpacity>
+
+        <View style={styles.reduxContainer}>
+          <Text style={styles.reduxText}>Redux Counter: {counter}</Text>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.touchable} onPress={addBubble}>
-        {bubbles.map((bubble) => (
+        {bubbles.map(bubble => (
           <Bubble
             key={bubble.id}
             id={bubble.id}
@@ -177,9 +197,8 @@ const Lab1 = ({ navigation }) => {
               width: basket.width,
               height: basket.height,
             },
-          ]}
-        >
-          <Text style={styles.basketText}>Корзина</Text>
+          ]}>
+          <InfoText style={styles.basketText}>Корзина</InfoText>
         </View>
       </TouchableOpacity>
 
@@ -188,9 +207,12 @@ const Lab1 = ({ navigation }) => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Как играть</Text>
             <Text style={styles.modalText}>
-              Создавайте пузырьки и перетаскивайте их в корзину, чтобы заработать очки!
+              Создавайте пузырьки и перетаскивайте их в корзину, чтобы
+              заработать очки!
             </Text>
-            <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
+            <Pressable
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}>
               <Text style={styles.closeButtonText}>Закрыть</Text>
             </Pressable>
           </View>
@@ -206,7 +228,7 @@ const Lab1 = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       )}
-    </ImageBackground>
+    </ThemedBackground>
   );
 };
 
@@ -223,7 +245,6 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 2,
-    borderColor: '#00ffff',
   },
   header: {
     position: 'absolute',
@@ -240,7 +261,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   infoButtonText: {
-    color: '#00ffff',
     fontSize: 18,
   },
   switchButton: {
@@ -261,6 +281,15 @@ const styles = StyleSheet.create({
     color: '#00ffff',
     fontSize: 18,
   },
+  reduxContainer: {
+    backgroundColor: 'rgba(0, 255, 255, 0.2)',
+    padding: 10,
+    borderRadius: 10,
+  },
+  reduxText: {
+    color: '#00ffff',
+    fontSize: 18,
+  },
   basket: {
     position: 'absolute',
     backgroundColor: 'rgba(0, 255, 255, 0.2)',
@@ -271,7 +300,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   basketText: {
-    color: '#00ffff',
     fontSize: 16,
   },
   modalBackground: {
@@ -281,63 +309,58 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: '#001f3f',
-    borderRadius: 20,
+    backgroundColor: 'white',
     padding: 20,
+    borderRadius: 10,
+    width: '80%',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#00ffff',
   },
   modalTitle: {
     fontSize: 24,
-    marginBottom: 15,
     fontWeight: 'bold',
-    color: '#00ffff',
+    marginBottom: 10,
   },
   modalText: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
-    color: '#ffffff',
+    marginBottom: 20,
   },
   closeButton: {
-    marginTop: 20,
     backgroundColor: '#00ffff',
-    borderRadius: 10,
     padding: 10,
-    elevation: 2,
+    borderRadius: 10,
   },
   closeButtonText: {
-    color: '#001f3f',
+    color: 'white',
     fontSize: 18,
   },
   gameOverContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   gameOverText: {
-    color: '#00ffff',
-    fontSize: 32,
+    fontSize: 36,
+    color: 'white',
     marginBottom: 20,
   },
   finalScoreText: {
-    color: '#ffffff',
     fontSize: 24,
+    color: 'white',
     marginBottom: 20,
   },
   restartButton: {
     backgroundColor: '#00ffff',
-    padding: 15,
+    padding: 10,
     borderRadius: 10,
   },
   restartButtonText: {
-    color: '#001f3f',
+    color: 'white',
     fontSize: 18,
   },
 });
