@@ -1,22 +1,16 @@
-import {
-  SafeAreaView,
-  Text,
-  TextInput,
-  FlatList,
-  View,
-  Button,
-  StyleSheet,
-} from "react-native";
+import { Text, TextInput, FlatList, View, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import ThemedSafeAreaView from "../components/ThemedSafeAreaView";
+import useTheme from "../hooks/useTheme";
 
 const Lab3 = () => {
   const [items, setItems] = useState([]);
   const [minPrice, setMinPrice] = useState("0");
   const [maxPrice, setMaxPrice] = useState("Infinity");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const { backgroundColor, textColor } = useTheme();
 
   const getFakeStoreData = () => {
     const url = "https://fakestoreapi.com/products";
@@ -43,38 +37,28 @@ const Lab3 = () => {
     return filteredItems;
   }, [items, minPrice, maxPrice, sortOrder]);
 
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
-  };
-
-  const containerStyle = isDarkTheme
-    ? styles.darkContainer
-    : styles.lightContainer;
-  const textStyle = isDarkTheme ? styles.darkText : styles.lightText;
-
   return (
-    <SafeAreaView style={containerStyle}>
-      <Text style={textStyle}>Список товаров</Text>
-      <Button title="Переключить тему" onPress={toggleTheme} />
+    <ThemedSafeAreaView>
+      <Text style={[styles.title, { color: textColor }]}>Список товаров</Text>
       <TextInput
         placeholder="Минимальная цена"
         value={minPrice}
         onChangeText={setMinPrice}
         keyboardType="numeric"
-        style={[textStyle, { height: 40, borderWidth: 1 }]}
+        style={[styles.input, { color: textColor, borderColor: textColor }]}
       />
       <TextInput
         placeholder="Максимальная цена"
         value={maxPrice}
         onChangeText={setMaxPrice}
         keyboardType="numeric"
-        style={[textStyle, { height: 40, borderWidth: 1 }]}
+        style={[styles.input, { color: textColor, borderColor: textColor }]}
       />
-      <Text style={textStyle}>Сортировка по цене:</Text>
+      <Text style={{ color: textColor }}>Сортировка по цене:</Text>
       <Picker
-        style={[textStyle, { height: 40, width: 150 }]}
         selectedValue={sortOrder}
         onValueChange={(sortValue) => setSortOrder(sortValue)}
+        style={[styles.picker, { color: textColor }]}
       >
         <Picker.Item label="По возрастанию" value="asc" />
         <Picker.Item label="По убыванию" value="desc" />
@@ -84,42 +68,51 @@ const Lab3 = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => {
           return (
-            <View style={containerStyle}>
-              <Text style={[textStyle, { fontWeight: "bold" }]}>
+            <View style={[styles.item, { backgroundColor: backgroundColor }]}>
+              <Text
+                style={[
+                  styles.itemText,
+                  { color: textColor, fontWeight: "bold" },
+                ]}
+              >
                 {item.title}
               </Text>
-              <Text style={textStyle}>Цена: ${item.price}</Text>
-              <Text style={textStyle}>Rating: ${item.rating?.rate}</Text>
+              <Text style={[styles.itemText, { color: textColor }]}>
+                Цена: ${item.price}
+              </Text>
+              <Text style={[styles.itemText, { color: textColor }]}>
+                Rating: ${item.rating?.rate}
+              </Text>
             </View>
           );
         }}
       />
-    </SafeAreaView>
+    </ThemedSafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  lightContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ffffff",
+  title: {
+    fontSize: 18,
+    marginBottom: 10,
   },
-  darkContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#333333",
+  input: {
+    height: 40,
+    borderWidth: 1,
+    marginBottom: 10,
+    padding: 8,
   },
-  lightText: {
-    color: "#000000",
-    marginTop: 15,
-    fontSize: 15,
+  picker: {
+    height: 40,
+    width: 150,
   },
-  darkText: {
-    color: "#ffffff",
-    marginTop: 15,
-    fontSize: 15,
+  item: {
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
+  },
+  itemText: {
+    fontSize: 14,
   },
 });
 
