@@ -5,9 +5,9 @@ export default function Lab3() {
   const [text, setText] = useState('');
   
   const charCount = useMemo(() => {
-    console.log('Подсчитываем количество символов...');
-    return text.length;
-  }, [text]);
+    console.log('Подсчитываем количество символов только если текст больше 5 символов...');
+    return text.length > 5 ? text.length : 'Текст слишком короткий';
+  }, [text.length > 5]);
 
   return (
     <View style={styles.container}>
