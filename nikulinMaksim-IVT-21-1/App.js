@@ -7,8 +7,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 
-const colors = ["black", "red", "yellow"];
-
 const Tab = createBottomTabNavigator();
 export default function App() {
   return (
