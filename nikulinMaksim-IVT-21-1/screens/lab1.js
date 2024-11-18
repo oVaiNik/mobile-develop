@@ -20,7 +20,9 @@ const Lab1 = () => {
   const { backgroundColor, textColor, toggleThemeMode } = useTheme();
 
   return (
-    <SafeAreaView style={[styles.container, {backgroundColor: backgroundColor}]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: backgroundColor }]}
+    >
       <View style={{ alignItems: "center" }}>
         <View style={styles.countContainer}>
           <Text>You clicked: {count}</Text>
@@ -55,7 +57,7 @@ const Lab1 = () => {
       <Button title="Change Mode" onPress={toggleThemeMode} />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -81,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Lab1
+export default Lab1;
