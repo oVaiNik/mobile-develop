@@ -26,7 +26,7 @@ const Lab3 = () => {
         const interval = setInterval(() => {
             setColor(colors[index]);
             index = (index + 1) % colors.length;
-        }, 500);
+        }, 10000);
         
         return () => clearInterval(interval);
     }, []);

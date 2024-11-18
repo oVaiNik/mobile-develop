@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { View, Text, Button, StyleSheet } from 'react-native';
 
+import { useTheme } from "../hooks/themeManager.js";
+
 const Lab2 = () => {
   const [fact, setFact] = useState('');
 
@@ -21,10 +23,13 @@ const Lab2 = () => {
     getRandomFact();
   }, []);
 
+  const { backgroundColor, textColor, toggleThemeMode } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: backgroundColor}]}>
       <Text style={styles.factText}>{fact}</Text>
       <Button title="Get useless fact!" onPress={getRandomFact} />
+      <Button title="Change Mode" onPress={toggleThemeMode} />
     </View>
   );
 }

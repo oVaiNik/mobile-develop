@@ -5,7 +5,10 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
 } from "react-native";
+
+import { useTheme } from "../hooks/themeManager.js";
 
 const Lab1 = () => {
   const [count, setCount] = useState(0);
@@ -14,8 +17,10 @@ const Lab1 = () => {
   const colors = ["red", "green", "blue"];
   const [colorIndex, setColorIndex] = useState(0);
 
+  const { backgroundColor, textColor, toggleThemeMode } = useTheme();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {backgroundColor: backgroundColor}]}>
       <View style={{ alignItems: "center" }}>
         <View style={styles.countContainer}>
           <Text>You clicked: {count}</Text>
@@ -47,6 +52,7 @@ const Lab1 = () => {
           ></View>
         </TouchableOpacity>
       </View>
+      <Button title="Change Mode" onPress={toggleThemeMode} />
     </SafeAreaView>
   );
 }
