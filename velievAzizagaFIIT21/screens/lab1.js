@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { increment, reset, double } from "../redux/counterSlice";
 
 export default function lab1() {
-  const [count, setCount] = useState(0);
+  const count =useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.counterContainer}>
         <Text style={styles.text}>Счётчик: {count}</Text>
-        <Button title="Увеличить" onPress={() => setCount(count + 1)} />
+        <Button title="Увеличить" onPress={() => dispatch(increment())} />
       </View>
 
       <View style={styles.counterContainer}>
-        <Button title="Обнулить" onPress={() => setCount(0)} />
+        <Button title="Обнулить" onPress={() => dispatch(reset())} />
       </View>
 
       <View style={styles.counterContainer}>
-        <Button title="Увеличить x2" onPress={() => setCount(count * 2)} />
+        <Button title="Увеличить x2" onPress={() => dispatch(double())} />
       </View>
     </SafeAreaView>
   );
