@@ -1,3 +1,4 @@
+
 // Bubble.js
 import React, { useEffect, useState, useContext } from 'react';
 import { Animated, StyleSheet, Dimensions, PanResponder } from 'react-native';

@@ -62,3 +62,8 @@
 - Применены стили и фоновые изображения для улучшения интерфейса.
 
 ---
+
+## Дополнительно
+
+[**Figma Design**](https://www.figma.com/design/7vNLU8U3sQsqcYa2tntB0c/Untitled?node-id=0-1&t=UzYchR2kJgT2nZ4j-1)  
+Проект макета интерфейса доступен для просмотра в Figma.
