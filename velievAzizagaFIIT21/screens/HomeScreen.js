@@ -9,16 +9,19 @@ export default function HomeScreen({ navigation }) {
         onPress={() => navigation.navigate('lab1')}
         style={styles.button}
       />
-      <View style={styles.spacing} />
       <Button
         title="Перейти к Заданию 2"
         onPress={() => navigation.navigate('lab2')}
         style={styles.button}
       />
-      <View style={styles.spacing} />
       <Button
         title="Перейти к Заданию 3"
         onPress={() => navigation.navigate('lab3')}
+        style={styles.button}
+      />
+      <Button
+        title="Перейти к Заданию 4"
+        onPress={() => navigation.navigate('lab4')}
         style={styles.button}
       />
     </View>
