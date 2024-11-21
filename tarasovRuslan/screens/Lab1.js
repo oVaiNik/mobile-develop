@@ -1,12 +1,14 @@
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { changeColor, changeShape } from '../store';
 
 const colors = ["black", "red", "yellow"];
 const shapes = ["square", "circle", "triangle"];
 
 const Lab1 = () => {
-  const [colorIndex, setColorIndex] = useState(0);
-  const [shapeIndex, setShapeIndex] = useState(0);
+  const dispatch = useDispatch();
+  const colorIndex = useSelector((state) => state.app.colorIndex);
+  const shapeIndex = useSelector((state) => state.app.shapeIndex);
 
   const shapeStyle = {
     backgroundColor: colors[colorIndex],
@@ -35,8 +37,8 @@ const Lab1 = () => {
         <View style={shapeStyle} />
         <TouchableOpacity
           onPress={() => {
-            setColorIndex((colorIndex + 1) % colors.length);
-            setShapeIndex((shapeIndex + 1) % shapes.length);
+            dispatch(changeColor());
+            dispatch(changeShape());
           }}
           style={{
             backgroundColor: "green",
