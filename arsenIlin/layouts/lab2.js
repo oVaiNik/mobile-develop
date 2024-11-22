@@ -2,7 +2,7 @@ import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 const colors = ["black", "red", "yellow" , "green", "gray", "blue"];
 
-const Lab1 = () => {
+const Lab2 = () => {
   const [backgroundColor, setBackgroundColor] = useState(colors[0]); 
 
   let getRandomNumber = (max) => {
@@ -37,4 +37,4 @@ const Lab1 = () => {
   );
 };
 
-export default Lab1;
+export default Lab2;
