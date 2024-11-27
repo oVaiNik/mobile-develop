@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+// screens/Lab1.js
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,15 +11,12 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { incrementCounter } from '../store/store';
-import ThemedBackground from '../components/ThemedBackground';
-import { ThemedText } from '../components/ThemedText';
+import useTheme from '../hooks/useTheme';
 import Bubble from '../components/Bubble';
-import { ThemeContext } from '../ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
-function InfoBox() {
-  const { colors } = useContext(ThemeContext);
+function InfoBox({ colors }) {
   return (
     <View style={[styles.infoBox, { borderColor: colors.text }]}>
       <Text style={[styles.infoText, { color: colors.text }]}>Info</Text>
@@ -33,7 +31,7 @@ const Lab1 = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const counter = useSelector((state) => state.counter);
   const dispatch = useDispatch();
-  const { colors } = useContext(ThemeContext);
+  const colors = useTheme();
 
   const addBubble = useCallback(() => {
     const id = Date.now() + Math.random();
@@ -71,60 +69,61 @@ const Lab1 = () => {
   };
 
   return (
-    <ThemedBackground>
-      <View style={styles.container}>
-        <View style={styles.headerSection}>
-          <View style={styles.scoreContainer}>
-            <Text style={[styles.scoreText, { color: colors.text }]}>
-              score: {score}
-              {'\n'}
-              counter: {counter}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.headerSection}>
+        <View style={styles.scoreContainer}>
+          <Text style={[styles.scoreText, { color: colors.text }]}>
+            score: {score}
+            {'\n'}
+            counter: {counter}
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
+          <InfoBox colors={colors} />
+        </TouchableOpacity>
+      </View>
+      {!gameOver && (
+        <TouchableOpacity style={styles.touchable} onPress={addBubble}>
+          {bubbles.map((bubble) => (
+            <Bubble
+              key={bubble.id}
+              id={bubble.id}
+              removeBubble={removeBubble}
+              onDrag={onDrag}
+              gameOver={gameOver}
+            />
+          ))}
+        </TouchableOpacity>
+      )}
+
+      <Modal transparent={true} visible={modalVisible} animationType="fade">
+        <View style={styles.modalBackground}>
+          <View style={[styles.modalContainer, { backgroundColor: colors.secondary }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>How to Play</Text>
+            <Text style={[styles.modalText, { color: colors.text }]}>
+              Create bubbles and drag them to earn points!
             </Text>
+            <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </Pressable>
           </View>
-          <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
-            <InfoBox />
+        </View>
+      </Modal>
+
+      {gameOver && (
+        <View style={[styles.gameOverContainer, { backgroundColor: colors.secondary }]}>
+          <Text style={[styles.gameOverText, { color: colors.text }]}>Game Over!</Text>
+          <Text style={[styles.finalScoreText, { color: colors.text }]}>
+            Your Score: {score}
+          </Text>
+          <TouchableOpacity style={styles.restartButton} onPress={resetGame}>
+            <Text style={styles.restartButtonText}>Play Again</Text>
           </TouchableOpacity>
         </View>
-        {!gameOver && (
-          <TouchableOpacity style={styles.touchable} onPress={addBubble}>
-            {bubbles.map((bubble) => (
-              <Bubble
-                key={bubble.id}
-                id={bubble.id}
-                removeBubble={removeBubble}
-                onDrag={onDrag}
-                gameOver={gameOver}
-              />
-            ))}
-          </TouchableOpacity>
-        )}
-
-        <Modal transparent={true} visible={modalVisible} animationType="fade">
-          <View style={styles.modalBackground}>
-            <View style={[styles.modalContainer, { backgroundColor: colors.secondary }]}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>How to Play</Text>
-              <Text style={[styles.modalText, { color: colors.text }]}>Create bubbles and drag them to earn points!</Text>
-              <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
-                <Text style={styles.closeButtonText}>Close</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-
-        {gameOver && (
-          <View style={[styles.gameOverContainer, { backgroundColor: colors.secondary }]}>
-            <Text style={[styles.gameOverText, { color: colors.text }]}>Game Over!</Text>
-            <Text style={[styles.finalScoreText, { color: colors.text }]}>Your Score: {score}</Text>
-            <TouchableOpacity style={styles.restartButton} onPress={resetGame}>
-              <Text style={styles.restartButtonText}>Play Again</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
-    </ThemedBackground>
+      )}
+    </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -144,37 +143,31 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   scoreText: {
-    fontFamily: "Pixelify Sans, sans-serif",
+    fontFamily: 'PixelFont',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     lineHeight: 28,
   },
   infoButton: {
     padding: 10,
-    // backgroundColor: '#D3D3D3', // Светло-серый фон для кнопки
-    // borderRadius: 8,
-    // shadowColor: '#000', // Цвет тени
-    // shadowOffset: { width: 0, height: 2 }, // Смещение тени
-    // shadowOpacity: 0.3, // Непрозрачность тени
-    // shadowRadius: 0, // Радиус размытия тени
-    // altitude: 4, // Для Android shadow
   },
   touchable: {
     flex: 1,
   },
   infoBox: {
     borderRadius: 8,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderWidth: 1,
     paddingHorizontal: 34,
     paddingVertical: 10,
     lineHeight: 1.4,
-    backgroundColor: '#D3D3D3',  // Тот же светло-серый фон
+    backgroundColor: '#D3D3D3',
   },
   infoText: {
     fontSize: 18,
     textAlign: 'center',
-    color: 'black',  // Черный цвет текста
+    color: 'black',
+    fontFamily: 'PixelFont',
   },
   modalBackground: {
     flex: 1,
@@ -192,11 +185,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     marginBottom: 10,
+    fontFamily: 'PixelFont',
   },
   modalText: {
     fontSize: 16,
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'PixelFont',
   },
   closeButton: {
     padding: 10,
@@ -208,6 +203,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'PixelFont',
   },
   gameOverContainer: {
     position: 'absolute',
@@ -221,10 +217,12 @@ const styles = StyleSheet.create({
   gameOverText: {
     fontSize: 22,
     fontWeight: '700',
+    fontFamily: 'PixelFont',
   },
   finalScoreText: {
     fontSize: 18,
     marginVertical: 10,
+    fontFamily: 'PixelFont',
   },
   restartButton: {
     padding: 10,
@@ -235,8 +233,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     fontWeight: '600',
+    fontFamily: 'PixelFont',
   },
 });
-
 
 export default Lab1;

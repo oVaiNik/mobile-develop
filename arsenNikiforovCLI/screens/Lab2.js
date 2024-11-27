@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+// screens/Lab2.js
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,14 +10,14 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { ThemeContext } from '../ThemeContext';
+import useTheme from '../hooks/useTheme';
 
 const { width } = Dimensions.get('window');
 
 const Lab2 = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { colors } = useContext(ThemeContext);
+  const colors = useTheme();
   const [savedImages, setSavedImages] = useState([]);
   const [imageIndex, setImageIndex] = useState(0);
 
@@ -50,25 +51,29 @@ const Lab2 = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: '#000' }]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         {loading ? (
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size="large" color={colors.text} />
         ) : (
           <>
             <TouchableOpacity
-              style={[styles.button, styles.saveButton]}
+              style={[styles.button, styles.saveButton, { backgroundColor: colors.secondary }]}
               onPress={handleSavePicture}
             >
-              <Text style={styles.buttonText}>Save Picture</Text>
+              <Text style={[styles.buttonText, { color: colors.text }]}>Save Picture</Text>
             </TouchableOpacity>
 
-            <Text style={styles.title}>{data.title}</Text>
+            <Text style={[styles.title, { color: colors.text }]}>{data.title}</Text>
             <Image source={{ uri: data.url }} style={styles.image} />
-            <Text style={styles.description}>{data.explanation}</Text>
+            <Text style={[styles.description, { color: colors.text }]}>
+              {data.explanation}
+            </Text>
 
             <View style={styles.savedContainer}>
-              <Text style={styles.savedText}>Saved Pictures:</Text>
+              <Text style={[styles.savedText, { color: colors.text }]}>
+                Saved Pictures:
+              </Text>
               {savedImages.map((url, index) => (
                 <Image key={index} source={{ uri: url }} style={styles.savedImage} />
               ))}
@@ -78,15 +83,14 @@ const Lab2 = () => {
       </ScrollView>
 
       <TouchableOpacity
-        style={[styles.button, styles.loadButton]}
+        style={[styles.button, styles.loadButton, { backgroundColor: colors.secondary }]}
         onPress={handleLoadNext}
       >
-        <Text style={styles.buttonText}>Load Next</Text>
+        <Text style={[styles.buttonText, { color: colors.text }]}>Load Next</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
@@ -133,7 +137,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     color: '#fff',
-    fontFamily: 'Pixelify Sans, sans-serif',
+    fontFamily: 'PixelifySans-Regular',
+  },
+  description: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#fff',
+    fontFamily: 'PixelifySans-Regular',
+    marginBottom: 20,
+  },
+  savedText: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 10,
+    color: '#fff',
+    fontFamily: 'PixelifySans-Regular',
   },
   image: {
     width: width - 40,
@@ -141,22 +159,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
   },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#fff',
-    fontFamily: 'Pixelify Sans, sans-serif',
-    marginBottom: 20,
-  },
   savedContainer: {
     marginTop: 20,
     alignItems: 'center',
-  },
-  savedText: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 10,
-    color: '#fff',
   },
   savedImage: {
     width: width - 60,

@@ -1,10 +1,9 @@
-// App.js
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider } from 'react-redux';
+import {Animated} from 'react-native'; // Don't forget to import Animated
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import { ThemeProvider } from './ThemeContext';
+import {Provider} from 'react-redux';
 import store from './store/store';
 
 import Home from './screens/Home';
@@ -17,16 +16,25 @@ import SavedImage from './screens/SavedImage';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [fadeAnim] = React.useState(new Animated.Value(0));
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
   return (
     <Provider store={store}>
-      <ThemeProvider>
+      <Animated.View style={{flex: 1, opacity: fadeAnim}}>
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName="Home"
             screenOptions={{
               headerShown: false,
-            }}
-          >
+            }}>
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Lab1" component={Lab1} />
             <Stack.Screen name="Lab2" component={Lab2} />
@@ -35,7 +43,7 @@ const App = () => {
             <Stack.Screen name="SavedImage" component={SavedImage} />
           </Stack.Navigator>
         </NavigationContainer>
-      </ThemeProvider>
+      </Animated.View>
     </Provider>
   );
 };

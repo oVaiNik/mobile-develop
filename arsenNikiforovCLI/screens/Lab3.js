@@ -1,4 +1,5 @@
-import React, {useState, useMemo, useCallback, useContext} from 'react';
+// screens/Lab3.js
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,42 +8,38 @@ import {
   Dimensions,
 } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import {ThemeContext} from '../ThemeContext';
+import useTheme from '../hooks/useTheme';
 
-const {width, height} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const OPERATIONS = ['+', '-', '*', '/'];
 const MAX_LEVEL = 5;
 const MAX_MISTAKES = 3;
 
-const CalculatorButton = ({value, onPress, style}) => (
+const CalculatorButton = ({ value, onPress, style }) => (
   <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
     <Text style={styles.buttonText}>{value}</Text>
   </TouchableOpacity>
 );
 
-const ButtonRow = ({values, onKeyPress}) => (
+const ButtonRow = ({ values, onKeyPress }) => (
   <View style={styles.buttonRow}>
     {values.map((value, index) => (
-      <CalculatorButton
-        key={index}
-        value={value}
-        onPress={() => onKeyPress(value)}
-      />
+      <CalculatorButton key={index} value={value} onPress={() => onKeyPress(value)} />
     ))}
   </View>
 );
 
-const SpaceMathGame = () => {
+const Lab3 = () => {
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [currentProblem, setCurrentProblem] = useState(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [mistakes, setMistakes] = useState(0);
-  const {colors} = useContext(ThemeContext);
+  const colors = useTheme();
 
-  const generateProblem = useCallback(level => {
+  const generateProblem = useCallback((level) => {
     const operation = OPERATIONS[Math.floor(Math.random() * OPERATIONS.length)];
     let num1, num2;
     switch (operation) {
@@ -63,11 +60,11 @@ const SpaceMathGame = () => {
         num1 = num2 * (Math.floor(Math.random() * (10 * level)) + 1);
         break;
     }
-    return {num1, num2, operation};
+    return { num1, num2, operation };
   }, []);
 
-  const calculateAnswer = useCallback(problem => {
-    const {num1, num2, operation} = problem;
+  const calculateAnswer = useCallback((problem) => {
+    const { num1, num2, operation } = problem;
     switch (operation) {
       case '+':
         return num1 + num2;
@@ -90,7 +87,7 @@ const SpaceMathGame = () => {
   }, [level, currentProblem, generateProblem]);
 
   const handleKeyPress = useCallback(
-    key => {
+    (key) => {
       ReactNativeHapticFeedback.trigger('selection');
       if (key === '⌫') {
         setUserAnswer(userAnswer.slice(0, -1));
@@ -98,7 +95,7 @@ const SpaceMathGame = () => {
         setUserAnswer(userAnswer + key);
       }
     },
-    [userAnswer],
+    [userAnswer]
   );
 
   const checkAnswer = useCallback(() => {
@@ -135,41 +132,42 @@ const SpaceMathGame = () => {
 
   if (gameOver) {
     return (
-      <View style={styles.calculatorContainer}>
+      <View style={[styles.calculatorContainer, { backgroundColor: colors.background }]}>
         <View style={styles.scoreBoard}>
-          <Text style={styles.pixelText}>score: {score}</Text>
-          <Text style={styles.pixelText}>mistakes: {mistakes}</Text>
-          <Text style={styles.pixelText}>Game Over!</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>score: {score}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>mistakes: {mistakes}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Game Over!</Text>
         </View>
 
         <TouchableOpacity style={styles.answerButton} onPress={restartGame}>
-          <Text style={styles.pixelText}>Restart</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Restart</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
   return (
-    <View style={styles.calculatorContainer}>
+    <View style={[styles.calculatorContainer, { backgroundColor: colors.background }]}>
       <View style={styles.topRow}>
         <View style={styles.scoreBoard}>
-          <Text style={styles.pixelText}>score: {score}</Text>
-          <Text style={styles.pixelText}>
+          <Text style={[styles.pixelText, { color: colors.text }]}>score: {score}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>
             mistakes: {mistakes}/{MAX_MISTAKES}
           </Text>
         </View>
-        <Text style={styles.pixelText}>level: {level}</Text>
+        <Text style={[styles.pixelText, { color: colors.text }]}>level: {level}</Text>
       </View>
 
       <View style={styles.equationContainer}>
-        <Text style={styles.equationText}>
-          {memoizedProblem.num1} {memoizedProblem.operation}{' '}
-          {memoizedProblem.num2} = ?
+        <Text style={[styles.equationText, { color: colors.text }]}>
+          {memoizedProblem.num1} {memoizedProblem.operation} {memoizedProblem.num2} = ?
         </Text>
       </View>
 
       <View style={styles.resultDisplay}>
-        <Text style={styles.resultText}>{userAnswer || '___'}</Text>
+        <Text style={[styles.resultText, { color: colors.text }]}>
+          {userAnswer || '___'}
+        </Text>
       </View>
 
       <View style={styles.keypadContainer}>
@@ -185,12 +183,11 @@ const SpaceMathGame = () => {
       </View>
 
       <TouchableOpacity style={styles.answerButton} onPress={checkAnswer}>
-        <Text style={styles.pixelText}>answer</Text>
+        <Text style={[styles.pixelText, { color: colors.text }]}>answer</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   calculatorContainer: {
     flex: 1,
@@ -280,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SpaceMathGame;
+export default Lab3;

@@ -1,101 +1,107 @@
 // screens/Lab4.js
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Switch, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { incrementCounter, decrementCounter } from '../store/store';
-import { ThemeContext } from '../ThemeContext';
+import { incrementCounter, decrementCounter, toggleTheme } from '../store/store';
+import useTheme from '../hooks/useTheme';
 
 const Lab4 = () => {
-  const counter = useSelector(state => state.counter);
+  const counter = useSelector((state) => state.counter);
   const dispatch = useDispatch();
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: theme === 'dark' ? '#121212' : '#ffffff',  // Черный фон для темной темы, белый для светлой
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 20,
-    },
-    title: {
-      fontSize: 30,
-      fontWeight: '900',
-      color: theme === 'dark' ? '#ffffff' : '#000000',  // Белый для темной темы, черный для светлой
-      marginBottom: 30,
-      textTransform: 'uppercase',
-    },
-    themeContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 20,
-    },
-    themeText: {
-      fontSize: 20,
-      color: theme === 'dark' ? '#ffffff' : '#000000',
-      marginRight: 10,
-    },
-    counterText: {
-      fontSize: 24,
-      color: theme === 'dark' ? '#ffffff' : '#000000',
-      marginBottom: 20,
-      fontWeight: '700',
-    },
-    buttonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginTop: 20,
-    },
-    button: {
-      backgroundColor: theme === 'dark' ? '#ffffff' : '#000000',  // Белый для темной темы, черный для светлой
-      borderColor: theme === 'dark' ? '#000000' : '#ffffff',  // Черный для темной, белый для светлой
-      borderWidth: 2,
-      borderRadius: 50,
-      marginHorizontal: 20,
-      width: 70,
-      height: 70,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    buttonText: {
-      fontSize: 30,
-      color: theme === 'dark' ? '#000000' : '#ffffff',  // Черный для темной, белый для светлой
-      fontWeight: 'bold',
-    },
-    switch: {
-      transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
-    },
-  });
+  const colors = useTheme();
+  const theme = useSelector((state) => state.theme);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Theme switcher</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Theme Switcher</Text>
       <View style={styles.themeContainer}>
-        <Text style={styles.themeText}>{theme === 'dark' ? 'dark mode' : 'light mode'}</Text>
+        <Text style={[styles.themeText, { color: colors.text }]}>
+          {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+        </Text>
         <Switch
           value={theme === 'dark'}
-          onValueChange={toggleTheme}
-          thumbColor={theme === 'dark' ? '#000000' : '#ffffff'}
+          onValueChange={() => dispatch(toggleTheme())}
+          thumbColor={colors.accent}
+          trackColor={{ false: colors.border, true: colors.border }}
           style={styles.switch}
         />
       </View>
-      <Text style={styles.counterText}>counter: {counter}</Text>
+      <Text style={[styles.counterText, { color: colors.text }]}>Counter: {counter}</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, { backgroundColor: colors.secondary, borderColor: colors.border, shadowColor: colors.shadow }]}
           onPress={() => dispatch(incrementCounter())}
         >
-          <Text style={styles.buttonText}>+</Text>
+          <Text style={[styles.buttonText, { color: colors.text }]}>+</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, { backgroundColor: colors.secondary, borderColor: colors.border, shadowColor: colors.shadow }]}
           onPress={() => dispatch(decrementCounter())}
         >
-          <Text style={styles.buttonText}>-</Text>
+          <Text style={[styles.buttonText, { color: colors.text }]}>-</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: '900',
+    marginBottom: 30,
+    textTransform: 'uppercase',
+    ////fontFamily: 'PixelFont',
+  },
+  themeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  themeText: {
+    fontSize: 20,
+    marginRight: 10,
+    ////fontFamily: 'PixelFont',
+  },
+  counterText: {
+    fontSize: 24,
+    marginBottom: 20,
+    fontWeight: '700',
+    ////fontFamily: 'PixelFont', 
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  button: {
+    borderColor: '#000',
+    borderWidth: 2,
+    borderRadius: 50,
+    marginHorizontal: 20,
+    width: 70,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  buttonText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    ////fontFamily: 'PixelFont', 
+  },
+  switch: {
+    transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
+  },
+});
 
 export default Lab4;
