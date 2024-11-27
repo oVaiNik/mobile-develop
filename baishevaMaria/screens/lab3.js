@@ -37,7 +37,7 @@ export default function Lab3() {
         value={searchTerm}
         onChangeText={(text) => setSearchTerm(text)}
       />
-      <Button title="Перерисовать экран" onPress={forceRerender} />
+      <Button title="Очистить экран" onPress={forceRerender} />
       <FlatList
         data={filteredNames}
         keyExtractor={(item, index) => index.toString()}
