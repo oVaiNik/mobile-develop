@@ -4,10 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   Dimensions,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { ThemeContext } from '../ThemeContext';
 
@@ -135,17 +133,9 @@ const SpaceMathGame = () => {
     return (
       <View style={styles.calculatorContainer}>
         <View style={styles.scoreBoard}>
-          <View style={styles.scoreContainer}>
-            <View style={styles.scoreItem}>
-              <Text style={styles.pixelText}>score: {score}</Text>
-            </View>
-            <View style={styles.scoreItem}>
-              <Text style={styles.pixelText}>mistakes: {mistakes}</Text>
-            </View>
-          </View>
-          <View style={styles.levelContainer}>
-            <Text style={styles.pixelText}>Game Over!</Text>
-          </View>
+          <Text style={styles.pixelText}>score: {score}</Text>
+          <Text style={styles.pixelText}>mistakes: {mistakes}</Text>
+          <Text style={styles.pixelText}>Game Over!</Text>
         </View>
         
         <TouchableOpacity 
@@ -161,17 +151,9 @@ const SpaceMathGame = () => {
   return (
     <View style={styles.calculatorContainer}>
       <View style={styles.scoreBoard}>
-        <View style={styles.scoreContainer}>
-          <View style={styles.scoreItem}>
-            <Text style={styles.pixelText}>score: {score}</Text>
-          </View>
-          <View style={styles.scoreItem}>
-            <Text style={styles.pixelText}>mistakes: {mistakes}/{MAX_MISTAKES}</Text>
-          </View>
-        </View>
-        <View style={styles.levelContainer}>
-          <Text style={styles.pixelText}>level: {level}</Text>
-        </View>
+        <Text style={styles.pixelText}>score: {score}</Text>
+        <Text style={styles.pixelText}>mistakes: {mistakes}/{MAX_MISTAKES}</Text>
+        <Text style={styles.pixelText}>level: {level}</Text>
       </View>
 
       <View style={styles.equationContainer}>
@@ -184,32 +166,34 @@ const SpaceMathGame = () => {
         <Text style={styles.resultText}>{userAnswer || '___'}</Text>
       </View>
 
-      <ButtonRow 
-        values={['7', '8', '9']} 
-        onKeyPress={handleKeyPress} 
-      />
-      <ButtonRow 
-        values={['4', '5', '6']} 
-        onKeyPress={handleKeyPress} 
-      />
-      <ButtonRow 
-        values={['1', '2', '3']} 
-        onKeyPress={handleKeyPress} 
-      />
+      <View style={styles.keypadContainer}>
+        <ButtonRow 
+          values={['7', '8', '9']} 
+          onKeyPress={handleKeyPress} 
+        />
+        <ButtonRow 
+          values={['4', '5', '6']} 
+          onKeyPress={handleKeyPress} 
+        />
+        <ButtonRow 
+          values={['1', '2', '3']} 
+          onKeyPress={handleKeyPress} 
+        />
 
-      <View style={styles.bottomRow}>
-        <CalculatorButton 
-          value="." 
-          onPress={() => handleKeyPress('.')} 
-        />
-        <CalculatorButton 
-          value="0" 
-          onPress={() => handleKeyPress('0')} 
-        />
-        <CalculatorButton 
-          value="⌫" 
-          onPress={() => handleKeyPress('⌫')} 
-        />
+        <View style={styles.bottomRow}>
+          <CalculatorButton 
+            value="." 
+            onPress={() => handleKeyPress('.')} 
+          />
+          <CalculatorButton 
+            value="0" 
+            onPress={() => handleKeyPress('0')} 
+          />
+          <CalculatorButton 
+            value="⌫" 
+            onPress={() => handleKeyPress('⌫')} 
+          />
+        </View>
       </View>
 
       <TouchableOpacity 
@@ -224,85 +208,49 @@ const SpaceMathGame = () => {
 
 const styles = StyleSheet.create({
   calculatorContainer: {
-    display: 'flex',
-    marginHorizontal: 'auto',
+    flex: 1,
     maxWidth: 480,
     width: '100%',
-    padding: 55,
-    paddingBottom: 72,
-    flexDirection: 'column',
-    overflow: 'hidden',
+    padding: 20,
     alignItems: 'center',
-    backgroundColor: '#f0f0f0', // Light background
+    justifyContent: 'center',
+  },
+  scoreBoard: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
   },
   pixelText: {
     fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 18,
     color: 'rgba(0, 0, 0, 1)',
-    fontWeight: '500',
-  },
-  scoreBoard: {
-    alignSelf: 'stretch',
-    display: 'flex',
-    width: '100%',
-    gap: 20,
-    justifyContent: 'space-between',
-  },
-  scoreContainer: {
-    display: 'flex',
-    marginTop: 10,
-    flexDirection: 'column',
-    gap: 10,
-  },
-  scoreItem: {
-    borderColor: 'rgba(0, 0, 0, 1)',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    padding: 10,
-  },
-  levelContainer: {
-    borderColor: 'rgba(0, 0, 0, 1)',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    padding: 10,
   },
   equationContainer: {
-    borderColor: 'rgba(0, 0, 0, 1)',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 24,
-    marginTop: 109,
-    width: 146,
-    padding: 4,
-    alignItems: 'center',
+    marginBottom: 10,
   },
   equationText: {
     fontFamily: 'Post No Bills Jaffna ExtraBold, sans-serif',
     fontSize: 35,
   },
   resultDisplay: {
-    borderColor: 'rgba(0, 0, 0, 1)',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    width: 94,
-    padding: 10,
-    marginTop: -4,
-    alignItems: 'center',
+    marginBottom: 20,
   },
   resultText: {
     fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 50,
     textAlign: 'center',
   },
+  keypadContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   buttonRow: {
-    display: 'flex',
-    width: 240,
-    maxWidth: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     gap: 20,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginTop: 10,
+    marginBottom: 10,
   },
   button: {
     borderRadius: 12,
@@ -310,8 +258,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     minHeight: 55,
-    paddingHorizontal: 23,
-    paddingVertical: 11,
+    minWidth: 55,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -320,28 +267,20 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'rgba(0, 0, 0, 1)',
     fontWeight: '700',
-    textAlign: 'center',
   },
   bottomRow: {
-    display: 'flex',
-    width: 230,
-    maxWidth: '100%',
-    alignItems: 'center',
-    gap: 12,
     flexDirection: 'row',
-    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
   },
   answerButton: {
     borderRadius: 8,
     borderColor: 'rgba(0, 0, 0, 1)',
     borderStyle: 'solid',
     borderWidth: 1,
-    marginTop: 31,
-    minHeight: 47,
-    width: 184,
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
   },
 });
 
