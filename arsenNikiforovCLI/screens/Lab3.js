@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useContext } from 'react';
+import React, {useState, useMemo, useCallback, useContext} from 'react';
 import {
   View,
   Text,
@@ -7,29 +7,26 @@ import {
   Dimensions,
 } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { ThemeContext } from '../ThemeContext';
+import {ThemeContext} from '../ThemeContext';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const OPERATIONS = ['+', '-', '*', '/'];
 const MAX_LEVEL = 5;
 const MAX_MISTAKES = 3;
 
-const CalculatorButton = ({ value, onPress, style }) => (
-  <TouchableOpacity 
-    style={[styles.button, style]} 
-    onPress={onPress}
-  >
+const CalculatorButton = ({value, onPress, style}) => (
+  <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
     <Text style={styles.buttonText}>{value}</Text>
   </TouchableOpacity>
 );
 
-const ButtonRow = ({ values, onKeyPress }) => (
+const ButtonRow = ({values, onKeyPress}) => (
   <View style={styles.buttonRow}>
     {values.map((value, index) => (
-      <CalculatorButton 
-        key={index} 
-        value={value} 
+      <CalculatorButton
+        key={index}
+        value={value}
         onPress={() => onKeyPress(value)}
       />
     ))}
@@ -43,9 +40,9 @@ const SpaceMathGame = () => {
   const [currentProblem, setCurrentProblem] = useState(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [mistakes, setMistakes] = useState(0);
-  const { colors } = useContext(ThemeContext);
+  const {colors} = useContext(ThemeContext);
 
-  const generateProblem = useCallback((level) => {
+  const generateProblem = useCallback(level => {
     const operation = OPERATIONS[Math.floor(Math.random() * OPERATIONS.length)];
     let num1, num2;
     switch (operation) {
@@ -66,16 +63,20 @@ const SpaceMathGame = () => {
         num1 = num2 * (Math.floor(Math.random() * (10 * level)) + 1);
         break;
     }
-    return { num1, num2, operation };
+    return {num1, num2, operation};
   }, []);
 
-  const calculateAnswer = useCallback((problem) => {
-    const { num1, num2, operation } = problem;
+  const calculateAnswer = useCallback(problem => {
+    const {num1, num2, operation} = problem;
     switch (operation) {
-      case '+': return num1 + num2;
-      case '-': return num1 - num2;
-      case '*': return num1 * num2;
-      case '/': return num1 / num2;
+      case '+':
+        return num1 + num2;
+      case '-':
+        return num1 - num2;
+      case '*':
+        return num1 * num2;
+      case '/':
+        return num1 / num2;
     }
   }, []);
 
@@ -88,19 +89,22 @@ const SpaceMathGame = () => {
     return currentProblem;
   }, [level, currentProblem, generateProblem]);
 
-  const handleKeyPress = useCallback((key) => {
-    ReactNativeHapticFeedback.trigger('selection');
-    if (key === '⌫') {
-      setUserAnswer(userAnswer.slice(0, -1));
-    } else if (userAnswer.length < 8) {
-      setUserAnswer(userAnswer + key);
-    }
-  }, [userAnswer]);
+  const handleKeyPress = useCallback(
+    key => {
+      ReactNativeHapticFeedback.trigger('selection');
+      if (key === '⌫') {
+        setUserAnswer(userAnswer.slice(0, -1));
+      } else if (userAnswer.length < 8) {
+        setUserAnswer(userAnswer + key);
+      }
+    },
+    [userAnswer],
+  );
 
   const checkAnswer = useCallback(() => {
     const memoizedAnswer = calculateAnswer(memoizedProblem);
     const userAnswerNum = parseFloat(userAnswer);
-    
+
     if (Math.abs(userAnswerNum - memoizedAnswer) < 0.01) {
       ReactNativeHapticFeedback.trigger('notificationSuccess');
       setScore(score + level * 10);
@@ -137,11 +141,8 @@ const SpaceMathGame = () => {
           <Text style={styles.pixelText}>mistakes: {mistakes}</Text>
           <Text style={styles.pixelText}>Game Over!</Text>
         </View>
-        
-        <TouchableOpacity 
-          style={styles.answerButton} 
-          onPress={restartGame}
-        >
+
+        <TouchableOpacity style={styles.answerButton} onPress={restartGame}>
           <Text style={styles.pixelText}>Restart</Text>
         </TouchableOpacity>
       </View>
@@ -153,14 +154,17 @@ const SpaceMathGame = () => {
       <View style={styles.topRow}>
         <View style={styles.scoreBoard}>
           <Text style={styles.pixelText}>score: {score}</Text>
-          <Text style={styles.pixelText}>mistakes: {mistakes}/{MAX_MISTAKES}</Text>
+          <Text style={styles.pixelText}>
+            mistakes: {mistakes}/{MAX_MISTAKES}
+          </Text>
         </View>
         <Text style={styles.pixelText}>level: {level}</Text>
       </View>
 
       <View style={styles.equationContainer}>
         <Text style={styles.equationText}>
-          {memoizedProblem.num1} {memoizedProblem.operation} {memoizedProblem.num2} = ?
+          {memoizedProblem.num1} {memoizedProblem.operation}{' '}
+          {memoizedProblem.num2} = ?
         </Text>
       </View>
 
@@ -169,39 +173,18 @@ const SpaceMathGame = () => {
       </View>
 
       <View style={styles.keypadContainer}>
-        <ButtonRow 
-          values={['7', '8', '9']} 
-          onKeyPress={handleKeyPress} 
-        />
-        <ButtonRow 
-          values={['4', '5', '6']} 
-          onKeyPress={handleKeyPress} 
-        />
-        <ButtonRow 
-          values={['1', '2', '3']} 
-          onKeyPress={handleKeyPress} 
-        />
+        <ButtonRow values={['7', '8', '9']} onKeyPress={handleKeyPress} />
+        <ButtonRow values={['4', '5', '6']} onKeyPress={handleKeyPress} />
+        <ButtonRow values={['1', '2', '3']} onKeyPress={handleKeyPress} />
 
         <View style={styles.bottomRow}>
-          <CalculatorButton 
-            value="." 
-            onPress={() => handleKeyPress('.')} 
-          />
-          <CalculatorButton 
-            value="0" 
-            onPress={() => handleKeyPress('0')} 
-          />
-          <CalculatorButton 
-            value="⌫" 
-            onPress={() => handleKeyPress('⌫')} 
-          />
+          <CalculatorButton value="." onPress={() => handleKeyPress('.')} />
+          <CalculatorButton value="0" onPress={() => handleKeyPress('0')} />
+          <CalculatorButton value="⌫" onPress={() => handleKeyPress('⌫')} />
         </View>
       </View>
 
-      <TouchableOpacity 
-        style={styles.answerButton} 
-        onPress={checkAnswer}
-      >
+      <TouchableOpacity style={styles.answerButton} onPress={checkAnswer}>
         <Text style={styles.pixelText}>answer</Text>
       </TouchableOpacity>
     </View>
@@ -215,13 +198,13 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 20,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   topRow: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   scoreBoard: {
     flexDirection: 'column',
@@ -229,26 +212,31 @@ const styles = StyleSheet.create({
   pixelText: {
     fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 18,
-    color: 'rgba(0, 0, 0, 1)',
+    color: '#000',
   },
   equationContainer: {
     marginBottom: 10,
+    marginTop: 140, // Добавлен marginTop для понижения уравнения
   },
   equationText: {
     fontFamily: 'Post No Bills Jaffna ExtraBold, sans-serif',
     fontSize: 35,
+    color: '#000',
   },
   resultDisplay: {
     marginBottom: 20,
+    marginTop: 20, // Добавлен marginTop для понижения отображения результата
   },
   resultText: {
     fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 50,
     textAlign: 'center',
+    color: '#000',
   },
   keypadContainer: {
     alignItems: 'center',
     marginBottom: 20,
+    marginTop: 20, // Добавлен marginTop для опускания клавиатуры
   },
   buttonRow: {
     flexDirection: 'row',
@@ -266,7 +254,7 @@ const styles = StyleSheet.create({
     minWidth: 55,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#d3d3d3', // серые кнопки
+    backgroundColor: '#d3d3d3',
   },
   buttonText: {
     fontFamily: 'Pixelify Sans, sans-serif',
@@ -282,7 +270,8 @@ const styles = StyleSheet.create({
     minWidth: 95,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#d3d3d3', 
+    backgroundColor: '#d3d3d3',
+    marginTop: 20, // Добавлен marginTop для опускания кнопки ответа
   },
   bottomRow: {
     flexDirection: 'row',
