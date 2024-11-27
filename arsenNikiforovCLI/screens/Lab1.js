@@ -17,6 +17,15 @@ import { ThemeContext } from '../ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
+function InfoBox() {
+  const { colors } = useContext(ThemeContext);
+  return (
+    <View style={[styles.infoBox, { borderColor: colors.text }]}>
+      <Text style={[styles.infoText, { color: colors.text }]}>Info</Text>
+    </View>
+  );
+}
+
 const Lab1 = () => {
   const [bubbles, setBubbles] = useState([]);
   const [score, setScore] = useState(0);
@@ -61,154 +70,163 @@ const Lab1 = () => {
     setGameOver(false);
   };
 
-  const styles = StyleSheet.create({
-    header: {
-      position: 'absolute',
-      top: 40,
-      width: '100%',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingHorizontal: 20,
-      zIndex: 1,
-      backgroundColor: colors.primaryDark,
-    },
-    infoButton: {
-      padding: 8,
-      borderRadius: 5,
-      backgroundColor: colors.accentDark,
-      alignItems: 'center',
-    },
-    infoButtonText: {
-      fontSize: 16,
-      color: '#FFFFFF',
-      fontWeight: '600',
-    },
-    scoreText: {
-      fontSize: 18,
-      fontWeight: '500',
-      color: colors.text,
-    },
-    counterText: {
-      fontSize: 18,
-      color: colors.text,
-    },
-    touchable: {
-      flex: 1,
-      justifyContent: 'center',
-    },
-    modalBackground: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0,0,0,0.6)',
-    },
-    modalContainer: {
-      width: 320,
-      padding: 24,
-      borderRadius: 8,
-      backgroundColor: colors.secondaryDark,
-      alignItems: 'center',
-    },
-    modalTitle: {
-      fontSize: 20,
-      fontWeight: '700',
-      color: colors.text,
-      marginBottom: 10,
-    },
-    modalText: {
-      fontSize: 16,
-      color: colors.textLight,
-      marginBottom: 20,
-      textAlign: 'center',
-    },
-    closeButton: {
-      padding: 10,
-      borderRadius: 5,
-      alignItems: 'center',
-      backgroundColor: colors.accentDark,
-    },
-    closeButtonText: {
-      color: '#fff',
-      fontSize: 16,
-      fontWeight: '600',
-    },
-    gameOverContainer: {
-      position: 'absolute',
-      top: height / 3,
-      left: width / 6,
-      right: width / 6,
-      backgroundColor: colors.secondaryDark,
-      padding: 20,
-      borderRadius: 8,
-      alignItems: 'center',
-    },
-    gameOverText: {
-      fontSize: 22,
-      fontWeight: '700',
-      color: colors.text,
-    },
-    finalScoreText: {
-      fontSize: 18,
-      color: colors.textLight,
-      marginVertical: 10,
-    },
-    restartButton: {
-      padding: 10,
-      borderRadius: 5,
-      backgroundColor: colors.accentDark,
-    },
-    restartButtonText: {
-      fontSize: 16,
-      color: '#fff',
-      fontWeight: '600',
-    },
-  });
-
   return (
     <ThemedBackground>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.infoButtonText}>Info</Text>
-        </TouchableOpacity>
-        <ThemedText style={styles.scoreText}>Score: {score}</ThemedText>
-        <ThemedText style={styles.counterText}>Counter: {counter}</ThemedText>
-      </View>
-
-      <TouchableOpacity style={styles.touchable} onPress={addBubble}>
-        {bubbles.map((bubble) => (
-          <Bubble
-            key={bubble.id}
-            id={bubble.id}
-            removeBubble={removeBubble}
-            onDrag={onDrag}
-            gameOver={gameOver}
-          />
-        ))}
-      </TouchableOpacity>
-
-      <Modal transparent={true} visible={modalVisible} animationType="fade">
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>How to Play</Text>
-            <Text style={styles.modalText}>Create bubbles and drag them to earn points!</Text>
-            <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </Pressable>
+      <View style={styles.container}>
+        <View style={styles.headerSection}>
+          <View style={styles.scoreContainer}>
+            <Text style={[styles.scoreText, { color: colors.text }]}>
+              score: {score}
+              {'\n'}
+              counter: {counter}
+            </Text>
           </View>
-        </View>
-      </Modal>
-
-      {gameOver && (
-        <View style={styles.gameOverContainer}>
-          <Text style={styles.gameOverText}>Game Over!</Text>
-          <Text style={styles.finalScoreText}>Your Score: {score}</Text>
-          <TouchableOpacity style={styles.restartButton} onPress={resetGame}>
-            <Text style={styles.restartButtonText}>Play Again</Text>
+          <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
+            <InfoBox />
           </TouchableOpacity>
         </View>
-      )}
+        {!gameOver && (
+          <TouchableOpacity style={styles.touchable} onPress={addBubble}>
+            {bubbles.map((bubble) => (
+              <Bubble
+                key={bubble.id}
+                id={bubble.id}
+                removeBubble={removeBubble}
+                onDrag={onDrag}
+                gameOver={gameOver}
+              />
+            ))}
+          </TouchableOpacity>
+        )}
+
+        <Modal transparent={true} visible={modalVisible} animationType="fade">
+          <View style={styles.modalBackground}>
+            <View style={[styles.modalContainer, { backgroundColor: colors.secondary }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>How to Play</Text>
+              <Text style={[styles.modalText, { color: colors.text }]}>Create bubbles and drag them to earn points!</Text>
+              <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                <Text style={styles.closeButtonText}>Close</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+
+        {gameOver && (
+          <View style={[styles.gameOverContainer, { backgroundColor: colors.secondary }]}>
+            <Text style={[styles.gameOverText, { color: colors.text }]}>Game Over!</Text>
+            <Text style={[styles.finalScoreText, { color: colors.text }]}>Your Score: {score}</Text>
+            <TouchableOpacity style={styles.restartButton} onPress={resetGame}>
+              <Text style={styles.restartButtonText}>Play Again</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </ThemedBackground>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingLeft: 21,
+    paddingRight: 21,
+    paddingTop: 40,
+    paddingBottom: 142,
+    alignItems: 'stretch',
+  },
+  headerSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  scoreContainer: {
+    lineHeight: 28,
+  },
+  scoreText: {
+    fontFamily: "Pixelify Sans, sans-serif",
+    fontSize: 20,
+    fontWeight: "700",
+    lineHeight: 28,
+  },
+  infoButton: {
+    padding: 10,
+  },
+  touchable: {
+    flex: 1,
+  },
+  infoBox: {
+    borderRadius: 8,
+    borderStyle: "solid",
+    borderWidth: 1,
+    paddingHorizontal: 34,
+    paddingVertical: 10,
+    lineHeight: 1.4,
+  },
+  infoText: {
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  modalContainer: {
+    width: 320,
+    padding: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  closeButton: {
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    backgroundColor: '#03DAC6',
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  gameOverContainer: {
+    position: 'absolute',
+    top: height / 3,
+    left: width / 6,
+    right: width / 6,
+    padding: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  gameOverText: {
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  finalScoreText: {
+    fontSize: 18,
+    marginVertical: 10,
+  },
+  restartButton: {
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#03DAC6',
+  },
+  restartButtonText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: '600',
+  },
+});
 
 export default Lab1;

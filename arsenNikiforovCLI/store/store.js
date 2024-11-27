@@ -1,4 +1,4 @@
-// store.js
+// store/store.js
 import { createStore } from 'redux';
 
 const initialState = {

@@ -1,124 +1,103 @@
-// Home.js
-import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import * as React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { ThemeContext } from '../ThemeContext';
 
-const { width, height } = Dimensions.get('window');
+const menuItems = [
+  { id: 1, title: "Lab1" },
+  { id: 2, title: "Lab2" },
+  { id: 3, title: "Lab3" },
+  { id: 4, title: "Lab4" },
+];
+
+function LabHeader({ colors }) {
+  return (
+    <View style={styles.headerContainer}>
+      <Text style={[styles.headerText, { color: colors.text }]}>
+        Laboratory work
+        {"\n"}
+        Nikiforov Arsen
+        {"\n"}
+        FIIT-21
+      </Text>
+    </View>
+  );
+}
+
+function LabButton({ title, onPress, colors }) {
+  return (
+    <TouchableOpacity 
+      style={[styles.buttonContainer, { borderColor: colors.text }]} 
+      onPress={onPress}
+    >
+      <Text style={[styles.buttonText, { color: colors.text }]}>{title}</Text>
+    </TouchableOpacity>
+  );
+}
 
 function Home({ navigation }) {
-  const { colors } = useContext(ThemeContext);
+  const { colors } = React.useContext(ThemeContext);
 
-  const handleNavigation = path => {
+  const handleNavigation = (path) => {
     navigation.navigate(path);
   };
 
-  const menuItems = [
-    { path: 'Lab1', text: 'Bubble Game', icon: '🎮' },
-    { path: 'Lab2', text: 'NASA API', icon: '🛸' },
-    { path: 'Lab3', text: 'Space Calculator', icon: '🧮' },
-    { path: 'Lab4', text: 'Redux Theme', icon: '⚗️' },
-  ];
-
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.content}>
-        <View style={[styles.card, { backgroundColor: colors.secondary, borderColor: colors.primary }]}>
-          <Text style={[styles.title, { color: colors.primary }]}>CyberLabs 2077</Text>
-          <Text style={[styles.subtitle, { color: colors.text }]}>Лабораторные работы</Text>
-
-          <View style={styles.studentInfo}>
-            <Text style={[styles.studentText, { color: colors.text }]}>Студент: Никифоров Арсен</Text>
-            <Text style={[styles.studentText, { color: colors.text }]}>Группа: ФИИТ-21</Text>
-          </View>
-
-          <Text style={[styles.selectionText, { color: colors.text }]}>Выберите экран:</Text>
-
-          <View style={styles.menuContainer}>
-            {menuItems.map(({ path, text, icon }) => (
-              <TouchableOpacity
-                key={path}
-                onPress={() => handleNavigation(path)}
-                style={[styles.menuItem, { backgroundColor: colors.secondary, borderColor: colors.primary }]}
-              >
-                <View style={styles.menuItemContent}>
-                  <Text style={[styles.icon, { color: colors.primary }]}>{icon}</Text>
-                  <Text style={[styles.menuText, { color: colors.text }]}>{text}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
+      <LabHeader colors={colors} />
+      {menuItems.map((lab) => (
+        <LabButton 
+          key={lab.id} 
+          title={lab.title} 
+          onPress={() => handleNavigation(lab.title.replace(' ', ''))}
+          colors={colors}
+        />
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    width,
-    height,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  content: {
-    width: '90%',
-    maxWidth: 400,
-    alignItems: 'center',
-  },
-  card: {
-    padding: 20,
-    borderRadius: 15,
-    borderWidth: 1.5,
-    width: '100%',
-  },
-  title: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 22,
-    textAlign: 'center',
-    marginBottom: 15,
-  },
-  studentInfo: {
-    marginBottom: 15,
-    alignItems: 'center',
-  },
-  studentText: {
+    display: "flex",
+    marginLeft: "auto",
+    marginRight: "auto",
+    maxWidth: 480,
+    width: "100%",
+    paddingLeft: 65,
+    paddingRight: 65,
+    paddingTop: 226,
+    paddingBottom: 226,
+    flexDirection: "column",
+    overflow: "hidden",
+    alignItems: "center",
+    fontFamily: "Pixelify Sans, sans-serif",
     fontSize: 18,
-    marginBottom: 2,
+    fontWeight: "500",
+    lineHeight: 1.4,
   },
-  selectionText: {
-    fontSize: 18,
-    marginBottom: 15,
-    textAlign: 'center',
+  headerContainer: {
+    width: "100%",
   },
-  menuContainer: {
-    width: '100%',
-    marginTop: 10,
+  headerText: {
+    fontSize: 20,
+    fontWeight: "700",
+    lineHeight: 28,
+    textAlign: "center",
   },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    marginBottom: 10,
-    borderWidth: 1.5,
+  buttonContainer: {
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginTop: 21,
+    width: 184,
+    maxWidth: "100%",
+    paddingLeft: 70,
+    paddingRight: 70,
+    paddingTop: 12,
+    paddingBottom: 12,
   },
-  menuItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  icon: {
-    fontSize: 22,
-    marginRight: 12,
-  },
-  menuText: {
-    fontSize: 18,
+  buttonText: {
+    textAlign: "center",
   },
 });
 
