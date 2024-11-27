@@ -151,6 +151,13 @@ const styles = StyleSheet.create({
   },
   infoButton: {
     padding: 10,
+    // backgroundColor: '#D3D3D3', // Светло-серый фон для кнопки
+    // borderRadius: 8,
+    // shadowColor: '#000', // Цвет тени
+    // shadowOffset: { width: 0, height: 2 }, // Смещение тени
+    // shadowOpacity: 0.3, // Непрозрачность тени
+    // shadowRadius: 0, // Радиус размытия тени
+    // altitude: 4, // Для Android shadow
   },
   touchable: {
     flex: 1,
@@ -162,10 +169,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 34,
     paddingVertical: 10,
     lineHeight: 1.4,
+    backgroundColor: '#D3D3D3',  // Тот же светло-серый фон
   },
   infoText: {
     fontSize: 18,
     textAlign: 'center',
+    color: 'black',  // Черный цвет текста
   },
   modalBackground: {
     flex: 1,
@@ -228,5 +237,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
 
 export default Lab1;
