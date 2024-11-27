@@ -150,9 +150,11 @@ const SpaceMathGame = () => {
 
   return (
     <View style={styles.calculatorContainer}>
-      <View style={styles.scoreBoard}>
-        <Text style={styles.pixelText}>score: {score}</Text>
-        <Text style={styles.pixelText}>mistakes: {mistakes}/{MAX_MISTAKES}</Text>
+      <View style={styles.topRow}>
+        <View style={styles.scoreBoard}>
+          <Text style={styles.pixelText}>score: {score}</Text>
+          <Text style={styles.pixelText}>mistakes: {mistakes}/{MAX_MISTAKES}</Text>
+        </View>
         <Text style={styles.pixelText}>level: {level}</Text>
       </View>
 
@@ -215,11 +217,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  scoreBoard: {
+  topRow: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+  },
+  scoreBoard: {
+    flexDirection: 'column',
   },
   pixelText: {
     fontFamily: 'Pixelify Sans, sans-serif',
@@ -261,26 +266,24 @@ const styles = StyleSheet.create({
     minWidth: 55,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#d3d3d3', // серые кнопки
   },
   buttonText: {
     fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 24,
-    color: 'rgba(0, 0, 0, 1)',
-    fontWeight: '700',
+    color: '#000',
+  },
+  answerButton: {
+    backgroundColor: '#d3d3d3',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginTop: 20,
   },
   bottomRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
     gap: 20,
-  },
-  answerButton: {
-    borderRadius: 8,
-    borderColor: 'rgba(0, 0, 0, 1)',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 40,
   },
 });
 

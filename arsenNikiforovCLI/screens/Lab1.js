@@ -125,7 +125,6 @@ const Lab1 = () => {
   );
 };
 
-<<<<<<< HEAD
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -230,6 +229,4 @@ const styles = StyleSheet.create({
   },
 });
 
-=======
->>>>>>> c6d60465d0664b4c609ab22529f86e913a53ceff
 export default Lab1;
