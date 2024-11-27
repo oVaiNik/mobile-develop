@@ -8,22 +8,22 @@ import { ThemeContext } from '../ThemeContext';
 const Lab4 = () => {
   const counter = useSelector(state => state.counter);
   const dispatch = useDispatch();
-  const { theme, toggleTheme, colors } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor: theme === 'dark' ? '#121212' : '#ffffff',  // Черный фон для темной темы, белый для светлой
       alignItems: 'center',
       justifyContent: 'center',
       padding: 20,
     },
     title: {
-      fontSize: 28,  // Увеличиваем размер шрифта
-      fontWeight: '900',  // Устанавливаем жирный шрифт
-      color: colors.text,
-      marginBottom: 20,
-      textTransform: 'uppercase',  // Сделаем текст заглавными буквами
+      fontSize: 30,
+      fontWeight: '900',
+      color: theme === 'dark' ? '#ffffff' : '#000000',  // Белый для темной темы, черный для светлой
+      marginBottom: 30,
+      textTransform: 'uppercase',
     },
     themeContainer: {
       flexDirection: 'row',
@@ -31,16 +31,15 @@ const Lab4 = () => {
       marginBottom: 20,
     },
     themeText: {
-      fontSize: 20,  // Увеличиваем шрифт
-      color: colors.text,
+      fontSize: 20,
+      color: theme === 'dark' ? '#ffffff' : '#000000',
       marginRight: 10,
-      fontWeight: '500',  // Чуть более легкий шрифт
     },
     counterText: {
-      fontSize: 24,  // Увеличиваем шрифт
-      color: colors.text,
+      fontSize: 24,
+      color: theme === 'dark' ? '#ffffff' : '#000000',
       marginBottom: 20,
-      fontWeight: '700',  // Увеличиваем жирность шрифта
+      fontWeight: '700',
     },
     buttonContainer: {
       flexDirection: 'row',
@@ -48,23 +47,23 @@ const Lab4 = () => {
       marginTop: 20,
     },
     button: {
-      backgroundColor: theme === 'dark' ? '#555' : '#ccc',  // Темный фон для темной темы, светлый для светлой
-      paddingVertical: 15,
-      paddingHorizontal: 25,
+      backgroundColor: theme === 'dark' ? '#ffffff' : '#000000',  // Белый для темной темы, черный для светлой
+      borderColor: theme === 'dark' ? '#000000' : '#ffffff',  // Черный для темной, белый для светлой
+      borderWidth: 2,
       borderRadius: 50,
-      marginHorizontal: 10,
+      marginHorizontal: 20,
+      width: 70,
+      height: 70,
       alignItems: 'center',
       justifyContent: 'center',
-      width: 70,  // Ширина кнопки
-      height: 70,  // Высота кнопки
     },
     buttonText: {
-      color: colors.text,
-      fontSize: 30,  // Увеличиваем шрифт для большей выразительности
-      fontWeight: 'bold',  // Жирный шрифт
+      fontSize: 30,
+      color: theme === 'dark' ? '#000000' : '#ffffff',  // Черный для темной, белый для светлой
+      fontWeight: 'bold',
     },
     switch: {
-      transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],  // Увеличиваем размер переключателя
+      transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
     },
   });
 
@@ -76,7 +75,7 @@ const Lab4 = () => {
         <Switch
           value={theme === 'dark'}
           onValueChange={toggleTheme}
-          thumbColor={colors.accent}
+          thumbColor={theme === 'dark' ? '#000000' : '#ffffff'}
           style={styles.switch}
         />
       </View>
