@@ -14,12 +14,12 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import axios from "axios";
 
-export default function Lab3() {
+
+export default function Lab1() {
+
   return (
     <SafeAreaView style={{ flex: 1, display: "flex" }}>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        
-      </View>
+      
     </SafeAreaView>
   );
 }

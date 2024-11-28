@@ -17,35 +17,8 @@ export default function TabLayout() {
           headerStyle: {
             backgroundColor: '#f4511e',
           },
-        }}
-      >
-        <Tabs.Screen
-          name="lab1"
-          options={{
-            title: "Lab1",
-            tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="lab2"
-          options={{
-            title: "Lab2",
-            tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="lab3"
-          options={{
-            title: "Lab3",
-            tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
-            ),
-          }}
-        />
+        }}>
+
       </Tabs>
     </>
   );
