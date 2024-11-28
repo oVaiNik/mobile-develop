@@ -1,44 +1,51 @@
-import React, {useEffect, useState} from 'react'
-import {ScrollView, StyleSheet, View} from 'react-native'
-import {api} from '../api/api'
-import {CryptoCurrency} from '../interfaces/cryptocurrency.interface'
+import React, {useState} from 'react'
+import {StyleSheet, TouchableOpacity, View} from 'react-native'
 import BoldText from '../components/customs/text/BoldText'
-import RegularText from '../components/customs/text/RegularText'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  scrollContainer: {
-    padding: 16,
+  button: {
+    borderRadius: 50,
+    width: '50%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
   },
 })
 
 const Lab2: React.FC = () => {
-  const getCryptocurrencyData = () => {
-    api.getCryptocurrencyData().then(response => {
-      console.log(response)
-      setCryptocurrencyData(response)
-    })
+  const [darkTheme] = useState('#000')
+  const [lightTheme] = useState('#FFF')
+  const [isDarkThemeOn, setIsDarkThemeOn] = useState(false)
+
+  const toggleDarkMode = () => {
+    setIsDarkThemeOn(!isDarkThemeOn)
   }
 
-  const [cryptocurrencyData, setCryptocurrencyData] = useState<
-    CryptoCurrency[]
-  >([])
-  useEffect(getCryptocurrencyData, [])
-
   return (
-    <View style={[styles.container]}>
-      <ScrollView style={[styles.scrollContainer]}>
-        {cryptocurrencyData.map(cryptocurrency => {
-          return (
-            <View>
-              <BoldText>{cryptocurrency.name}</BoldText>
-              <RegularText>{cryptocurrency.priceUsd} USD</RegularText>
-            </View>
-          )
-        })}
-      </ScrollView>
+    <View
+      style={[
+        styles.container,
+        {backgroundColor: isDarkThemeOn ? darkTheme : lightTheme},
+      ]}>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          {
+            backgroundColor: isDarkThemeOn ? darkTheme : lightTheme,
+            borderColor: isDarkThemeOn ? lightTheme : darkTheme,
+          },
+        ]}
+        onPress={toggleDarkMode}>
+        <BoldText style={{color: isDarkThemeOn ? lightTheme : darkTheme}}>
+          Click on me
+        </BoldText>
+      </TouchableOpacity>
     </View>
   )
 }
