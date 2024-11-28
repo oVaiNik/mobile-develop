@@ -8,6 +8,7 @@ import {colors} from '../constants/colors.const'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.white,
