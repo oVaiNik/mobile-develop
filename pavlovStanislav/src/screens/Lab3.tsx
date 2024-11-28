@@ -30,17 +30,50 @@ const expensiveFunction = (x: number) => {
 const Lab3: React.FC = () => {
   const [num, setNum] = useState(0)
   const [memoNum, setMemoNum] = useState(0)
+  const [timeToIterate, setTimeToIterate] = useState(0)
+  const [timeToIterateWithMemo, setTimeToIterateWithMemo] = useState(0)
+  const [isIterating, setIsIterating] = useState(false)
+
+  const measurePerformance = (callback: () => number, isMemo: boolean) => {
+    const startTime = performance.now()
+    const callbackResult = callback()
+    const endTime = performance.now()
+
+    if (isMemo) {
+      setTimeToIterateWithMemo(Math.round(endTime - startTime))
+    } else {
+      setTimeToIterate(Math.round(endTime - startTime))
+    }
+
+    return new Promise<number>(resolve => {
+      resolve(callbackResult)
+    })
+  }
+
   const iterate = () => {
-    setNum(expensiveFunction(0))
+    setIsIterating(true)
+    measurePerformance(() => expensiveFunction(0), false).then(result => {
+      setNum(result)
+      setIsIterating(false)
+    })
   }
-  const memoizeExpensiveFunction = useMemo(() => expensiveFunction(0), [])
+  const memoizeExpensiveFunction = useMemo(() => {
+    return expensiveFunction(0)
+  }, [])
+
   const iterateWithMemo = () => {
-    setMemoNum(memoizeExpensiveFunction)
+    setIsIterating(true)
+    measurePerformance(() => memoizeExpensiveFunction, false).then(result => {
+      setMemoNum(result)
+      setIsIterating(false)
+    })
   }
+
   const clearState = () => {
     setNum(0)
     setMemoNum(0)
   }
+
   return (
     <View style={styles.container}>
       <BoldText style={{fontSize: 20}}>useMemo</BoldText>
@@ -48,14 +81,26 @@ const Lab3: React.FC = () => {
         <View style={{margin: 10}}>
           <BoldText>Without memo</BoldText>
           <SemiBoldText>{num}</SemiBoldText>
-          <TouchableOpacity style={styles.button} onPress={iterate}>
+          <SemiBoldText>
+            {num ? `Iteration time: ${timeToIterate}ms` : ''}
+          </SemiBoldText>
+          <TouchableOpacity
+            style={styles.button}
+            disabled={isIterating}
+            onPress={iterate}>
             <MediumText>Click to run</MediumText>
           </TouchableOpacity>
         </View>
         <View style={{margin: 10}}>
           <BoldText>With memo</BoldText>
           <SemiBoldText>{memoNum}</SemiBoldText>
-          <TouchableOpacity style={styles.button} onPress={iterateWithMemo}>
+          <SemiBoldText>
+            {memoNum ? `Iteration time: ${timeToIterateWithMemo}ms` : ''}
+          </SemiBoldText>
+          <TouchableOpacity
+            style={styles.button}
+            disabled={isIterating}
+            onPress={() => iterateWithMemo()}>
             <MediumText>Click to run</MediumText>
           </TouchableOpacity>
         </View>
