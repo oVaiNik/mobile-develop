@@ -36,10 +36,13 @@ function LabButton({ title, onPress, colors }) {
       ]}
       onPress={onPress}
     >
-      <ThemedText style={styles.buttonText}>{title}</ThemedText>
+      <ThemedText style={[styles.buttonText, { color: colors.buttonText }]}>
+        {title}
+      </ThemedText>
     </TouchableOpacity>
   );
 }
+
 
 function Home({ navigation }) {
   const colors = useTheme();
@@ -73,6 +76,8 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginBottom: 30,
+    width: '90%', // Задаём ширину контейнера для текста
+    alignItems: 'center', // Центруем текст
   },
   headerText: {
     fontSize: 20, // Размер текста
