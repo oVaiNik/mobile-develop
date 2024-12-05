@@ -23,6 +23,8 @@ function LabHeader({ colors }) {
   );
 }
 
+
+
 function LabButton({ title, onPress, colors }) {
   return (
     <TouchableOpacity
@@ -76,12 +78,15 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginBottom: 30,
-    width: '90%', // Задаём ширину контейнера для текста
-    alignItems: 'center', // Центруем текст
+    width: '100%', // Устанавливаем ширину контейнера
+    alignItems: 'center', // Центруем текст внутри
   },
   headerText: {
-    fontSize: 20, // Размер текста
-    textAlign: 'center',
+    fontSize: 18, // Размер шрифта
+    textAlign: 'center', // Выравнивание текста по центру
+    fontFamily: 'PixelFont', // Шрифт
+    letterSpacing: -1.2, // Уменьшаем расстояние между буквами
+    lineHeight: 30, // Увеличиваем расстояние между строками
   },
   buttonContainer: {
     borderWidth: 1,
@@ -97,7 +102,9 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
     fontSize: 16,
+    fontFamily: 'PixelFont',
   },
 });
+
 
 export default Home;
