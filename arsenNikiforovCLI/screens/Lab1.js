@@ -124,6 +124,7 @@ const Lab1 = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -138,15 +139,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
+    marginTop: 30, // Отступ сверху для опускания HUD
   },
   scoreContainer: {
     lineHeight: 28,
   },
   scoreText: {
-    fontSize: 20,
-    fontWeight: '700',
-    lineHeight: 28,
+    fontSize: 14,
     fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   infoButton: {
     padding: 10,
@@ -158,13 +161,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     paddingHorizontal: 34,
-    paddingVertical: 10,
-    lineHeight: 1.4,
+    paddingVertical: 3,
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   infoText: {
-    fontSize: 18,
+    fontSize: 12,
     textAlign: 'center',
     fontFamily: 'PixelFont',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   modalBackground: {
     flex: 1,
@@ -179,16 +185,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 10,
+    fontSize: 14,
     fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   modalText: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center',
+    fontSize: 12,
     fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   closeButton: {
     padding: 10,
@@ -197,10 +205,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#03DAC6',
   },
   closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 12,
     fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   gameOverContainer: {
     position: 'absolute',
@@ -212,14 +221,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   gameOverText: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 14,
     fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   finalScoreText: {
-    fontSize: 18,
-    marginVertical: 10,
+    fontSize: 12,
     fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   restartButton: {
     padding: 10,
@@ -227,10 +240,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#03DAC6',
   },
   restartButtonText: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: '600',
+    fontSize: 12,
     fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
 });
 
