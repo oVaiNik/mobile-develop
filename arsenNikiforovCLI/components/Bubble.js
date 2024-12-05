@@ -12,7 +12,7 @@ const Bubble = ({ id, removeBubble, onDrag, gameOver }) => {
   const [opacity] = useState(new Animated.Value(1));
   const colors = useTheme();
 
-  const color = colors.accent;
+  const bubbleColor = colors.accent;
 
   useEffect(() => {
     if (!gameOver) {
@@ -56,7 +56,7 @@ const Bubble = ({ id, removeBubble, onDrag, gameOver }) => {
       style={[
         styles.bubble,
         {
-          backgroundColor: color,
+          backgroundColor: bubbleColor,
           transform: position.getTranslateTransform(),
           opacity,
         },

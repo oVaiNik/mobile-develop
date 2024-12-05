@@ -58,10 +58,10 @@ const Lab2 = () => {
         ) : (
           <>
             <TouchableOpacity
-              style={[styles.button, styles.saveButton, { backgroundColor: colors.secondary }]}
+              style={[styles.button, styles.saveButton, { backgroundColor: colors.buttonBackground }]}
               onPress={handleSavePicture}
             >
-              <Text style={[styles.buttonText, { color: colors.text }]}>Save Picture</Text>
+              <Text style={[styles.buttonText, { color: colors.buttonText }]}>Save Picture</Text>
             </TouchableOpacity>
 
             <Text style={[styles.title, { color: colors.text }]}>{data.title}</Text>
@@ -83,10 +83,10 @@ const Lab2 = () => {
       </ScrollView>
 
       <TouchableOpacity
-        style={[styles.button, styles.loadButton, { backgroundColor: colors.secondary }]}
+        style={[styles.button, styles.loadButton, { backgroundColor: colors.buttonBackground }]}
         onPress={handleLoadNext}
       >
-        <Text style={[styles.buttonText, { color: colors.text }]}>Load Next</Text>
+        <Text style={[styles.buttonText, { color: colors.buttonText }]}>Load Next</Text>
       </TouchableOpacity>
     </View>
   );
@@ -95,14 +95,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between', // Размещаем элементы по всему экрану
     paddingTop: 20,
   },
   content: {
     paddingHorizontal: 20,
     alignItems: 'center',
     paddingVertical: 20,
-    flexGrow: 1, // Это заставляет ScrollView растягиваться
+    flexGrow: 1,
   },
   button: {
     paddingVertical: 10,
@@ -111,47 +110,38 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#000',
   },
   saveButton: {
-    backgroundColor: '#bbb',
-    marginBottom: 20, // Отступ от других элементов
+    marginBottom: 20,
   },
   loadButton: {
-    backgroundColor: '#bbb',
-    marginBottom: 20, // Отступ от других элементов
+    marginBottom: 20,
   },
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    fontFamily: 'PixelFont',
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    lineHeight: 28,
     textAlign: 'center',
     marginBottom: 10,
-    color: '#fff',
-    fontFamily: 'PixelifySans-Regular',
+    fontFamily: 'PixelFont',
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#fff',
-    fontFamily: 'PixelifySans-Regular',
+    fontFamily: 'PixelFont',
     marginBottom: 20,
   },
   savedText: {
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 10,
-    color: '#fff',
-    fontFamily: 'PixelifySans-Regular',
+    fontFamily: 'PixelFont',
   },
   image: {
     width: width - 40,

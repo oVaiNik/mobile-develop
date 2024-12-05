@@ -18,8 +18,8 @@ const { width, height } = Dimensions.get('window');
 
 function InfoBox({ colors }) {
   return (
-    <View style={[styles.infoBox, { borderColor: colors.text }]}>
-      <Text style={[styles.infoText, { color: colors.text }]}>Info</Text>
+    <View style={[styles.infoBox, { borderColor: colors.border, backgroundColor: colors.buttonBackground }]}>
+      <Text style={[styles.infoText, { color: colors.buttonText }]}>Info</Text>
     </View>
   );
 }
@@ -73,9 +73,9 @@ const Lab1 = () => {
       <View style={styles.headerSection}>
         <View style={styles.scoreContainer}>
           <Text style={[styles.scoreText, { color: colors.text }]}>
-            score: {score}
+            Score: {score}
             {'\n'}
-            counter: {counter}
+            Counter: {counter}
           </Text>
         </View>
         <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
@@ -143,10 +143,10 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   scoreText: {
-    fontFamily: 'PixelFont',
     fontSize: 20,
     fontWeight: '700',
     lineHeight: 28,
+    fontFamily: 'PixelFont',
   },
   infoButton: {
     padding: 10,
@@ -156,17 +156,14 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     borderRadius: 8,
-    borderStyle: 'solid',
     borderWidth: 1,
     paddingHorizontal: 34,
     paddingVertical: 10,
     lineHeight: 1.4,
-    backgroundColor: '#D3D3D3',
   },
   infoText: {
     fontSize: 18,
     textAlign: 'center',
-    color: 'black',
     fontFamily: 'PixelFont',
   },
   modalBackground: {

@@ -74,6 +74,8 @@ const Lab3 = () => {
         return num1 * num2;
       case '/':
         return num1 / num2;
+      default:
+        return 0;
     }
   }, []);
 
@@ -134,13 +136,19 @@ const Lab3 = () => {
     return (
       <View style={[styles.calculatorContainer, { backgroundColor: colors.background }]}>
         <View style={styles.scoreBoard}>
-          <Text style={[styles.pixelText, { color: colors.text }]}>score: {score}</Text>
-          <Text style={[styles.pixelText, { color: colors.text }]}>mistakes: {mistakes}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Score: {score}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Mistakes: {mistakes}</Text>
           <Text style={[styles.pixelText, { color: colors.text }]}>Game Over!</Text>
         </View>
 
-        <TouchableOpacity style={styles.answerButton} onPress={restartGame}>
-          <Text style={[styles.pixelText, { color: colors.text }]}>Restart</Text>
+        <TouchableOpacity
+          style={[
+            styles.answerButton,
+            { backgroundColor: colors.buttonBackground, borderColor: colors.border }
+          ]}
+          onPress={restartGame}
+        >
+          <Text style={[styles.pixelText, { color: colors.buttonText }]}>Restart</Text>
         </TouchableOpacity>
       </View>
     );
@@ -150,12 +158,12 @@ const Lab3 = () => {
     <View style={[styles.calculatorContainer, { backgroundColor: colors.background }]}>
       <View style={styles.topRow}>
         <View style={styles.scoreBoard}>
-          <Text style={[styles.pixelText, { color: colors.text }]}>score: {score}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Score: {score}</Text>
           <Text style={[styles.pixelText, { color: colors.text }]}>
-            mistakes: {mistakes}/{MAX_MISTAKES}
+            Mistakes: {mistakes}/{MAX_MISTAKES}
           </Text>
         </View>
-        <Text style={[styles.pixelText, { color: colors.text }]}>level: {level}</Text>
+        <Text style={[styles.pixelText, { color: colors.text }]}>Level: {level}</Text>
       </View>
 
       <View style={styles.equationContainer}>
@@ -182,20 +190,25 @@ const Lab3 = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.answerButton} onPress={checkAnswer}>
-        <Text style={[styles.pixelText, { color: colors.text }]}>answer</Text>
+      <TouchableOpacity
+        style={[
+          styles.answerButton,
+          { backgroundColor: colors.buttonBackground, borderColor: colors.border }
+        ]}
+        onPress={checkAnswer}
+      >
+        <Text style={[styles.pixelText, { color: colors.buttonText }]}>Answer</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   calculatorContainer: {
     flex: 1,
-    maxWidth: 480,
-    width: '100%',
     padding: 20,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   topRow: {
     width: '100%',
@@ -207,73 +220,65 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   pixelText: {
-    fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 18,
-    color: '#000',
+    fontWeight: '700',
+    fontFamily: 'PixelFont',
   },
   equationContainer: {
     marginBottom: 10,
-    marginTop: 140, // Добавлен marginTop для понижения уравнения
+    marginTop: 50,
   },
   equationText: {
-    fontFamily: 'Post No Bills Jaffna ExtraBold, sans-serif',
     fontSize: 35,
-    color: '#000',
+    fontWeight: 'bold',
+    fontFamily: 'PixelFont',
   },
   resultDisplay: {
     marginBottom: 20,
-    marginTop: 20, // Добавлен marginTop для понижения отображения результата
+    marginTop: 20,
   },
   resultText: {
-    fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 50,
     textAlign: 'center',
-    color: '#000',
+    fontFamily: 'PixelFont',
   },
   keypadContainer: {
     alignItems: 'center',
     marginBottom: 20,
-    marginTop: 20, // Добавлен marginTop для опускания клавиатуры
+    marginTop: 20,
   },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    gap: 20,
     marginBottom: 10,
   },
   button: {
     borderRadius: 12,
-    borderColor: 'rgba(0, 0, 0, 1)',
-    borderStyle: 'solid',
     borderWidth: 1,
+    borderColor: '#000',
     minHeight: 55,
     minWidth: 55,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#d3d3d3',
+    backgroundColor: '#D3D3D3',
+    marginHorizontal: 5,
   },
   buttonText: {
-    fontFamily: 'Pixelify Sans, sans-serif',
     fontSize: 24,
-    color: '#000',
+    fontFamily: 'PixelFont',
   },
   answerButton: {
     borderRadius: 12,
-    borderColor: 'rgba(0, 0, 0, 1)',
-    borderStyle: 'solid',
     borderWidth: 1,
     minHeight: 55,
     minWidth: 95,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#d3d3d3',
-    marginTop: 20, // Добавлен marginTop для опускания кнопки ответа
+    marginTop: 20,
   },
   bottomRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 20,
   },
 });
 

@@ -29,16 +29,30 @@ const Lab4 = () => {
       <Text style={[styles.counterText, { color: colors.text }]}>Counter: {counter}</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: colors.secondary, borderColor: colors.border, shadowColor: colors.shadow }]}
+          style={[
+            styles.button,
+            {
+              backgroundColor: colors.buttonBackground,
+              borderColor: colors.border,
+              shadowColor: colors.shadow,
+            },
+          ]}
           onPress={() => dispatch(incrementCounter())}
         >
-          <Text style={[styles.buttonText, { color: colors.text }]}>+</Text>
+          <Text style={[styles.buttonText, { color: colors.buttonText }]}>+</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: colors.secondary, borderColor: colors.border, shadowColor: colors.shadow }]}
+          style={[
+            styles.button,
+            {
+              backgroundColor: colors.buttonBackground,
+              borderColor: colors.border,
+              shadowColor: colors.shadow,
+            },
+          ]}
           onPress={() => dispatch(decrementCounter())}
         >
-          <Text style={[styles.buttonText, { color: colors.text }]}>-</Text>
+          <Text style={[styles.buttonText, { color: colors.buttonText }]}>-</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -57,7 +71,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginBottom: 30,
     textTransform: 'uppercase',
-    ////fontFamily: 'PixelFont',
+    fontFamily: 'PixelFont',
   },
   themeContainer: {
     flexDirection: 'row',
@@ -67,13 +81,13 @@ const styles = StyleSheet.create({
   themeText: {
     fontSize: 20,
     marginRight: 10,
-    ////fontFamily: 'PixelFont',
+    fontFamily: 'PixelFont',
   },
   counterText: {
     fontSize: 24,
     marginBottom: 20,
     fontWeight: '700',
-    ////fontFamily: 'PixelFont', 
+    fontFamily: 'PixelFont',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -81,7 +95,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    borderColor: '#000',
     borderWidth: 2,
     borderRadius: 50,
     marginHorizontal: 20,
@@ -97,7 +110,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 30,
     fontWeight: 'bold',
-    ////fontFamily: 'PixelFont', 
+    fontFamily: 'PixelFont',
   },
   switch: {
     transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],

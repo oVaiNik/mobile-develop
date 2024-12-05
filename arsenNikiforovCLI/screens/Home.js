@@ -1,7 +1,8 @@
 // screens/Home.js
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import useTheme from '../hooks/useTheme';
+import ThemedText from '../components/ThemedText'; // Импорт нового компонента
 
 const menuItems = [
   { id: 1, title: 'Lab1' },
@@ -13,13 +14,11 @@ const menuItems = [
 function LabHeader({ colors }) {
   return (
     <View style={styles.headerContainer}>
-      <Text style={[styles.headerText, { color: colors.text }]}>
-        Laboratory work
-        {'\n'}
-        Nikiforov Arsen
-        {'\n'}
+      <ThemedText style={styles.headerText}>
+        Laboratory Work{'\n'}
+        Nikiforov Arsen{'\n'}
         FIIT-21
-      </Text>
+      </ThemedText>
     </View>
   );
 }
@@ -27,10 +26,17 @@ function LabHeader({ colors }) {
 function LabButton({ title, onPress, colors }) {
   return (
     <TouchableOpacity
-      style={[styles.buttonContainer, { borderColor: colors.text, shadowColor: colors.shadow }]}
+      style={[
+        styles.buttonContainer,
+        {
+          borderColor: colors.border,
+          backgroundColor: colors.buttonBackground,
+          shadowColor: colors.shadow,
+        },
+      ]}
       onPress={onPress}
     >
-      <Text style={[styles.buttonText, { color: colors.text }]}>{title}</Text>
+      <ThemedText style={styles.buttonText}>{title}</ThemedText>
     </TouchableOpacity>
   );
 }
@@ -59,43 +65,25 @@ function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    maxWidth: 480,
-    width: '100%',
-    paddingLeft: 65,
-    paddingRight: 65,
-    paddingTop: 226,
-    paddingBottom: 226,
-    flexDirection: 'column',
-    overflow: 'hidden',
+    flex: 1,
+    paddingHorizontal: 65,
+    paddingVertical: 100,
     alignItems: 'center',
-    fontSize: 18,
-    fontWeight: '500',
-    lineHeight: 1.4,
+    justifyContent: 'center',
   },
   headerContainer: {
-    width: '100%',
+    marginBottom: 30,
   },
   headerText: {
-    fontSize: 20,
-    fontWeight: '700',
-    lineHeight: 28,
+    fontSize: 20, // Размер текста
     textAlign: 'center',
-    //fontFamily: 'PixelFont', 
   },
   buttonContainer: {
-    borderStyle: 'solid',
     borderWidth: 1,
     borderRadius: 8,
-    marginTop: 21,
-    width: 184,
-    maxWidth: '100%',
-    paddingLeft: 70,
-    paddingRight: 70,
-    paddingTop: 12,
-    paddingBottom: 12,
+    marginTop: 20,
+    width: '77%',
+    paddingVertical: 12,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
@@ -103,7 +91,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: 'center',
-    //fontFamily: 'PixelFont', 
+    fontSize: 16,
   },
 });
 
