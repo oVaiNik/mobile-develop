@@ -82,11 +82,12 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Центруем текст внутри
   },
   headerText: {
-    fontSize: 18, // Размер шрифта
+    fontSize: 14, // Размер шрифта
     textAlign: 'center', // Выравнивание текста по центру
     fontFamily: 'PixelFont', // Шрифт
-    letterSpacing: -1.2, // Уменьшаем расстояние между буквами
+    // letterSpacing: -0.2, // Уменьшаем расстояние между буквами
     lineHeight: 30, // Увеличиваем расстояние между строками
+    transform: [{ scaleY: 1.4 }], // Вытягиваем текст по высоте
   },
   buttonContainer: {
     borderWidth: 1,
@@ -100,11 +101,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontFamily: 'PixelFont',
+    fontSize: 12, // Размер шрифта
+    textAlign: 'center', // Выравнивание текста по центру
+    fontFamily: 'PixelFont', // Шрифт
+    // letterSpacing: -0.2, // Уменьшаем расстояние между буквами
+    lineHeight: 30, // Увеличиваем расстояние между строками
+    transform: [{ scaleY: 1.4 }], // Вытягиваем текст по высоте
   },
 });
+
 
 
 export default Home;
