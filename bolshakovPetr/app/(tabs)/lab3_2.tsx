@@ -16,7 +16,7 @@ export default function MovieSearchScreen() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [minYear, setMinYear] = useState("1896");
-
+  А;
   const fetchMovies = async (searchQuery) => {
     if (!searchQuery) return;
 
@@ -30,11 +30,11 @@ export default function MovieSearchScreen() {
       const data = await response.json();
       if (data.ok && data.description) {
         setMovies(data.description);
-        console.log(data)
-        console.log('movies fetched')
+        console.log(data);
+        console.log("movies fetched");
       } else {
         setMovies([]);
-        console.log('movies not fetched')
+        console.log("movies not fetched");
       }
     } catch (error) {
       console.error("Ошибка при получении данных о фильмах:", error);
@@ -44,13 +44,11 @@ export default function MovieSearchScreen() {
     }
   };
 
-    const getFilteredMovies = movies.filter((movie) => {
-        console.log(1)
-            const year = parseInt(movie["#YEAR"]);
-            return year >= parseInt(minYear);
-            }
-        )
-
+  const getFilteredMovies = movies.filter((movie) => {
+    console.log(1);
+    const year = parseInt(movie["#YEAR"]);
+    return year >= parseInt(minYear);
+  });
 
   const handleSearch = () => {
     fetchMovies(query);
@@ -62,7 +60,6 @@ export default function MovieSearchScreen() {
         placeholder="Movie name"
         value={query}
         onChangeText={setQuery}
-
         style={styles.searchBar}
       />
       <View style={styles.searchBlock}>
@@ -135,15 +132,14 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "green",
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     padding: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   searchBlock: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     gap: 15,
-
-  }
+  },
 });

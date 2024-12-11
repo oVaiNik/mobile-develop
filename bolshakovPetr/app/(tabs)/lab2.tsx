@@ -4,7 +4,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -45,7 +45,10 @@ export default function HomeScreen() {
           {characters[nextChar - 1]?.name}
         </Text>
 
-        <Image style={styles.image} source = {{ uri: characters[nextChar - 1]?.image }} />
+        <Image
+          style={styles.image}
+          source={{ uri: characters[nextChar - 1]?.image }}
+        />
 
         <TouchableOpacity
           onPress={() => {
@@ -86,7 +89,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     marginRight: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
-
 });

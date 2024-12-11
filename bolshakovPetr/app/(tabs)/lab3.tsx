@@ -31,11 +31,11 @@ export default function MovieSearchScreen() {
       const data = await response.json();
       if (data.ok && data.description) {
         setMovies(data.description);
-        console.log(data)
-        console.log('movies fetched')
+        console.log(data);
+        console.log("movies fetched");
       } else {
         setMovies([]);
-        console.log('movies not fetched')
+        console.log("movies not fetched");
       }
     } catch (error) {
       console.error("Ошибка при получении данных о фильмах:", error);
@@ -47,7 +47,7 @@ export default function MovieSearchScreen() {
 
   //позволяет избежать повторной фильтрации списка фильмов каждый раз, когда происходит ререндер компонента (например, из-за ввода текста или изменения состояния), если сами фильмы или диапазон годов не менялись.
   const getFilteredMovies = useMemo(() => {
-      console.log(1)
+    console.log(1);
     return movies.filter((movie) => {
       const year = parseInt(movie["#YEAR"]);
       return year >= parseInt(minYear);
@@ -136,15 +136,14 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "green",
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     padding: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   searchBlock: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     gap: 15,
-
-  }
+  },
 });
