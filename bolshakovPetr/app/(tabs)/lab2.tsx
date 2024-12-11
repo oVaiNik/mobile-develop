@@ -45,7 +45,7 @@ export default function HomeScreen() {
           {characters[nextChar - 1]?.name}
         </Text>
 
-        <Image style={styles.image} source = {{ uri: characters[nextChar - 1].image }} />
+        <Image style={styles.image} source = {{ uri: characters[nextChar - 1]?.image }} />
 
         <TouchableOpacity
           onPress={() => {

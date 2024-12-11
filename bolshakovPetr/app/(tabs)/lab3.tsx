@@ -47,6 +47,7 @@ export default function MovieSearchScreen() {
 
   //позволяет избежать повторной фильтрации списка фильмов каждый раз, когда происходит ререндер компонента (например, из-за ввода текста или изменения состояния), если сами фильмы или диапазон годов не менялись.
   const getFilteredMovies = useMemo(() => {
+      console.log(1)
     return movies.filter((movie) => {
       const year = parseInt(movie["#YEAR"]);
       return year >= parseInt(minYear);
@@ -124,6 +125,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     marginRight: 10,
+    borderRadius: 10,
   },
   movieDetails: {
     flex: 1,

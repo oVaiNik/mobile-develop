@@ -44,13 +44,13 @@ export default function MovieSearchScreen() {
     }
   };
 
-  //позволяет избежать повторной фильтрации списка фильмов каждый раз, когда происходит ререндер компонента (например, из-за ввода текста или изменения состояния), если сами фильмы или диапазон годов не менялись.
-  const getFilteredMovies = () => {
-    return movies.filter((movie) => {
-      const year = parseInt(movie["#YEAR"]);
-      return year >= parseInt(minYear);
-    });
-  }
+    const getFilteredMovies = movies.filter((movie) => {
+        console.log(1)
+            const year = parseInt(movie["#YEAR"]);
+            return year >= parseInt(minYear);
+            }
+        )
+
 
   const handleSearch = () => {
     fetchMovies(query);
@@ -62,6 +62,7 @@ export default function MovieSearchScreen() {
         placeholder="Movie name"
         value={query}
         onChangeText={setQuery}
+
         style={styles.searchBar}
       />
       <View style={styles.searchBlock}>
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     marginRight: 10,
+    borderRadius: 10,
   },
   movieDetails: {
     flex: 1,
