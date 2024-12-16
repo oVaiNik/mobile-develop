@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Text } from "react-native";
 import Lab1 from "./lab1";
 import Lab2 from "./lab2";
+import Lab3 from "./lab3";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
@@ -14,6 +15,7 @@ export default function Index() {
     <Tab.Navigator>
       <Tab.Screen name="Лаба 1" component={Lab1} />
       <Tab.Screen name="Лаба 2" component={Lab2} />
+      <Tab.Screen name="Лаба 3" component={Lab3} />
     </Tab.Navigator>
   );
 }

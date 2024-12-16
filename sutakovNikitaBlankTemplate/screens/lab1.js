@@ -1,10 +1,13 @@
-import { SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
+import ThemedSafeAreaView from "../components/ThemedSafeAreaView";
+import useTheme from "../hooks/useTheme";
 
 const Lab1 = () => {
   const [clicks, setClicks] = useState(0);
   const [seconds, setSeconds] = useState(5);
   const [result, setResult] = useState(0);
+  const { backgroundColor, textColor } = useTheme();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -24,56 +27,23 @@ const Lab1 = () => {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#000000",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Text
-        style={{
-          color: "white",
-          fontSize: 30,
-        }}
-      >
+    <ThemedSafeAreaView>
+      <Text style={[styles.title, { color: textColor }]}>
         Click per second test
       </Text>
-      <Text
-        style={{
-          color: "white",
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
+      <Text style={[styles.text, { color: textColor }]}>
         Best result: {result} clicks
       </Text>
-      <Text
-        style={{
-          color: "white",
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
+      <Text style={[styles.text, { color: textColor }]}>
         Remaining time: {seconds} seconds
       </Text>
       <TouchableOpacity
         onPress={() => {
           setSeconds(5);
         }}
-        style={{
-          backgroundColor: "white",
-          padding: 10,
-          borderRadius: 10,
-          marginTop: 30,
-        }}
+        style={[styles.button, { backgroundColor: textColor }]}
       >
-        <Text
-          style={{
-            color: "black",
-          }}
-        >
+        <Text style={[styles.text, { color: backgroundColor }]}>
           Restart timer
         </Text>
       </TouchableOpacity>
@@ -81,32 +51,33 @@ const Lab1 = () => {
         onPress={() => {
           setClicks(clicks + 1);
         }}
-        style={{
-          backgroundColor: "white",
-          padding: 100,
-          borderRadius: 120,
-          marginTop: 30,
-        }}
+        style={[styles.clickButton, { backgroundColor: textColor }]}
       >
-        <Text
-          style={{
-            color: "black",
-          }}
-        >
-          Click!
-        </Text>
+        <Text style={[styles.text, { color: backgroundColor }]}>Click!</Text>
       </TouchableOpacity>
-      <Text
-        style={{
-          color: "white",
-          marginTop: 30,
-          fontSize: 20,
-        }}
-      >
-        Clicks: {clicks}
-      </Text>
-    </SafeAreaView>
+      <Text style={[styles.text, { color: textColor }]}>Clicks: {clicks}</Text>
+    </ThemedSafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+  },
+  text: {
+    fontSize: 15,
+    marginTop: 20,
+  },
+  button: {
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  clickButton: {
+    padding: 100,
+    borderRadius: 120,
+    marginTop: 20,
+  },
+});
 
 export default Lab1;
