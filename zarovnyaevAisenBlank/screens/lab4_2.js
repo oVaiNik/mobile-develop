@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { useTasksStore } from "../store/zustand";
 
 export default function Lab4_2() {

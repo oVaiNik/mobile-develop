@@ -81,7 +81,8 @@ export default function MovieSearchScreen() {
       {loading ? (
         <Text>Загрузка...</Text>
       ) : (
-        <FlatList style={styles.movieList}
+        <FlatList
+          style={styles.movieList}
           data={getFilteredMovies}
           keyExtractor={(item) => item["#IMDB_ID"]}
           renderItem={({ item }) => (

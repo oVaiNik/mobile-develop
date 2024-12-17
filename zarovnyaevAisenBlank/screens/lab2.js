@@ -49,17 +49,17 @@ export default function AdministrativeDivisionsScreen() {
         <Text style={[styles.countryName, { marginTop: 120 }]}>
           {countries[countryIndex].name}:
         </Text>
-          <View style={styles.divisionsContainer}>
-            <ScrollView
-              contentContainerStyle={styles.scrollViewContent}
-              style={styles.scrollView}
-            >
-              {divisions.map((division, index) => (
-                <Text key={index} style={styles.divisionText}>
-                  {division}
-                </Text>
-              ))}
-            </ScrollView>
+        <View style={styles.divisionsContainer}>
+          <ScrollView
+            contentContainerStyle={styles.scrollViewContent}
+            style={styles.scrollView}
+          >
+            {divisions.map((division, index) => (
+              <Text key={index} style={styles.divisionText}>
+                {division}
+              </Text>
+            ))}
+          </ScrollView>
         </View>
       </View>
       <TouchableOpacity style={styles.button} onPress={handleChangeCountry}>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 35,
     alignSelf: "center",
-    backgroundColor: "#CFE2F9", 
+    backgroundColor: "#CFE2F9",
     width: 200,
     height: 60,
     justifyContent: "center",
