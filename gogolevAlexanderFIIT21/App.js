@@ -3,7 +3,7 @@ import Lab1 from "./Screens/Lab1";
 import Lab2 from "./Screens/Lab2";
 import Lab3 from "./Screens/Lab3";
 import Lab4 from "./Screens/Lab4";
-import Lab4_2 from "./Screens/Lab4_2"; 
+import Lab4_2 from "./Screens/Lab4_2";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import store from "./store/store";

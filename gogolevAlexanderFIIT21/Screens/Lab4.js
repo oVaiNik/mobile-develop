@@ -14,7 +14,9 @@ import { addTask, deleteTask, toggleTask } from "../store/store";
 export default function Lab4() {
   const [taskName, setTaskName] = useState("");
   const tasks = useSelector((state) => state.tasksState.tasks);
-  const completedCount = useSelector((state) => state.tasksState.completedCount);
+  const completedCount = useSelector(
+    (state) => state.tasksState.completedCount
+  );
   const dispatch = useDispatch();
 
   const handleAddTask = () => {
