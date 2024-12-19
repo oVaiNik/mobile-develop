@@ -16,7 +16,7 @@ export default function MovieSearchScreen() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [minYear, setMinYear] = useState("1896");
-
+  А;
   const fetchMovies = async (searchQuery) => {
     if (!searchQuery) return;
 
@@ -27,7 +27,6 @@ export default function MovieSearchScreen() {
           searchQuery
         )}`
       );
-
       const data = await response.json();
       if (data.ok && data.description) {
         setMovies(data.description);
@@ -45,14 +44,11 @@ export default function MovieSearchScreen() {
     }
   };
 
-  //позволяет избежать повторной фильтрации списка фильмов каждый раз, когда происходит ререндер компонента (например, из-за ввода текста или изменения состояния), если сами фильмы или диапазон годов не менялись.
-  const getFilteredMovies = useMemo(() => {
+  const getFilteredMovies = movies.filter((movie) => {
     console.log(1);
-    return movies.filter((movie) => {
-      const year = parseInt(movie["#YEAR"]);
-      return year >= parseInt(minYear);
-    });
-  }, [movies, minYear]);
+    const year = parseInt(movie["#YEAR"]);
+    return year >= parseInt(minYear);
+  });
 
   const handleSearch = () => {
     fetchMovies(query);

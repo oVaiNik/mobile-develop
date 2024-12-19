@@ -1,11 +1,10 @@
 import {
-  Image,
-  StyleSheet,
-  Platform,
   SafeAreaView,
   View,
   Text,
   TouchableOpacity,
+  Image,
+  StyleSheet,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -45,7 +44,11 @@ export default function HomeScreen() {
         <Text style={{ marginBottom: 20 }}>
           {characters[nextChar - 1]?.name}
         </Text>
-        <img src={characters[nextChar - 1]?.image} />
+
+        <Image
+          style={styles.image}
+          source={{ uri: characters[nextChar - 1]?.image }}
+        />
 
         <TouchableOpacity
           onPress={() => {
@@ -80,3 +83,12 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  image: {
+    width: 150,
+    height: 150,
+    marginRight: 10,
+    borderRadius: 10,
+  },
+});
