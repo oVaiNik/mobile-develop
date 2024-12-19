@@ -1,5 +1,5 @@
 import { SafeAreaView, Text, TextInput, StyleSheet } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 const Lab3 = () => {
@@ -8,7 +8,7 @@ const Lab3 = () => {
   const [textMessage, setTextMessage] = useState("");
 
   const getWeatherData = async () => {
-    const apiKey = "your_weatherapi_key_here"; // Замените на ваш ключ API
+    const apiKey = "b93df7f5926c4d62b8a103312241912"; // Замените на ваш ключ API
     const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&lang=ru`;
 
     try {
@@ -31,9 +31,10 @@ const Lab3 = () => {
     }
   }, [city]);
 
-  useEffect(() => {
+  // Используем useMemo для вычисления текстового сообщения о погоде
+  const weatherMessage = useMemo(() => {
     if (weatherData) {
-      setTextMessage(
+      return (
         `Погода в: ${weatherData.location.name}\n` +
         `Температура: ${weatherData.current.temp_c}°C\n` +
         `Ощущается как: ${weatherData.current.feelslike_c}°C\n` +
@@ -42,7 +43,15 @@ const Lab3 = () => {
         `Влажность: ${weatherData.current.humidity}%`
       );
     }
+    return "";
   }, [weatherData]);
+
+  // Обновляем текст сообщения
+  useEffect(() => {
+    if (weatherMessage) {
+      setTextMessage(weatherMessage);
+    }
+  }, [weatherMessage]);
 
   return (
     <SafeAreaView style={styles.container}>
