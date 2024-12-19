@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const Lab1: React.FC = () => {
+const Lab2: React.FC = () => {
   const [darkTheme] = useState('#000')
   const [lightTheme] = useState('#FFF')
   const [isDarkThemeOn, setIsDarkThemeOn] = useState(false)
@@ -50,4 +50,4 @@ const Lab1: React.FC = () => {
   )
 }
 
-export default Lab1
+export default Lab2
