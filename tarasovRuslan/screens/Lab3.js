@@ -1,8 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button, SafeAreaView, View, Text, FlatList } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSortOrder } from '../store';
 
 const Lab3 = () => {
-    const [sortOrder, setSortOrder] = useState('asc');
+    const dispatch = useDispatch();
+    const sortOrder = useSelector((state) => state.app.sortOrder);
     const [items, setItems] = useState([
         'Яблоко',
         'Банан',
@@ -11,6 +14,8 @@ const Lab3 = () => {
         'Ананас',
         'Клубника',
     ]);
+
+    const [key, setKey] = useState(0);
 
     const sortedItems = useMemo(() => {
         console.log('Сортируем список...');
@@ -23,13 +28,17 @@ const Lab3 = () => {
         });
     }, [sortOrder, items]);
 
+    useEffect(() => {
+        setKey(prevKey => prevKey + 1);
+    }, [sortOrder]);
+
     return (
-        <SafeAreaView style={{ flex: 1, padding: 20 }}>
+        <SafeAreaView style={{ flex: 1, padding: 20 }} key={key}>
             <View>
                 <Text>Сортировка:</Text>
                 <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                    <Button title="По возрастанию" onPress={() => setSortOrder('asc')} />
-                    <Button title="По убыванию" onPress={() => setSortOrder('desc')} />
+                    <Button title="По возрастанию" onPress={() => dispatch(setSortOrder('asc'))} />
+                    <Button title="По убыванию" onPress={() => dispatch(setSortOrder('desc'))} />
                 </View>
                 <FlatList
                     data={sortedItems}
