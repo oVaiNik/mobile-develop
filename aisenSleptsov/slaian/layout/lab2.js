@@ -10,7 +10,7 @@ const Lab2 = () => {
     let newColor;
     do {
       newColor = colors[Math.floor(Math.random() * colors.length)];
-    } while (newColor === backgroundColor); // Убедимся, что цвет не повторяется
+    } while (newColor === backgroundColor);
     return newColor;
   };
 
