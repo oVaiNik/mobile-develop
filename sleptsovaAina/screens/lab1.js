@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
   } from "react-native";
   import React, { useState } from "react";
+  import {styles} from '../styles/StylesLab1'
   
   const colors = ["black", "red", "blue", "green", "yellow", "purple","pink"];
   const colorsText = [
