@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
-const lab1 = () => {
+const Lab1 = () => {
  
   const [count, setCount] = useState(0);
 
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default lab1;
+export default Lab1;
