@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,17 +8,20 @@ import {
   TextInput,
   Image,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, deleteUser } from "../redux/actions";
 
 const Lab2 = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [newUserName, setNewUserName] = useState("");
-  const [newUserEmail, setNewUserEmail] = useState("");
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users);
+  const [loading, setLoading] = React.useState(true);
+  const [newUserName, setNewUserName] = React.useState("");
+  const [newUserEmail, setNewUserEmail] = React.useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("https://randomuser.me/api/?results=20");
+        const response = await fetch("https://randomuser.me/api/?results=10");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -29,9 +32,12 @@ const Lab2 = () => {
           name: `${user.name.first} ${user.name.last}`,
           email: user.email,
           picture: user.picture.large,
+          age: user.dob.age,
+          city: user.location.city,
         }));
 
-        setUsers(usersWithId);
+        // Добавляем пользователей в Redux store
+        usersWithId.forEach((user) => dispatch(addUser(user)));
       } catch (error) {
         console.error("Ошибка при загрузке пользователей:", error);
       } finally {
@@ -40,14 +46,10 @@ const Lab2 = () => {
     };
 
     fetchUsers();
-  }, []);
-
-  const deleteUser = (id) => {
-    setUsers(users.filter((user) => user.id !== id));
-  };
+  }, [dispatch]);
 
   // Функция для добавления нового пользователя
-  const addUser = () => {
+  const handleAddUser = () => {
     if (newUserName && newUserEmail) {
       const lastUserId =
         users.length > 0
@@ -57,8 +59,10 @@ const Lab2 = () => {
         id: `${lastUserId + 1}-custom`,
         name: newUserName,
         email: newUserEmail,
+        age: Math.floor(Math.random() * (60 - 18 + 1)) + 18,
+        city: "Новый Город",
       };
-      setUsers([...users, newUser]);
+      dispatch(addUser(newUser));
       setNewUserName("");
       setNewUserEmail("");
     }
@@ -79,10 +83,12 @@ const Lab2 = () => {
             <View style={styles.userInfo}>
               <Text style={styles.userName}>{item.name}</Text>
               <Text>{item.email}</Text>
+              <Text>Возраст: {item.age}</Text>
+              <Text>Город: {item.city}</Text>
             </View>
             <Button
               title="Удалить"
-              onPress={() => deleteUser(item.id)}
+              onPress={() => dispatch(deleteUser(item.id))}
               color="#ff4d4d"
             />
           </View>
@@ -104,7 +110,7 @@ const Lab2 = () => {
         />
         <Button
           title="Добавить пользователя"
-          onPress={addUser}
+          onPress={handleAddUser}
           color="#4CAF50"
         />
       </View>
