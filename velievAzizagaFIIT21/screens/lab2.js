@@ -27,7 +27,7 @@ export default function lab2() {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchJoke();
   }, []);
@@ -57,26 +57,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
     alignItems: "center",
-
-    
   },
   counterContainer: {
     alignItems: "center",
     marginVertical: 20,
     paddingTop: 140,
-    paddingBottom:156, 
+    paddingBottom: 156,
   },
   counterLabel: {
     fontSize: 36,
     fontFamily: "JetBrainsMono-Regular",
     marginBottom: 12,
-   
   },
   counterValue: {
     fontSize: 26,
     fontFamily: "JetBrainsMono-Regular",
     textAlign: "center",
-    height:284,
+    height: 284,
     width: 284,
   },
   textBackground: {
@@ -96,12 +93,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
-
   },
   buttonText: {
     fontSize: 25,
     color: "#000000",
     fontFamily: "JetBrainsMono-Regular",
-
   },
 });
