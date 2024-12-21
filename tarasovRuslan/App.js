@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import Lab1 from "./screens/Lab1";
@@ -11,7 +12,25 @@ export default function App() {
   return (
     <Provider store={store}>
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Lab1') {
+              iconName = 'crop-square';
+            } else if (route.name === 'Lab2') {
+              iconName = 'image';
+            } else if (route.name === 'Lab3') {
+              iconName = 'list';
+            }
+
+            return <Icon name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#6200EE',
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
         <Tab.Screen name="Lab1" component={Lab1} />
         <Tab.Screen name="Lab2" component={Lab2} />
         <Tab.Screen name="Lab3" component={Lab3} />
