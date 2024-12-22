@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, Button, StyleSheet } from "react-native";
 
-const lab1 = () => {
- 
+const Lab1 = () => {
   const [count, setCount] = useState(0);
 
- 
   const increment = () => {
     setCount(count + 1);
   };
 
- 
   const decrement = () => {
     setCount(count - 1);
   };
@@ -26,23 +23,22 @@ const lab1 = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
   },
   counter: {
     fontSize: 24,
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '60%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "60%",
   },
 });
 
-export default lab1;
+export default Lab1;

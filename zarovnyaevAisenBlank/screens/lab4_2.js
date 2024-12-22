@@ -1,6 +1,11 @@
-// lab4_2.js
 import React from "react";
-import { View, Text, FlatList, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { useTasksStore } from "../store/zustand";
 
 export default function Lab4_2() {
@@ -9,14 +14,20 @@ export default function Lab4_2() {
 
   const renderTaskItem = ({ item }) => (
     <View style={styles.taskContainer}>
-      <Text style={styles.taskText}>{item.name}</Text>
-      <Text style={styles.statusText}>
-        Статус: {item.completed ? "Завершено" : "В процессе"}
-      </Text>
-      <Button
-        title={item.completed ? "Сделать активным" : "Завершить"}
+      <View style={styles.textContainer}>
+        <Text style={styles.taskText}>{item.name}</Text>
+        <Text style={styles.statusText}>
+          Статус: {item.completed ? "Завершено" : "В процессе"}
+        </Text>
+      </View>
+      <TouchableOpacity
+        style={styles.statusButton}
         onPress={() => toggleTaskStatus(item.id)}
-      />
+      >
+        <Text style={styles.buttonText}>
+          {item.completed ? "Сделать активным" : "Завершить"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -41,20 +52,48 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
+    fontFamily: "Roboto-Bold",
+    color: "#2673D0",
   },
   taskContainer: {
-    marginBottom: 15,
-    padding: 15,
+    flexDirection: "row", // Расположим текст и кнопку по горизонтали
+    alignItems: "center", // Выравнивание по центру по вертикали
+    height: 60,
+    marginBottom: 10,
     borderWidth: 1,
-    borderColor: "lightgray",
-    borderRadius: 8,
+    borderColor: "black", // Цвет границы
+  },
+  textContainer: {
+    flex: 1, // Занимает все пространство слева
+    marginRight: 20, // Отступ между текстом и кнопкой
   },
   taskText: {
     fontSize: 16,
+    color: "#2673D0", // Цвет текста
+    fontWeight: "bold",
+    marginLeft: 10,
+    fontFamily: "Roboto-Bold",
   },
   statusText: {
-    marginVertical: 10,
-    fontSize: 14,
+    fontSize: 16,
     color: "gray",
+    marginLeft: 10,
+    color: "#2673D0",
+    fontFamily: "Roboto-Medium",
+  },
+  statusButton: {
+    width: 150, // Ширина кнопки
+    height: 40, // Высота кнопки
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#CFE2F9", // Цвет фона кнопки
+    marginRight: 10, // Отступ от правой границы
+  },
+  buttonText: {
+    color: "#2673D0",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontFamily: "Roboto-Bold",
   },
 });

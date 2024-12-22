@@ -27,14 +27,15 @@ export default function MovieSearchScreen() {
           searchQuery
         )}`
       );
+
       const data = await response.json();
       if (data.ok && data.description) {
         setMovies(data.description);
-        console.log(data)
-        console.log('movies fetched')
+        console.log(data);
+        console.log("movies fetched");
       } else {
         setMovies([]);
-        console.log('movies not fetched')
+        console.log("movies not fetched");
       }
     } catch (error) {
       console.error("Ошибка при получении данных о фильмах:", error);
@@ -43,8 +44,10 @@ export default function MovieSearchScreen() {
       setLoading(false);
     }
   };
+
   //позволяет избежать повторной фильтрации списка фильмов каждый раз, когда происходит ререндер компонента (например, из-за ввода текста или изменения состояния), если сами фильмы или диапазон годов не менялись.
   const getFilteredMovies = useMemo(() => {
+    console.log(1);
     return movies.filter((movie) => {
       const year = parseInt(movie["#YEAR"]);
       return year >= parseInt(minYear);
@@ -63,7 +66,7 @@ export default function MovieSearchScreen() {
         onChangeText={setQuery}
         style={styles.searchBar}
       />
-      <div style={styles.searchBlock}>
+      <View style={styles.searchBlock}>
         <Text> Release year</Text>
         <TextInput
           placeholder="Минимальный год"
@@ -74,9 +77,9 @@ export default function MovieSearchScreen() {
         />
 
         <Pressable style={styles.button} onPress={handleSearch}>
-          Search
+          <Text>Search</Text>
         </Pressable>
-      </div>
+      </View>
 
       {loading ? (
         <Text>Loading</Text>
@@ -122,6 +125,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     marginRight: 10,
+    borderRadius: 10,
   },
   movieDetails: {
     flex: 1,
@@ -132,15 +136,14 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "green",
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     padding: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   searchBlock: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     gap: 15,
-
-  }
+  },
 });
