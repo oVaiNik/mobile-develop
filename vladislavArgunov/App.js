@@ -5,8 +5,8 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import Lab2 from "./app/screens/lab2";
-import Lab3 from "./app/screens/lab3";
+import Lab2 from "./screens/lab2";
+import Lab3 from "./screens/lab3";
 
 const Tab = createBottomTabNavigator();
 
