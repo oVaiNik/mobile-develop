@@ -1,32 +1,37 @@
-import { useState } from "react";
-import { StyleSheet, TextInput, Button, Text, View } from "react-native";
+import {
+  createBottomTabNavigator,
+  TransitionPresets,
+} from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
+import Lab2 from "./app/screens/lab2";
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const [number, setNumber] = useState(0);
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.defaultStyle}>{number}</Text>
-      <Text style={styles.defaultStyle}>Нажимай</Text>
-      <View style={styles.defaultStyle}>
-        <Button title="на меня" onPress={() => setNumber(number + 1)} />
-      </View>
-      <View style={styles.defaultStyle}>
-        <Button title="не сюда" onPress={() => setNumber(-9999)} />
-      </View>
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={() => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            iconName = focused ? "terminal" : "terminal-outline";
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: "tomato",
+          tabBarInactiveTintColor: "gray",
+        })}
+      >
+        <Tab.Screen
+          name="useEffect + useState + API"
+          component={Lab2}
+          options={{
+            tabBarBadge: 2,
+            TransitionPresets: TransitionPresets.ShiftTransition,
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  defaultStyle: {
-    fontSize: 20,
-    marginTop: 20,
-  },
-});
