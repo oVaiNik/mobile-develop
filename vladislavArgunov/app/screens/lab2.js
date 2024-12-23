@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Button, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Button, Text, View } from "react-native";
+import styles from "./styles";
 
 const Lab2 = () => {
   const [fact, setFact] = useState("");
@@ -67,38 +68,5 @@ const Lab2 = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#87CEEB",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  content: {
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  title: {
-    fontSize: 24,
-    color: "#333",
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-});
 
 export default Lab2;
