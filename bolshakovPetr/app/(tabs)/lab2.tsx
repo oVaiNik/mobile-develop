@@ -2,10 +2,9 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableOpacity,
   Image,
   StyleSheet,
-  Pressable
+  Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -51,24 +50,23 @@ export default function HomeScreen() {
           source={{ uri: characters[nextChar - 1]?.image }}
         />
         <View style={styles.btnDiv}>
+          <Pressable
+            onPress={() => {
+              PrevFunc(nextChar);
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.btnText}>Предыдущий</Text>
+          </Pressable>
 
-            <Pressable
-              onPress={() => {
-                PrevFunc(nextChar);
-              }}
-              style={styles.button}
-            >
-              <Text style={styles.btnText}>Предыдущий</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => {
-                NextFunc(nextChar);
-              }}
-              style={styles.button}
-
-            >
-              <Text style={styles.btnText}>Следующий</Text>
-            </Pressable>
+          <Pressable
+            onPress={() => {
+              NextFunc(nextChar);
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.btnText}>Следующий</Text>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>
@@ -82,24 +80,25 @@ const styles = StyleSheet.create({
     marginRight: 78,
     marginLeft: 79,
     borderRadius: 10,
+    marginBottom: 28,
   },
-
   btnDiv: {
-      display: "grid",
-      alignItems: "center",
-      marginTop: 26,
-      gap: 46,
-      },
+    width: 236,
+    flexDirection: "row",
+    gap: 46,
+  },
   button: {
-      backgroundColor: '#2A4758',
-      height: 29,
-      width: 95,
-      borderRadius: 5
-      },
+    backgroundColor: "#2A4758",
+    height: 29,
+    width: 95,
+    borderRadius: 5,
+  },
   btnText: {
-        fontSize: 10,
-        color: "#DCEEFA",
-        textAlign: 'center',
-        margin: 7
-        }
+    fontSize: 10,
+    color: "#DCEEFA",
+    textAlign: "center",
+    margin: 7,
+    fontFamily: "Inter",
+    fontWeight: 300,
+  },
 });

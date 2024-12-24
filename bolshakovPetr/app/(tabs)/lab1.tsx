@@ -1,14 +1,11 @@
 import {
-  Image,
   StyleSheet,
-  Platform,
   SafeAreaView,
   View,
   Text,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
 
 const colors: string[] = ["black", "red", "blue", "green", "yellow", "purple"];
 const colorsText: string[] = [
@@ -35,7 +32,8 @@ export default function Lab1() {
             backgroundColor: colors[colorIndex],
             width: boxSize,
             height: boxSize,
-            borderRadius: 8
+            borderRadius: 8,
+            marginBottom: 29,
           }}
         />
         <TouchableOpacity
@@ -66,10 +64,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 30,
     width: 150,
+    textAlign: "center",
   },
   btnText: {
-      fontSize: 12,
-      color: "#DCEEFA",
-      textAlign: 'center',
-      }
+    fontSize: 12,
+    marginTop: 6,
+    color: "#DCEEFA",
+    textAlign: "center",
+    fontFamily: "Inter",
+    fontWeight: 300,
+  },
 });
