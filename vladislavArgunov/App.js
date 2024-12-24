@@ -7,6 +7,7 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+import Lab1 from "./screens/lab1";
 import Lab2 from "./screens/lab2";
 import Lab3 from "./screens/lab3";
 import { ThemeProvider } from "./ContextAPI/themeContext";
@@ -33,18 +34,23 @@ function AppContent() {
         })}
       >
         <Tab.Screen 
-          name="useEffect + useState + API"
+          name="Lab 1"
+          component={Lab1}
+          options={{
+            TransitionPresets: TransitionPresets.ShiftTransition,
+          }}
+        />
+        <Tab.Screen 
+          name="Lab 2"
           component={Lab2}
           options={{
-            tabBarBadge: 2,
             TransitionPresets: TransitionPresets.ShiftTransition,
           }}
         />
         <Tab.Screen
-          name="useMemo + useState"
+          name="Lab 3"
           component={Lab3}
           options={{
-            tabBarBadge: 3,
             TransitionPresets: TransitionPresets.ShiftTransition,
           }}
         />
