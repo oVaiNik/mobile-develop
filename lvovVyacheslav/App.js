@@ -1,28 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Lab1 from './screens/Lab1';
+import Lab2 from './screens/Lab2';
+import Lab3 from './screens/Lab3';
+import { NavigationContainer } from '@react-navigation/native';
 
-function Example() {
-  const [count, setCount] = useState(0);
-  
+const Tab = createBottomTabNavigator();
+export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Вы кликнули {count} раз(а)</Text>
-      <TouchableOpacity onPress={() => setCount(count + 1)}>
-        <Text style={{ marginTop: 10 }}>Нажми на меня</Text>
-      </TouchableOpacity>
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="lab1" component={Lab1} />
+        <Tab.Screen name="lab2" component={Lab2} />
+        <Tab.Screen name="lab3" component={Lab3} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-});
-
-export default Example;
