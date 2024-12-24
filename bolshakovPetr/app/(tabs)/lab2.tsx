@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Pressable
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -49,36 +50,26 @@ export default function HomeScreen() {
           style={styles.image}
           source={{ uri: characters[nextChar - 1]?.image }}
         />
+        <View style={styles.btnDiv}>
 
-        <TouchableOpacity
-          onPress={() => {
-            PrevFunc(nextChar);
-          }}
-          style={{
-            backgroundColor: "green",
-            padding: 10,
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-          <Text style={{ color: "white" }}>Предыдущий</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            NextFunc(nextChar);
-          }}
-          style={{
-            backgroundColor: "green",
-            padding: 10,
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-          <Text style={{ color: "white" }}>Следующий</Text>
-        </TouchableOpacity>
-        <Text style={{ marginTop: 20 }}>
-          Персонаж №{characters[nextChar - 1]?.id}
-        </Text>
+            <Pressable
+              onPress={() => {
+                PrevFunc(nextChar);
+              }}
+              style={styles.button}
+            >
+              <Text style={styles.btnText}>Предыдущий</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                NextFunc(nextChar);
+              }}
+              style={styles.button}
+
+            >
+              <Text style={styles.btnText}>Следующий</Text>
+            </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -86,9 +77,29 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   image: {
-    width: 150,
-    height: 150,
-    marginRight: 10,
+    width: 236,
+    height: 236,
+    marginRight: 78,
+    marginLeft: 79,
     borderRadius: 10,
   },
+
+  btnDiv: {
+      display: "grid",
+      alignItems: "center",
+      marginTop: 26,
+      gap: 46,
+      },
+  button: {
+      backgroundColor: '#2A4758',
+      height: 29,
+      width: 95,
+      borderRadius: 5
+      },
+  btnText: {
+        fontSize: 10,
+        color: "#DCEEFA",
+        textAlign: 'center',
+        margin: 7
+        }
 });

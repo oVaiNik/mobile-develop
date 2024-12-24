@@ -16,23 +16,27 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerStyle: {
             backgroundColor: '#2A4758',
+            height: 59,
           },
           tabBarStyle: {
               height: 70,
               borderRadius: 50,
               backgroundColor: '#2A4758',
-              margin: 30
+              margin: 14,
+              marginBottom: 30,
           }
 
         }}
+
       >
         <Tabs.Screen
           name="lab1"
           options={{
             title: "Lab1",
             tabBarIcon: ({ size }) => (
-              <Entypo name="lab-flask" size={size} color={'#ffffff'} />
+              <Entypo name="lab-flask" size={size} color={'#DCEEFA'} />
             ),
+
           }}
         />
         <Tabs.Screen
@@ -43,6 +47,7 @@ export default function TabLayout() {
               <Entypo name="lab-flask" size={size} color={color} />
             ),
           }}
+            style = {{ color: '#DCEEFA'}}
         />
         <Tabs.Screen
           name="lab3"

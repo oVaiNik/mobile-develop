@@ -1,4 +1,3 @@
-// lab4_2.js
 import React from "react";
 import {
   View,
