@@ -1,3 +1,5 @@
+import React from "react";
+import { Button } from "react-native";
 import {
   createBottomTabNavigator,
   TransitionPresets,
@@ -7,13 +9,19 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Lab2 from "./screens/lab2";
 import Lab3 from "./screens/lab3";
+import { ThemeProvider } from "./ContextAPI/themeContext";
+import { useTheme } from "./ContextAPI/themeContext";
+import { getStyles } from "./screens/styles";
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+function AppContent() {
+  const { isDarkTheme, toggleTheme } = useTheme();
+  const styles = getStyles(isDarkTheme);
+
   return (
-    <NavigationContainer>
-      <Tab.Navigator
+    <NavigationContainer >
+      <Tab.Navigator 
         screenOptions={() => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -24,7 +32,7 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen
+        <Tab.Screen 
           name="useEffect + useState + API"
           component={Lab2}
           options={{
@@ -41,6 +49,15 @@ export default function App() {
           }}
         />
       </Tab.Navigator>
+      <Button title="Сменить тему" onPress={toggleTheme} />
     </NavigationContainer>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
