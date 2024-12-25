@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Tab = createBottomTabNavigator();
 
 import Lab1 from "./layouts/lab1";
+import Lab2 from "./layouts/lab2";
 import { NavigationContainer } from "@react-navigation/native";
 const colors = ["black", "red", "yellow"];
 
@@ -11,6 +12,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Lab1" component={Lab1} />
+        <Tab.Screen name="Lab2" component={Lab2} />
       </Tab.Navigator>
     </NavigationContainer>
   );
