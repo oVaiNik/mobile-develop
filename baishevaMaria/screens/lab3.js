@@ -1,24 +1,48 @@
-import React, { useState, useMemo } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState, useMemo } from "react";
+import { StyleSheet, Text, TextInput, View, FlatList, Button } from "react-native";
 
 export default function Lab3() {
-  const [text, setText] = useState('');
-  
-  const charCount = useMemo(() => {
-    console.log('Подсчитываем количество символов...');
-    return text.length;
-  }, [text]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [key, setKey] = useState(0);
+
+  const names = [
+    "Sardaana",
+    "Aytal",
+    "Nurgun",
+    "Bergen",
+    "Sandal",
+    "Erchim",
+    "Keskil",
+    "Tuskun",
+  ];
+
+  const filteredNames = useMemo(() => {
+    console.log("Фильтруем список...");
+    return names.filter((name) =>
+      name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm]);
+
+  const forceRerender = () => {
+    setKey((prevKey) => prevKey + 1);
+    setSearchTerm("");
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Введите текст:</Text>
+    <View style={styles.container} key={key}>
+      <Text style={styles.title}>Фильтрация списка имен</Text>
       <TextInput
         style={styles.input}
-        value={text}
-        onChangeText={(newText) => setText(newText)}
-        placeholder="Введите что-нибудь..."
+        placeholder="Искать имя..."
+        value={searchTerm}
+        onChangeText={(text) => setSearchTerm(text)}
       />
-      <Text style={styles.counter}>Количество символов: {charCount}</Text>
+      <Button title="Очистить экран" onPress={forceRerender} />
+      <FlatList
+        data={filteredNames}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <Text style={styles.name}>{item}</Text>}
+      />
     </View>
   );
 }
@@ -26,25 +50,24 @@ export default function Lab3() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
-    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 20,
-    marginBottom: 10,
+    fontSize: 24,
+    marginBottom: 20,
   },
   input: {
-    width: '100%',
-    padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
     marginBottom: 20,
-    fontSize: 18,
+    width: "100%",
   },
-  counter: {
+  name: {
     fontSize: 18,
-    fontWeight: 'bold',
-  },
+    marginBottom: 10,
+  },
 });

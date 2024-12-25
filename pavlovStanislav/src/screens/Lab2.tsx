@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
 import {StyleSheet, TouchableOpacity, View} from 'react-native'
 import BoldText from '../components/customs/text/BoldText'
+import Tooltip from '../components/customs/Tooltip'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 16,
   },
   button: {
     borderRadius: 50,
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const Lab1: React.FC = () => {
+const Lab2: React.FC = () => {
   const [darkTheme] = useState('#000')
   const [lightTheme] = useState('#FFF')
   const [isDarkThemeOn, setIsDarkThemeOn] = useState(false)
@@ -33,6 +35,7 @@ const Lab1: React.FC = () => {
         styles.container,
         {backgroundColor: isDarkThemeOn ? darkTheme : lightTheme},
       ]}>
+      <Tooltip />
       <TouchableOpacity
         style={[
           styles.button,
@@ -50,4 +53,4 @@ const Lab1: React.FC = () => {
   )
 }
 
-export default Lab1
+export default Lab2

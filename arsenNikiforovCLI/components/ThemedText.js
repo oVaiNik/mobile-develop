@@ -1,49 +1,31 @@
+// components/ThemedText.js
 import React from 'react';
-import {Text} from 'react-native';
-import {useSelector} from 'react-redux';
+import { Text, StyleSheet } from 'react-native';
+import useTheme from '../hooks/useTheme';
 
-export const ThemedText = ({style, ...props}) => {
-  const theme = useSelector(state => state.theme);
+
+const ThemedText = ({ style, children, ...props }) => {
+  const colors = useTheme();
 
   return (
     <Text
       style={[
-        {
-          color: theme === 'light' ? '#000' : '#FFF',
-        },
-        style,
+        styles.text, // Базовый стиль
+        style,       // Пользовательский стиль
+        { color: colors.text }, // Цвет текста из темы
       ]}
       {...props}
-    />
+    >
+      {children}
+    </Text>
   );
 };
 
-export const TitleText = ({style, ...props}) => (
-  <ThemedText
-    style={[
-      {
-        fontSize: 32,
-        fontWeight: 'bold',
-        textAlign: 'center',
-      },
-      style,
-    ]}
-    {...props}
-  />
-);
-
-export const InfoText = ({style, ...props}) => (
-  <ThemedText
-    style={[
-      {
-        fontSize: 18,
-        marginBottom: 10,
-        textAlign: 'center',
-      },
-      style,
-    ]}
-    {...props}
-  />
-);
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'PixelFont', // Пиксельный шрифт
+    fontSize: 16,           // Базовый размер шрифта
+  },
+});
 
 export default ThemedText;

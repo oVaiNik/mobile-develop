@@ -1,88 +1,35 @@
+// screens/SavedImage.js
 import React from 'react';
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
-import {useRoute} from '@react-navigation/native';
-import ThemedBackground from '../components/ThemedBackground';
-import {TitleText, InfoText} from '../components/ThemedText';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import useTheme from '../hooks/useTheme';
 
-const SavedImage = () => {
-  const route = useRoute();
-  const {data} = route.params;
-
-  if (!data) {
-    return (
-      <ThemedBackground style={styles.container}>
-        <TitleText style={styles.errorText}>
-          Нет сохраненных данных изображения.
-        </TitleText>
-      </ThemedBackground>
-    );
-  }
+const SavedImage = ({ route }) => {
+  const { imageUrl } = route.params;
+  const colors = useTheme();
 
   return (
-    <ThemedBackground style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <TitleText style={styles.title}>{data.title}</TitleText>
-        {data.media_type === 'image' ? (
-          <Image source={{uri: data.url}} style={styles.image} />
-        ) : (
-          <View style={styles.videoContainer}>
-            <InfoText style={styles.videoText}>
-              Видео не поддерживается.
-            </InfoText>
-          </View>
-        )}
-        <InfoText style={styles.dateText}>Дата: {data.date}</InfoText>
-        <InfoText style={styles.explanationText}>{data.explanation}</InfoText>
-      </ScrollView>
-    </ThemedBackground>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Text style={[styles.text, { color: colors.text }]}>Saved Image</Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  content: {
     alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 28,
-    marginBottom: 20,
-    textAlign: 'center',
+    paddingTop: 20,
   },
   image: {
-    width: 300,
-    height: 300,
-    marginBottom: 20,
+    width: '90%',
+    height: '70%',
     borderRadius: 10,
   },
-  videoContainer: {
-    width: 300,
-    height: 300,
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#444',
-    borderRadius: 10,
-  },
-  videoText: {
-    fontSize: 18,
-  },
-  dateText: {
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  explanationText: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'justify',
-  },
-  errorText: {
+  text: {
     fontSize: 20,
-    textAlign: 'center',
-    marginTop: 50,
+    marginTop: 20,
+    fontFamily: 'PixelFont',
   },
 });
 

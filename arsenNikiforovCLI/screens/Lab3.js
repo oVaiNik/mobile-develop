@@ -1,30 +1,45 @@
-import ThemedBackground from '../components/ThemedBackground';
-import React, {useState, useMemo, useCallback} from 'react';
+// screens/Lab3.js
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
-  Animated,
+  Dimensions,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import useTheme from '../hooks/useTheme';
+
+const { width } = Dimensions.get('window');
 
 const OPERATIONS = ['+', '-', '*', '/'];
 const MAX_LEVEL = 5;
 const MAX_MISTAKES = 3;
 
-const Lab3 = ({navigation}) => {
+const CalculatorButton = ({ value, onPress, style }) => (
+  <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+    <Text style={styles.buttonText}>{value}</Text>
+  </TouchableOpacity>
+);
+
+const ButtonRow = ({ values, onKeyPress }) => (
+  <View style={styles.buttonRow}>
+    {values.map((value, index) => (
+      <CalculatorButton key={index} value={value} onPress={() => onKeyPress(value)} />
+    ))}
+  </View>
+);
+
+const Lab3 = () => {
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [currentProblem, setCurrentProblem] = useState(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [mistakes, setMistakes] = useState(0);
-  const [shakeAnimation] = useState(new Animated.Value(0));
+  const colors = useTheme();
 
-  const generateProblem = useCallback(level => {
+  const generateProblem = useCallback((level) => {
     const operation = OPERATIONS[Math.floor(Math.random() * OPERATIONS.length)];
     let num1, num2;
     switch (operation) {
@@ -45,11 +60,11 @@ const Lab3 = ({navigation}) => {
         num1 = num2 * (Math.floor(Math.random() * (10 * level)) + 1);
         break;
     }
-    return {num1, num2, operation};
+    return { num1, num2, operation };
   }, []);
 
-  const calculateAnswer = useCallback(problem => {
-    const {num1, num2, operation} = problem;
+  const calculateAnswer = useCallback((problem) => {
+    const { num1, num2, operation } = problem;
     switch (operation) {
       case '+':
         return num1 + num2;
@@ -59,6 +74,8 @@ const Lab3 = ({navigation}) => {
         return num1 * num2;
       case '/':
         return num1 / num2;
+      default:
+        return 0;
     }
   }, []);
 
@@ -71,12 +88,22 @@ const Lab3 = ({navigation}) => {
     return currentProblem;
   }, [level, currentProblem, generateProblem]);
 
-  const memoizedAnswer = useMemo(() => {
-    return calculateAnswer(memoizedProblem);
-  }, [memoizedProblem, calculateAnswer]);
+  const handleKeyPress = useCallback(
+    (key) => {
+      ReactNativeHapticFeedback.trigger('selection');
+      if (key === '⌫') {
+        setUserAnswer(userAnswer.slice(0, -1));
+      } else if (userAnswer.length < 8) {
+        setUserAnswer(userAnswer + key);
+      }
+    },
+    [userAnswer]
+  );
 
   const checkAnswer = useCallback(() => {
+    const memoizedAnswer = calculateAnswer(memoizedProblem);
     const userAnswerNum = parseFloat(userAnswer);
+
     if (Math.abs(userAnswerNum - memoizedAnswer) < 0.01) {
       ReactNativeHapticFeedback.trigger('notificationSuccess');
       setScore(score + level * 10);
@@ -92,31 +119,9 @@ const Lab3 = ({navigation}) => {
       if (mistakes + 1 >= MAX_MISTAKES) {
         setGameOver(true);
       }
-      Animated.sequence([
-        Animated.timing(shakeAnimation, {
-          toValue: 10,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shakeAnimation, {
-          toValue: -10,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shakeAnimation, {
-          toValue: 10,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-        Animated.timing(shakeAnimation, {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: true,
-        }),
-      ]).start();
     }
     setUserAnswer('');
-  }, [userAnswer, memoizedAnswer, level, score, mistakes, shakeAnimation]);
+  }, [userAnswer, memoizedProblem, level, score, mistakes, calculateAnswer]);
 
   const restartGame = useCallback(() => {
     setLevel(1);
@@ -127,202 +132,153 @@ const Lab3 = ({navigation}) => {
     setMistakes(0);
   }, []);
 
-  const renderKeypad = useCallback(() => {
-    const keys = [
-      ['7', '8', '9'],
-      ['4', '5', '6'],
-      ['1', '2', '3'],
-      ['.', '0', '⌫'],
-    ];
-
-    return keys.map((row, rowIndex) => (
-      <View key={`row-${rowIndex}`} style={styles.keypadRow}>
-        {row.map(key => (
-          <TouchableOpacity
-            key={key}
-            style={styles.keypadButton}
-            onPress={() => {
-              ReactNativeHapticFeedback.trigger('selection');
-              if (key === '⌫') {
-                setUserAnswer(userAnswer.slice(0, -1));
-              } else if (userAnswer.length < 8) {
-                setUserAnswer(userAnswer + key);
-              }
-            }}>
-            <Text style={styles.keypadButtonText}>{key}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    ));
-  }, [userAnswer]);
-
   if (gameOver) {
     return (
-      <ImageBackground
-        source={
-          mistakes >= MAX_MISTAKES
-            ? require('../assets/space_defeat.jpg')
-            : require('../assets/space_victory.jpg')
-        }
-        style={styles.container}>
-        <View style={styles.gameOverContainer}>
-          <Text style={styles.gameOverText}>
-            {mistakes >= MAX_MISTAKES
-              ? 'Галактика захвачена!'
-              : 'Галактика спасена!'}
-          </Text>
-          <Text style={styles.finalScoreText}>Финальный счет: {score}</Text>
-          <TouchableOpacity style={styles.restartButton} onPress={restartGame}>
-            <Text style={styles.restartButtonText}>Начать новую миссию</Text>
-          </TouchableOpacity>
+      <View style={[styles.calculatorContainer, { backgroundColor: colors.background }]}>
+        <View style={styles.scoreBoard}>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Score: {score}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Mistakes: {mistakes}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Game Over!</Text>
         </View>
-      </ImageBackground>
+
+        <TouchableOpacity
+          style={[
+            styles.answerButton,
+            { backgroundColor: colors.buttonBackground, borderColor: colors.border }
+          ]}
+          onPress={restartGame}
+        >
+          <Text style={[styles.pixelText, { color: colors.buttonText }]}>Restart</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
   return (
-    <ThemedBackground
-      source={require('../assets/space.jpg')}
-      style={styles.container}>
-      <LinearGradient
-        colors={['rgba(0,0,0,0.7)', 'transparent']}
-        style={styles.gradient}>
-        <View style={styles.header}>
-          <Text style={styles.levelText}>Уровень: {level}</Text>
-          <Text style={styles.scoreText}>Счет: {score}</Text>
-          <Text style={styles.mistakesText}>
-            Ошибки: {mistakes}/{MAX_MISTAKES}
+    <View style={[styles.calculatorContainer, { backgroundColor: colors.background }]}>
+      <View style={styles.topRow}>
+        <View style={styles.scoreBoard}>
+          <Text style={[styles.pixelText, { color: colors.text }]}>Score: {score}</Text>
+          <Text style={[styles.pixelText, { color: colors.text }]}>
+            Mistakes: {mistakes}/{MAX_MISTAKES}
           </Text>
         </View>
-        <View style={styles.problemContainer}>
-          <Animated.Text
-            style={[
-              styles.problemText,
-              {transform: [{translateX: shakeAnimation}]},
-            ]}>
-            {`${memoizedProblem.num1} ${memoizedProblem.operation} ${memoizedProblem.num2} = ?`}
-          </Animated.Text>
+        <Text style={[styles.pixelText, { color: colors.text }]}>Level: {level}</Text>
+      </View>
+
+      <View style={styles.equationContainer}>
+        <Text style={[styles.equationText, { color: colors.text }]}>
+          {memoizedProblem.num1} {memoizedProblem.operation} {memoizedProblem.num2} = ?
+        </Text>
+      </View>
+
+      <View style={styles.resultDisplay}>
+        <Text style={[styles.resultText, { color: colors.text }]}>
+          {userAnswer || '___'}
+        </Text>
+      </View>
+
+      <View style={styles.keypadContainer}>
+        <ButtonRow values={['7', '8', '9']} onKeyPress={handleKeyPress} />
+        <ButtonRow values={['4', '5', '6']} onKeyPress={handleKeyPress} />
+        <ButtonRow values={['1', '2', '3']} onKeyPress={handleKeyPress} />
+
+        <View style={styles.bottomRow}>
+          <CalculatorButton value="." onPress={() => handleKeyPress('.')} />
+          <CalculatorButton value="0" onPress={() => handleKeyPress('0')} />
+          <CalculatorButton value="⌫" onPress={() => handleKeyPress('⌫')} />
         </View>
-        <View style={styles.answerContainer}>
-          <Text style={styles.answerText}>{userAnswer}</Text>
-        </View>
-        <View style={styles.keypadContainer}>{renderKeypad()}</View>
-        <TouchableOpacity style={styles.submitButton} onPress={checkAnswer}>
-          <Text style={styles.submitButtonText}>Уничтожить захватчиков</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-    </ThemedBackground>
+      </View>
+
+      <TouchableOpacity
+        style={[
+          styles.answerButton,
+          { backgroundColor: colors.buttonBackground, borderColor: colors.border }
+        ]}
+        onPress={checkAnswer}
+      >
+        <Text style={[styles.pixelText, { color: colors.buttonText }]}>Answer</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  gradient: {
+  calculatorContainer: {
     flex: 1,
     padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  header: {
+  topRow: {
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  scoreBoard: {
+    flexDirection: 'column',
+  },
+  pixelText: {
+    fontSize: 18,
+    fontWeight: '700',
+    fontFamily: 'PixelFont',
+  },
+  equationContainer: {
+    marginBottom: 10,
+    marginTop: 50,
+  },
+  equationText: {
+    fontSize: 35,
+    fontWeight: 'bold',
+    fontFamily: 'PixelFont',
+  },
+  resultDisplay: {
     marginBottom: 20,
+    marginTop: 20,
   },
-  levelText: {
-    fontSize: 24,
-    color: '#FFD700',
-    fontWeight: 'bold',
-  },
-  scoreText: {
-    fontSize: 24,
-    color: '#4CAF50',
-    fontWeight: 'bold',
-  },
-  mistakesText: {
-    fontSize: 24,
-    color: '#FF4500',
-    fontWeight: 'bold',
-  },
-  problemContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    padding: 20,
-    borderRadius: 10,
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  problemText: {
-    fontSize: 32,
-    color: '#FFFFFF',
+  resultText: {
+    fontSize: 50,
     textAlign: 'center',
-  },
-  answerContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
-    minWidth: 150,
-    alignItems: 'center',
-  },
-  answerText: {
-    fontSize: 28,
-    color: '#FFFFFF',
+    fontFamily: 'PixelFont',
   },
   keypadContainer: {
-    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    marginTop: 20,
   },
-  keypadRow: {
+  buttonRow: {
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom: 10,
   },
-  keypadButton: {
-    width: 70,
-    height: 70,
+  button: {
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#000',
+    minHeight: 55,
+    minWidth: 55,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    margin: 5,
-    borderRadius: 10,
+    backgroundColor: '#D3D3D3',
+    marginHorizontal: 5,
   },
-  keypadButtonText: {
+  buttonText: {
     fontSize: 24,
-    color: '#FFFFFF',
+    fontFamily: 'PixelFont',
   },
-  submitButton: {
-    backgroundColor: '#1E90FF',
-    padding: 15,
-    borderRadius: 10,
-    alignSelf: 'center',
-  },
-  submitButtonText: {
-    fontSize: 24,
-    color: '#FFFFFF',
-  },
-  gameOverContainer: {
-    flex: 1,
+  answerButton: {
+    borderRadius: 12,
+    borderWidth: 1,
+    minHeight: 55,
+    minWidth: 95,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
   },
-  gameOverText: {
-    fontSize: 36,
-    color: '#FFFFFF',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  finalScoreText: {
-    fontSize: 28,
-    color: '#FFFFFF',
-    marginBottom: 20,
-  },
-  restartButton: {
-    backgroundColor: '#1E90FF',
-    padding: 15,
-    borderRadius: 10,
-  },
-  restartButtonText: {
-    fontSize: 24,
-    color: '#FFFFFF',
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
 

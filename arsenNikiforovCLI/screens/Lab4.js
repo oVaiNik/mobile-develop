@@ -1,116 +1,61 @@
-import React, {useEffect} from 'react';
-import {View, TouchableOpacity, StyleSheet, Switch, Text} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {setTheme, incrementCounter, decrementCounter} from '../store/store';
-import {useTheme} from '@react-navigation/native';
-import ThemedBackground from '../components/ThemedBackground';
-import {ThemedText, TitleText, InfoText} from '../components/ThemedText';
+// screens/Lab4.js
+import React from 'react';
+import { View, TouchableOpacity, StyleSheet, Switch, Text } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { incrementCounter, decrementCounter, toggleTheme } from '../store/store';
+import useTheme from '../hooks/useTheme';
 
-const Lab4 = ({navigation}) => {
-  const theme = useSelector(state => state.theme);
-  const counter = useSelector(state => state.counter);
+const Lab4 = () => {
+  const counter = useSelector((state) => state.counter);
   const dispatch = useDispatch();
-
-  const switchTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    dispatch(setTheme(newTheme));
-  };
-
-  useEffect(() => {
-    // Этот эффект следит за обновлением счетчика и вызывает рендер при изменении
-    console.log('Counter updated:', counter);
-  }, [counter]);
+  const colors = useTheme();
+  const theme = useSelector((state) => state.theme);
 
   return (
-    <ThemedBackground>
-      <View style={styles.container}>
-        <TitleText style={styles.title}>Lab 4 - Redux Theme Switcher</TitleText>
-
-        <InfoText style={styles.text}>
-          Текущая тема: {theme === 'light' ? 'Светлая' : 'Темная'}
-        </InfoText>
-
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Theme Switcher</Text>
+      <View style={styles.themeContainer}>
+        <Text style={[styles.themeText, { color: colors.text }]}>
+          {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+        </Text>
         <Switch
           value={theme === 'dark'}
-          onValueChange={switchTheme}
-          thumbColor={theme === 'dark' ? '#FFF' : '#000'}
-          trackColor={{false: '#767577', true: '#81b0ff'}}
+          onValueChange={() => dispatch(toggleTheme())}
+          thumbColor={colors.accent}
+          trackColor={{ false: colors.border, true: colors.border }}
           style={styles.switch}
         />
-
-        <View style={styles.counterContainer}>
-          <Text
-            style={[
-              styles.counterText,
-              {color: theme === 'light' ? '#333' : '#fff'},
-            ]}>
-            Redux Counter: {counter}
-          </Text>
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              {
-                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-              },
-            ]}
-            onPress={() => dispatch(incrementCounter())}>
-            <ThemedText style={styles.buttonText}>+ Увеличить</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              {
-                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-              },
-            ]}
-            onPress={() => dispatch(decrementCounter())}>
-            <ThemedText style={styles.buttonText}>- Уменьшить</ThemedText>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.navigationButtonsContainer}>
-          <TouchableOpacity
-            style={[
-              styles.navigationButton,
-              {
-                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-              },
-            ]}
-            onPress={() => navigation.navigate('Lab1')}>
-            <ThemedText style={styles.buttonText}>Перейти к Lab 1</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.navigationButton,
-              {
-                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-              },
-            ]}
-            onPress={() => navigation.navigate('Lab2')}>
-            <ThemedText style={styles.buttonText}>Перейти к Lab 2</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.navigationButton,
-              {
-                backgroundColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-                borderColor: theme === 'light' ? '#4a90e2' : '#00FFFF',
-              },
-            ]}
-            onPress={() => navigation.navigate('Lab3')}>
-            <ThemedText style={styles.buttonText}>Перейти к Lab 3</ThemedText>
-          </TouchableOpacity>
-        </View>
       </View>
-    </ThemedBackground>
+      <Text style={[styles.counterText, { color: colors.text }]}>Counter: {counter}</Text>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              backgroundColor: colors.buttonBackground,
+              borderColor: colors.border,
+              shadowColor: colors.shadow,
+            },
+          ]}
+          onPress={() => dispatch(incrementCounter())}
+        >
+          <Text style={[styles.buttonText, { color: colors.buttonText }]}>+</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              backgroundColor: colors.buttonBackground,
+              borderColor: colors.border,
+              shadowColor: colors.shadow,
+            },
+          ]}
+          onPress={() => dispatch(decrementCounter())}
+        >
+          <Text style={[styles.buttonText, { color: colors.buttonText }]}>-</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
@@ -120,65 +65,55 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    margin: 20,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-    textShadowOffset: {width: 0, height: 2},
-    textShadowRadius: 5,
-    textShadowColor: 'rgba(0,0,0,0.3)',
+    fontSize: 30,
+    fontWeight: '900',
+    marginBottom: 30,
+    textTransform: 'uppercase',
+    fontFamily: 'PixelFont',
   },
-  text: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  counterContainer: {
+  themeContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  themeText: {
+    fontSize: 20,
+    marginRight: 10,
+    fontFamily: 'PixelFont',
   },
   counterText: {
-    fontSize: 26,
+    fontSize: 24,
     marginBottom: 20,
-    fontWeight: 'bold',
+    fontWeight: '700',
+    fontFamily: 'PixelFont',
   },
-  switch: {
-    marginBottom: 30,
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
   },
   button: {
-    padding: 15,
-    marginVertical: 10,
-    borderRadius: 50,
-    width: 200,
-    alignItems: 'center',
     borderWidth: 2,
-    shadowOffset: {width: 0, height: 4},
+    borderRadius: 50,
+    marginHorizontal: 20,
+    width: 70,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
   },
   buttonText: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 30,
+    fontWeight: 'bold',
+    fontFamily: 'PixelFont',
   },
-  navigationButtonsContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: 30,
-  },
-  navigationButton: {
-    padding: 15,
-    borderRadius: 30,
-    alignItems: 'center',
-    width: 250,
-    borderWidth: 2,
-    marginVertical: 10,
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
+  switch: {
+    transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
   },
 });
 

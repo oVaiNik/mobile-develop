@@ -1,29 +1,17 @@
+// components/ThemedBackground.js
 import React from 'react';
-import {ImageBackground, StyleSheet, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import { View, StyleSheet } from 'react-native';
+import useTheme from '../hooks/useTheme';
 
-const ThemedBackground = ({children}) => {
-  const theme = useSelector(state => state.theme);
+const ThemedBackground = ({ children }) => {
+  const colors = useTheme();
 
-  const backgroundImage =
-    theme === 'light'
-      ? require('../assets/lab4_light.jpg')
-      : require('../assets/lab4_dark.jpg');
-
-  return (
-    <ImageBackground source={backgroundImage} style={styles.background}>
-      <View style={styles.overlay}>{children}</View>
-    </ImageBackground>
-  );
+  return <View style={[styles.container, { backgroundColor: colors.background }]}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.1)',
   },
 });
 

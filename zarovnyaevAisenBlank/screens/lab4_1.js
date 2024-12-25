@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-  Button,
+  TouchableOpacity,
   FlatList,
   Text,
   StyleSheet,
@@ -41,7 +41,9 @@ export default function Lab4_1() {
         value={title}
         onChangeText={setTitle}
       />
-      <Button title="Добавить задачу" onPress={handleAddTask} />
+      <TouchableOpacity style={styles.button} onPress={handleAddTask}>
+        <Text style={styles.buttonText}>Добавить</Text>
+      </TouchableOpacity>
 
       <FlatList
         data={tasks}
@@ -54,14 +56,23 @@ export default function Lab4_1() {
                 Статус: {item.completed ? "Завершено" : "В процессе"}
               </Text>
             </View>
-            <Button title="Удалить" onPress={() => deleteTask(item.id)} />
-            <Button
-              title="Редактировать"
-              onPress={() => {
-                setEditId(item.id);
-                setNewTitle(item.name);
-              }}
-            />
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity
+                style={[styles.taskButtonDelete]}
+                onPress={() => deleteTask(item.id)}
+              >
+                <Text style={styles.buttonText}>Удалить</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.taskButtonEdit}
+                onPress={() => {
+                  setEditId(item.id);
+                  setNewTitle(item.name);
+                }}
+              >
+                <Text style={styles.buttonEdit}>Редактировать</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
@@ -74,7 +85,9 @@ export default function Lab4_1() {
             value={newTitle}
             onChangeText={setNewTitle}
           />
-          <Button title="Сохранить изменения" onPress={handleEditTask} />
+          <TouchableOpacity style={styles.button} onPress={handleEditTask}>
+            <Text style={styles.buttonText}>Сохранить изменения</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -83,14 +96,80 @@ export default function Lab4_1() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
-  input: { borderWidth: 1, padding: 10, marginBottom: 10 },
+  input: {
+    height: 54,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    alignSelf: "stretch",
+  },
+  button: {
+    alignSelf: "flex-end", // Выравнивание кнопки справа
+    backgroundColor: "#CFE2F9",
+    height: 50,
+    width: 150,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: "#2673D0",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontFamily: "Roboto-Bold",
+  },
+  buttonEdit: {
+    color: "#2673D0",
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontFamily: "Roboto-Bold",
+  },
   taskContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "black",
     marginBottom: 10,
+    height: 50, // Фиксированная высота для контейнера задачи
   },
-  taskTitle: { fontSize: 16, fontWeight: "bold" },
-  taskStatus: { fontSize: 14, color: "gray" },
+  taskTitle: {
+    fontSize: 18,
+    fontFamily: "Roboto-Bold",
+    color: "#2673D0",
+  },
+  taskStatus: {
+    fontSize: 18,
+    fontFamily: "Roboto-Medium",
+    color: "#2673D0",
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    width: "50%",
+    height: "100%", // Кнопки занимают всю высоту контейнера
+  },
+  taskButtonDelete: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: "black",
+    height: "100%", // Высота кнопки равна высоте контейнера
+    width: 93,
+    backgroundColor: "#CFE2F9",
+  },
+  taskButtonEdit: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%", // Высота кнопки равна высоте контейнера
+    width: 93,
+    backgroundColor: "#CFE2F9",
+  },
   editContainer: { marginTop: 20 },
 });

@@ -1,138 +1,49 @@
-import React, {useState, useEffect, useCallback} from 'react';
+// screens/Lab1.js
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   TouchableOpacity,
-  Animated,
+  Modal,
   Text,
+  Pressable,
   StyleSheet,
   Dimensions,
-  PanResponder,
-  Modal,
-  Pressable,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-import {incrementCounter} from '../store/store';
-import ThemedBackground from '../components/ThemedBackground';
-import {ThemedText, InfoText} from '../components/ThemedText';
-import {Easing} from 'react-native'; // Добавляем импорт Easing
+import { useSelector, useDispatch } from 'react-redux';
+import { incrementCounter } from '../store/store';
+import useTheme from '../hooks/useTheme';
+import Bubble from '../components/Bubble';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const randomColor = () => `hsl(${Math.random() * 360}, 100%, 50%)`;
-
-const randomPosition = () => ({
-  x: Math.random() * (width - 100),
-  y: Math.random() * (height - 300),
-});
-
-const Bubble = ({id, removeBubble, onDrag, basket, gameOver}) => {
-  const [scale] = useState(new Animated.Value(0));
-  const [popAnimation] = useState(new Animated.Value(1)); // Создаем анимацию лопания
-  const initialPosition = randomPosition();
-  const [pan] = useState(
-    new Animated.ValueXY({x: initialPosition.x, y: initialPosition.y}),
-  );
-  const [color] = useState(randomColor());
-
-  useEffect(() => {
-    const scaleAnimation = Animated.timing(scale, {
-      toValue: 1.5,
-      duration: 5000,
-      useNativeDriver: false,
-    });
-    scaleAnimation.start(({finished}) => {
-      if (finished) {
-        removeBubble(id);
-      }
-    });
-  }, [removeBubble, id]);
-
-  const handlePop = useCallback(() => {
-    Animated.timing(popAnimation, {
-      toValue: 0,
-      duration: 300,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: true,
-    }).start(() => removeBubble(id));
-  }, [popAnimation, removeBubble, id]);
-
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => !gameOver,
-    onPanResponderGrant: () => {
-      pan.setOffset({
-        x: pan.x._value,
-        y: pan.y._value,
-      });
-      pan.setValue({x: 0, y: 0});
-    },
-    onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
-      useNativeDriver: false,
-    }),
-    onPanResponderRelease: () => {
-      pan.flattenOffset();
-      const {x, y} = pan.__getValue();
-      const bubbleSize = 80 * scale.__getValue();
-
-      if (
-        x + bubbleSize / 2 > basket.x &&
-        x + bubbleSize / 2 < basket.x + basket.width &&
-        y + bubbleSize / 2 > basket.y &&
-        y + bubbleSize / 2 < basket.y + basket.height
-      ) {
-        onDrag();
-        handlePop(); // Вызываем анимацию лопания
-      } else {
-        // Если не попали в корзину, просто убираем смещение
-        removeBubble(id);
-      }
-    },
-  });
-
+function InfoBox({ colors }) {
   return (
-    <Animated.View
-      {...panResponder.panHandlers}
-      style={[
-        styles.bubble,
-        {
-          backgroundColor: color,
-          transform: [
-            {translateX: pan.x},
-            {translateY: pan.y},
-            {scale: Animated.multiply(scale, popAnimation)}, // Применяем анимацию лопания
-          ],
-        },
-      ]}
-    />
+    <View style={[styles.infoBox, { borderColor: colors.border, backgroundColor: colors.buttonBackground }]}>
+      <Text style={[styles.infoText, { color: colors.buttonText }]}>Info</Text>
+    </View>
   );
-};
+}
 
-const Lab1 = ({navigation}) => {
+const Lab1 = () => {
   const [bubbles, setBubbles] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const counter = useSelector(state => state.counter);
+  const counter = useSelector((state) => state.counter);
   const dispatch = useDispatch();
-
-const basket = {
-  x: width / 2 - 50,
-  y: height - 200, 
-  width: 100,
-  height: 100,
-};
-
+  const colors = useTheme();
 
   const addBubble = useCallback(() => {
     const id = Date.now() + Math.random();
-    setBubbles(prevBubbles => [...prevBubbles, {id}]);
+    setBubbles((prevBubbles) => [...prevBubbles, { id }]);
   }, []);
 
-  const removeBubble = useCallback(id => {
-    setBubbles(prevBubbles => prevBubbles.filter(bubble => bubble.id !== id));
+  const removeBubble = useCallback((id) => {
+    setBubbles((prevBubbles) => prevBubbles.filter((bubble) => bubble.id !== id));
   }, []);
 
   const onDrag = useCallback(() => {
-    setScore(prevScore => prevScore + 5);
+    setScore((prevScore) => prevScore + 5);
     dispatch(incrementCounter());
   }, [dispatch]);
 
@@ -158,210 +69,182 @@ const basket = {
   };
 
   return (
-    <ThemedBackground
-      source={require('../assets/mountain.png')}
-      style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.infoButton}
-          onPress={() => setModalVisible(true)}>
-          <InfoText style={styles.infoButtonText}>Инфо</InfoText>
-        </TouchableOpacity>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.headerSection}>
         <View style={styles.scoreContainer}>
-          <ThemedText style={styles.scoreText}>Счет: {score}</ThemedText>
+          <Text style={[styles.scoreText, { color: colors.text }]}>
+            Score: {score}
+            {'\n'}
+            Counter: {counter}
+          </Text>
         </View>
-
-        <View style={styles.reduxContainer}>
-          <Text style={styles.reduxText}>Redux Counter: {counter}</Text>
-        </View>
+        <TouchableOpacity style={styles.infoButton} onPress={() => setModalVisible(true)}>
+          <InfoBox colors={colors} />
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity style={styles.touchable} onPress={addBubble}>
-        {bubbles.map(bubble => (
-          <Bubble
-            key={bubble.id}
-            id={bubble.id}
-            removeBubble={removeBubble}
-            onDrag={onDrag}
-            basket={basket}
-            gameOver={gameOver}
-          />
-        ))}
-
-        <View
-          style={[
-            styles.basket,
-            {
-              left: basket.x,
-              top: basket.y,
-              width: basket.width,
-              height: basket.height,
-            },
-          ]}>
-          <InfoText style={styles.basketText}>Корзина</InfoText>
-        </View>
-      </TouchableOpacity>
+      {!gameOver && (
+        <TouchableOpacity style={styles.touchable} onPress={addBubble}>
+          {bubbles.map((bubble) => (
+            <Bubble
+              key={bubble.id}
+              id={bubble.id}
+              removeBubble={removeBubble}
+              onDrag={onDrag}
+              gameOver={gameOver}
+            />
+          ))}
+        </TouchableOpacity>
+      )}
 
       <Modal transparent={true} visible={modalVisible} animationType="fade">
         <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Как играть</Text>
-            <Text style={styles.modalText}>
-              Создавайте пузырьки и перетаскивайте их в корзину, чтобы
-              заработать очки!
+          <View style={[styles.modalContainer, { backgroundColor: colors.secondary }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>How to Play</Text>
+            <Text style={[styles.modalText, { color: colors.text }]}>
+              Create bubbles and drag them to earn points!
             </Text>
-            <Pressable
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeButtonText}>Закрыть</Text>
+            <Pressable style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close</Text>
             </Pressable>
           </View>
         </View>
       </Modal>
 
       {gameOver && (
-        <View style={styles.gameOverContainer}>
-          <Text style={styles.gameOverText}>Игра окончена!</Text>
-          <Text style={styles.finalScoreText}>Ваш счет: {score}</Text>
+        <View style={[styles.gameOverContainer, { backgroundColor: colors.secondary }]}>
+          <Text style={[styles.gameOverText, { color: colors.text }]}>Game Over!</Text>
+          <Text style={[styles.finalScoreText, { color: colors.text }]}>
+            Your Score: {score}
+          </Text>
           <TouchableOpacity style={styles.restartButton} onPress={resetGame}>
-            <Text style={styles.restartButtonText}>Играть снова</Text>
+            <Text style={styles.restartButtonText}>Play Again</Text>
           </TouchableOpacity>
         </View>
       )}
-    </ThemedBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingLeft: 21,
+    paddingRight: 21,
+    paddingTop: 40,
+    paddingBottom: 142,
+    alignItems: 'stretch',
+  },
+  headerSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 30, // Отступ сверху для опускания HUD
+  },
+  scoreContainer: {
+    lineHeight: 28,
+  },
+  scoreText: {
+    fontSize: 14,
+    fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
+  },
+  infoButton: {
+    padding: 10,
   },
   touchable: {
     flex: 1,
   },
-  bubble: {
-    position: 'absolute',
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    borderWidth: 2,
+  infoBox: {
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 34,
+    paddingVertical: 3,
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
-  header: {
-    position: 'absolute',
-    top: 40,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    zIndex: 1,
-  },
-  infoButton: {
-    backgroundColor: 'rgba(0, 255, 255, 0.2)',
-    padding: 10,
-    borderRadius: 10,
-  },
-  infoButtonText: {
-    fontSize: 18,
-  },
-  switchButton: {
-    backgroundColor: 'rgba(0, 255, 255, 0.2)',
-    padding: 10,
-    borderRadius: 10,
-  },
-  switchButtonText: {
-    color: '#00ffff',
-    fontSize: 18,
-  },
-  scoreContainer: {
-    backgroundColor: 'rgba(0, 255, 255, 0.2)',
-    padding: 10,
-    borderRadius: 10,
-  },
-  scoreText: {
-    color: '#00ffff',
-    fontSize: 18,
-  },
-  reduxContainer: {
-    backgroundColor: 'rgba(0, 255, 255, 0.2)',
-    padding: 10,
-    borderRadius: 10,
-  },
-  reduxText: {
-    color: '#00ffff',
-    fontSize: 18,
-  },
-  basket: {
-    position: 'absolute',
-    backgroundColor: 'rgba(0, 255, 255, 0.2)',
-    borderWidth: 2,
-    borderColor: '#00ffff',
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  basketText: {
-    fontSize: 16,
+  infoText: {
+    fontSize: 12,
+    textAlign: 'center',
+    fontFamily: 'PixelFont',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   modalBackground: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   modalContainer: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
+    width: 320,
+    padding: 24,
+    borderRadius: 8,
     alignItems: 'center',
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 14,
+    fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 12,
+    fontFamily: 'PixelFont',
     textAlign: 'center',
-    marginBottom: 20,
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   closeButton: {
-    backgroundColor: '#00ffff',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    backgroundColor: '#03DAC6',
   },
   closeButtonText: {
-    color: 'white',
-    fontSize: 18,
+    fontSize: 12,
+    fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   gameOverContainer: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
+    top: height / 3,
+    left: width / 6,
+    right: width / 6,
+    padding: 20,
+    borderRadius: 8,
     alignItems: 'center',
   },
   gameOverText: {
-    fontSize: 36,
-    color: 'white',
-    marginBottom: 20,
+    fontSize: 14,
+    fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   finalScoreText: {
-    fontSize: 24,
-    color: 'white',
-    marginBottom: 20,
+    fontSize: 12,
+    fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
   restartButton: {
-    backgroundColor: '#00ffff',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 5,
+    backgroundColor: '#03DAC6',
   },
   restartButtonText: {
-    color: 'white',
-    fontSize: 18,
+    fontSize: 12,
+    fontFamily: 'PixelFont',
+    textAlign: 'center',
+    lineHeight: 30,
+    transform: [{ scaleY: 1.2 }],
   },
 });
 
