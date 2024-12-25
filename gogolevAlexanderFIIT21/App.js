@@ -25,7 +25,9 @@ export default function App() {
                   iconName = focused ? "text" : "text-outline";
                   break;
                 case "Лабораторная 2":
-                  iconName = focused ? "document-text" : "document-text-outline";
+                  iconName = focused
+                    ? "document-text"
+                    : "document-text-outline";
                   break;
                 case "Лабораторная 3":
                   iconName = focused ? "leaf" : "leaf-outline";
@@ -36,7 +38,8 @@ export default function App() {
                 case "Завершённые задачи":
                   iconName = focused ? "checkbox" : "checkbox-outline";
                   break;
-                default:aa
+                default:
+                  aa;
                   iconName = "ellipse";
               }
 
