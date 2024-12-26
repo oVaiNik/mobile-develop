@@ -60,7 +60,7 @@ const Lab1 = ({ navigation }) => {
             marginTop: 20,
           }}
         >
-          <Text style={{ color: "white" }}>Поменять самому в настройках.</Text>
+          <Text style={{ color: "white" }}>Поменять самостоятельно</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
