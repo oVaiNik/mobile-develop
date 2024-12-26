@@ -1,41 +1,25 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
-import Svg, { Path } from 'react-native-svg';
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import BackArrow from "../components/BackArrow";
+import { useTheme } from "../components/ThemeContext";
 
 // Компонент для отображения точки
-const Dot = ({ position, visible }) => {
+const Dot = ({ position, visible, dotColor }) => {
   return (
     <View
       style={[
         styles.dot,
         position,
-        { opacity: visible ? 1 : 0 }, // Управление видимостью точки
+        { opacity: visible ? 1 : 0, backgroundColor: dotColor }, // Управление цветом точки
       ]}
     />
   );
 };
 
-const BackArrow = () => {
-  return (
-    <View style={styles.arrowContainer}>
-      <Svg width={35} height={35} viewBox="0 0 35 35" fill="none">
-        <Path
-          d="M22.6552 5.12604L10.2812 17.5L22.6552 29.874L24.7188 27.8119L14.4054 17.5L24.7188 7.18812L22.6552 5.12604Z"
-          fill="black"
-        />
-      </Svg>
-    </View>
-  );
-};
-
-export default function Lab1() {
+export default function Lab1({ navigation }) {
   const [randomNumber, setRandomNumber] = useState(1);
+
+  const { darkTheme } = useTheme(); // Получаем тему из контекста
 
   const generateRandomNumber = () => {
     const number = Math.floor(Math.random() * 6) + 1;
@@ -44,13 +28,13 @@ export default function Lab1() {
 
   // Карта позиций точек
   const dotPositions = [
-    { top: "25%", left: "25%", transform: [{ translateX: -20 }, { translateY: -20 }] }, // Верхняя левая точка
-    { top: "50%", left: "25%", transform: [{ translateX: -20 }, { translateY: -20 }] }, // Левая точка
-    { bottom: "25%", left: "25%", transform: [{ translateX: -20 }, { translateY: 20 }] }, // Нижняя левая точка
-    { top: "50%", left: "50%", transform: [{ translateX: -20 }, { translateY: -20 }] }, // Центральная точка
-    { top: "25%", right: "25%", transform: [{ translateX: 20 }, { translateY: -20 }] }, // Верхняя правая точка
-    { top: "50%", right: "25%", transform: [{ translateX: 20 }, { translateY: -20 }] }, // Правая точка
-    { bottom: "25%", right: "25%", transform: [{ translateX: 20 }, { translateY: 20 }] }, // Нижняя правая точка
+    { top: "25%", left: "25%", transform: [{ translateX: -20 }, { translateY: -20 }] },
+    { top: "50%", left: "25%", transform: [{ translateX: -20 }, { translateY: -20 }] },
+    { bottom: "25%", left: "25%", transform: [{ translateX: -20 }, { translateY: 20 }] },
+    { top: "50%", left: "50%", transform: [{ translateX: -20 }, { translateY: -20 }] },
+    { top: "25%", right: "25%", transform: [{ translateX: 20 }, { translateY: -20 }] },
+    { top: "50%", right: "25%", transform: [{ translateX: 20 }, { translateY: -20 }] },
+    { bottom: "25%", right: "25%", transform: [{ translateX: 20 }, { translateY: 20 }] },
   ];
 
   // Карта видимости точек для каждого числа
@@ -63,21 +47,30 @@ export default function Lab1() {
     6: [1, 1, 1, 0, 1, 1, 1],
   };
 
+  const themeStyles = darkTheme
+    ? styles.darkTheme
+    : styles.lightTheme; // Выбор стиля в зависимости от темы
+
   return (
-    <View style={styles.container}>
-      <BackArrow style={styles.arrowContainer}/>
+    <View style={[styles.container, themeStyles.container]}>
+      <BackArrow navigation={navigation} />
       <View style={styles.container2}>
-        <Text style={styles.numberText}>{randomNumber}</Text>
-        <View style={styles.dice}>
+        <Text style={[styles.numberText, themeStyles.text]}>{randomNumber}</Text>
+        <View style={[styles.dice, themeStyles.dice]}>
           {dotPositions.map((position, index) => (
             <Dot
               key={index}
               position={position}
-              visible={dotVisibilityMap[randomNumber][index]} // Видимость точки
+              visible={dotVisibilityMap[randomNumber][index]}
+              dotColor={darkTheme ? "#E1E1E1" : "#8C6F53"} // Цвет точек зависит от темы
             />
           ))}
         </View>
-        <TouchableOpacity onPress={generateRandomNumber} style={styles.rollButton}>
+        <TouchableOpacity
+          onPress={generateRandomNumber}
+          style={[styles.rollButton, themeStyles.rollButton]}
+        >
+          {/* Текст обязательно обёрнут в <Text> */}
           <Text style={styles.buttonText}>Roll</Text>
         </TouchableOpacity>
       </View>
@@ -86,13 +79,8 @@ export default function Lab1() {
 }
 
 const styles = StyleSheet.create({
-  arrowContainer: {
-    marginTop: 60,
-    marginLeft: 19,
-  },
   container: {
     flex: 1,
-    backgroundColor: "#F2E8D5",
   },
   container2: {
     alignItems: "center",
@@ -100,33 +88,29 @@ const styles = StyleSheet.create({
   numberText: {
     fontSize: 48,
     fontWeight: "bold",
-    color: "#333333",
     marginTop: 61,
   },
   dice: {
-    marginTop: 36, 
+    marginTop: 36,
     width: 200,
     height: 200,
     borderRadius: 10,
-    backgroundColor: "#DAAD86", // Цвет куба
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    position: "relative", // Для позиционирования точек
+    position: "relative",
   },
   dot: {
     width: 40,
     height: 40,
-    backgroundColor: "#8C6F53", // Цвет точек (контрастный цвет)
     borderRadius: 20,
-    position: "absolute", // Абсолютное позиционирование точки
+    position: "absolute",
   },
   rollButton: {
     width: 250,
     height: 70,
     flexShrink: 0,
-    backgroundColor: "#B28451",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
@@ -139,10 +123,39 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 50,
     fontWeight: "bold",
-    color: "#FFF",
+    color: "#FFF", // Цвет текста всегда белый
     textAlign: "center",
     letterSpacing: -0.5,
     lineHeight: 50,
     alignSelf: "center",
+  },
+  // Стили для светлой и темной темы
+  lightTheme: {
+    container: {
+      backgroundColor: "#F2E8D5",
+    },
+    text: {
+      color: "#333333",
+    },
+    dice: {
+      backgroundColor: "#DAAD86",
+    },
+    rollButton: {
+      backgroundColor: "#B28451",
+    },
+  },
+  darkTheme: {
+    container: {
+      backgroundColor: "#1E1E1E",
+    },
+    text: {
+      color: "#FFFFFF",
+    },
+    dice: {
+      backgroundColor: "#424242",
+    },
+    rollButton: {
+      backgroundColor: "#BB86FC", // Фиолетовый цвет для кнопки Roll в темной теме
+    },
   },
 });
