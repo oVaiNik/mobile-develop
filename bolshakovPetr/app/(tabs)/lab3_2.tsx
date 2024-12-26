@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     verticalAlign: "middle",
     lineHeight: 29,
-    fontWeight: 300,
+    fontWeight: "300",
   },
   movieItem: {
     flexDirection: "row",

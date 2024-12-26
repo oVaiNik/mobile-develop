@@ -1,10 +1,10 @@
 import { Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";
 import "react-native-reanimated";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import Entypo from "@expo/vector-icons/Entypo";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
 import * as Font from "expo-font";
 
@@ -52,54 +52,91 @@ export default function TabLayout() {
         <Tabs.Screen
           name="lab1"
           options={{
-            title: "Lab1",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
+              <MaterialCommunityIcons
+                name="numeric-1-box-outline"
+                size={size}
+                color={color}
+              />
             ),
           }}
         />
         <Tabs.Screen
           name="lab2"
           options={{
-            title: "Lab2",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
+              <MaterialCommunityIcons
+                name="numeric-2-box-outline"
+                size={size}
+                color={color}
+              />
             ),
           }}
         />
         <Tabs.Screen
           name="lab3"
           options={{
-            title: "Lab3",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
+              <MaterialCommunityIcons
+                name="numeric-3-box-outline"
+                size={size}
+                color={color}
+              />
             ),
           }}
         />
         <Tabs.Screen
           name="lab3_2"
           options={{
-            title: "Lab3_2",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
+              <MaterialCommunityIcons
+                name="numeric-3-box-outline"
+                size={size}
+                color={color}
+              />
             ),
           }}
         />
         <Tabs.Screen
           name="lab4"
           options={{
-            title: "Lab4",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
+              <MaterialCommunityIcons
+                name="numeric-4-box-outline"
+                size={size}
+                color={color}
+              />
             ),
           }}
         />
         <Tabs.Screen
           name="lab4_2"
           options={{
-            title: "Lab4_2",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
-              <Entypo name="lab-flask" size={size} color={color} />
+              <MaterialCommunityIcons
+                name="numeric-4-box-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="index"
+          options={{
+            tabBarLabel: "",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="numeric-0-box-outline"
+                size={size}
+                color={color}
+              />
             ),
           }}
         />
