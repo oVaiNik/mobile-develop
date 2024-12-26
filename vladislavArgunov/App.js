@@ -5,7 +5,8 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import Lab2 from "./app/screens/lab2";
+import Lab2 from "./screens/lab2";
+import Lab3 from "./screens/lab3";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,6 +29,14 @@ export default function App() {
           component={Lab2}
           options={{
             tabBarBadge: 2,
+            TransitionPresets: TransitionPresets.ShiftTransition,
+          }}
+        />
+        <Tab.Screen
+          name="useMemo + useState"
+          component={Lab3}
+          options={{
+            tabBarBadge: 3,
             TransitionPresets: TransitionPresets.ShiftTransition,
           }}
         />
