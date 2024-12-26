@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
-import { View, Image, TouchableOpacity, Text } from "react-native"
-import {styles} from "../styles/StylesLab2"
+import React, { useState, useEffect } from 'react'
+import { View, Image, TouchableOpacity, Text } from 'react-native'
+import {styles} from '../styles/StylesLab2'
 
 const Lab2 = () => {
   const [randomImage, setRandomImage] = useState('https://dog.ceo/api/breeds/image/random')
