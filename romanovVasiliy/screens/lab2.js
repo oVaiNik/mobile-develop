@@ -118,6 +118,7 @@ const Lab2 = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 30,
     flex: 1,
     padding: 20,
     backgroundColor: "#fff",
