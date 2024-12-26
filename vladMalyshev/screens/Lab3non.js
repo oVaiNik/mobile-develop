@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-const Lab3 = () => {
+const Lab3Non = () => {
   const [filterText, setFilterText] = useState("");
   const [newName, setNewName] = useState("");
   const [names, setNames] = useState([
@@ -24,13 +24,16 @@ const Lab3 = () => {
     "Jack",
   ]);
 
-  // Быстрая фильтрация через useMemo
-  const filteredNames = useMemo(() => {
-    console.log("Фильтрация через useMemo");
-    return names.filter((name) =>
-      name.toLowerCase().includes(filterText.toLowerCase())
-    );
-  }, [filterText, names]);
+  // Медленная фильтрация без useMemo
+  const filteredNames = names.filter((name) => {
+    for (let i = 0; i < names.length; i++) {
+      // Выполняется проход по массиву
+      if (name.toLowerCase().includes(filterText.toLowerCase())) {
+        return true;
+      }
+    }
+    return false;
+  });
 
   const addName = () => {
     if (newName.trim()) {
@@ -42,10 +45,10 @@ const Lab3 = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Лабораторная 3 (useMemo)</Text>
+        <Text style={styles.headerText}>Лабораторная 3 (без useMemo)</Text>
       </View>
 
-      <Text style={styles.title}>Фильтр имен (быстрый поиск)</Text>
+      <Text style={styles.title}>Фильтр имен (медленный поиск)</Text>
       <TextInput
         style={styles.input}
         placeholder="Введите имя для фильтрации"
@@ -124,4 +127,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Lab3;
+export default Lab3Non;

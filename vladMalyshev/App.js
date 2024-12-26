@@ -7,6 +7,7 @@ import store from "./store/store";
 import Lab1 from "./screens/Lab1";
 import Lab2 from "./screens/Lab2";
 import Lab3 from "./screens/Lab3";
+import Lab3non from "./screens/Lab3non";
 import Lab4 from "./screens/Lab4";
 import Lab4View from "./screens/Lab4View";
 import Icon from "react-native-vector-icons/Ionicons"; // Импорт иконок из библиотеки
@@ -36,6 +37,9 @@ export default function App() {
                 case "Лабораторная 3":
                   iconName = focused ? "person" : "person-outline";
                   break;
+                case "без USE MEMO":
+                    iconName = focused ? "person" : "person-outline";
+                    break;
                 case "Лабораторная 4":
                   iconName = focused ? "calendar" : "calendar-outline";
                   break;
@@ -53,6 +57,7 @@ export default function App() {
           <Tab.Screen name="Лабораторная 1" component={Lab1} />
           <Tab.Screen name="Лабораторная 2" component={Lab2} />
           <Tab.Screen name="Лабораторная 3" component={Lab3} />
+          <Tab.Screen name="Лабораторная 3 без Usememo" component={Lab3non} />
           <Tab.Screen name="Лабораторная 4" component={Lab4} />
           <Tab.Screen name="Просмотр задач" component={Lab4View} />
         </Tab.Navigator>
