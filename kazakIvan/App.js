@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Font from "expo-font";
 import { ThemeProvider } from "./components/ThemeContext"; 
 import Lab1 from "./screens/lab1";
-import Lab2_3 from "./screens/lab_2_3";
+import Lab2_3 from "./screens/lab3";
 import MainMenu from "./screens/mainMenu";
 
 const Stack = createNativeStackNavigator();
