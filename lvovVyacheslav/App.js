@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { Image, StyleSheet, View } from 'react-native';
 import Lab1 from './screens/Lab1';
+import Lab2 from './screens/Lab2';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +34,20 @@ export default function App() {
                     focused && styles.iconFocused,
                     (styles.height = 12),
                   ]}
+                />
+              </View>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Lab2"
+          component={Lab2}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View style={styles.iconContainer}>
+                <Image
+                  source={require('./assets/Spis.png')} // Иконка для Lab2
+                  style={[styles.icon, focused && styles.iconFocused]}
                 />
               </View>
             ),
