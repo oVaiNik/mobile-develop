@@ -11,18 +11,19 @@ import Lab1 from "./screens/lab1";
 import Lab2 from "./screens/lab2";
 import Lab3 from "./screens/lab3";
 import { ThemeProvider } from "./ContextAPI/themeContext";
+import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { useTheme } from "./ContextAPI/themeContext";
-import { getStyles } from "./screens/styles";
 
 const Tab = createBottomTabNavigator();
 
 function AppContent() {
   const { isDarkTheme, toggleTheme } = useTheme();
-  const styles = getStyles(isDarkTheme);
+  const navigationTheme = isDarkTheme ? DarkTheme : DefaultTheme;
+  const inactiveTintColor = isDarkTheme ? "darkgray" : "gray";
 
   return (
-    <NavigationContainer >
-      <Tab.Navigator 
+    <NavigationContainer theme={navigationTheme}>
+      <Tab.Navigator
         screenOptions={() => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -30,17 +31,17 @@ function AppContent() {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
+          tabBarInactiveTintColor: inactiveTintColor,
         })}
       >
-        <Tab.Screen 
+        <Tab.Screen
           name="Lab 1"
           component={Lab1}
           options={{
             TransitionPresets: TransitionPresets.ShiftTransition,
           }}
         />
-        <Tab.Screen 
+        <Tab.Screen
           name="Lab 2"
           component={Lab2}
           options={{
@@ -55,7 +56,11 @@ function AppContent() {
           }}
         />
       </Tab.Navigator>
-      <Button title="Сменить тему" onPress={toggleTheme} />
+      <Button
+        title="Сменить тему"
+        onPress={toggleTheme}
+        color={isDarkTheme ? "gray" : "#2296f3"}
+      />
     </NavigationContainer>
   );
 }

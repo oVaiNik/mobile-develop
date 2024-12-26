@@ -14,16 +14,18 @@ const Lab1 = () => {
       <View style={styles.content}>
         <Text style={styles.title}>{number}</Text>
         <Text style={styles.title}>Нажимай</Text>
-        <Button
-          style={styles.Button}
-          title="на меня"
-          onPress={() => setNumber(number + 1)}
-        />
-        <Button
-          style={styles.Button}
-          title="не сюда"
-          onPress={() => setNumber(-9999)}
-        />
+        <View style={styles.subContent}>
+          <Button
+            title="на меня"
+            onPress={() => setNumber(number + 1)}
+          />
+        </View>
+        <View style={styles.subContent}>
+          <Button
+            title="не сюда"
+            onPress={() => setNumber(-9999)}
+          />
+        </View>
       </View>
     </View>
   );
