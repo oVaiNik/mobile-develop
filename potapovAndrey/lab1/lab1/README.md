@@ -1,0 +1,1 @@
+Figma: https://www.figma.com/design/gtk5WZYUXjqs7UVFZRR4Ww/potapovAndrey?node-id=0-1&t=3AqurvI73w7eQnDx-1https://www.figma.com/design/gtk5WZYUXjqs7UVFZRR4Ww/potapovAndrey?node-id=0-1&t=3AqurvI73w7eQnDx-1
