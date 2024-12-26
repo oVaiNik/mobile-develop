@@ -25,7 +25,7 @@ const Lab3Non = () => {
   ]);
   const [filteredNames, setFilteredNames] = useState(names);
 
- 
+ //add Function
   const mediumFunction = () => {
     let total = 0;
     for (let i = 0; i < 10000000; i++) {  
