@@ -1,4 +1,11 @@
-import { SafeAreaView, Text, TouchableOpacity, View, TextInput, FlatList } from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  FlatList,
+} from "react-native";
 import { useState, useMemo } from "react";
 import useThemeStore from "../store/themeStore";
 
@@ -40,7 +47,7 @@ const Lab3 = () => {
       backgroundColor: isDarkTheme ? "#1e1e1e" : "#fff",
       color: isDarkTheme ? "#ffffff" : "#000000",
       alignSelf: "center",
-      marginTop: 15,
+      marginTop: 18,
     },
     item: {
       padding: 10,
