@@ -8,6 +8,10 @@ import {
   StyleSheet,
 } from "react-native";
 
+
+
+
+
 const Lab3 = () => {
   const [filterText, setFilterText] = useState("");
   const [newName, setNewName] = useState("");
@@ -23,10 +27,18 @@ const Lab3 = () => {
     "Ivy",
     "Jack",
   ]);
+  //add Function
+  const mediumFunction = () => {
+    let total = 0;
+    for (let i = 0; i < 10000000; i++) {  
+        total += Math.sqrt(i);  
+    }
+    return total;
+};
 
-  // Быстрая фильтрация через useMemo
+
   const filteredNames = useMemo(() => {
-    console.log("Фильтрация через useMemo");
+    mediumFunction();
     return names.filter((name) =>
       name.toLowerCase().includes(filterText.toLowerCase())
     );

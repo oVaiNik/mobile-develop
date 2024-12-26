@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -23,17 +23,26 @@ const Lab3Non = () => {
     "Ivy",
     "Jack",
   ]);
+  const [filteredNames, setFilteredNames] = useState(names);
 
-  // Медленная фильтрация без useMemo
-  const filteredNames = names.filter((name) => {
-    for (let i = 0; i < names.length; i++) {
-      // Выполняется проход по массиву
-      if (name.toLowerCase().includes(filterText.toLowerCase())) {
-        return true;
-      }
+ //add Function
+  const mediumFunction = () => {
+    let total = 0;
+    for (let i = 0; i < 10000000; i++) {  
+        total += Math.sqrt(i);  
     }
-    return false;
-  });
+    return total;
+};
+
+  useEffect(() => {
+
+    mediumFunction();
+    setFilteredNames(
+      names.filter((name) =>
+        name.toLowerCase().includes(filterText.toLowerCase())
+      )
+    );
+  }, [filterText, names]);
 
   const addName = () => {
     if (newName.trim()) {
@@ -45,10 +54,10 @@ const Lab3Non = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Лабораторная 3 (без useMemo)</Text>
+        <Text style={styles.headerText}>Лабораторная 3 (медленный поиск)</Text>
       </View>
 
-      <Text style={styles.title}>Фильтр имен (медленный поиск)</Text>
+      <Text style={styles.title}>Фильтр имен</Text>
       <TextInput
         style={styles.input}
         placeholder="Введите имя для фильтрации"
