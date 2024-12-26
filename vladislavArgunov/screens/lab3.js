@@ -1,16 +1,30 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, TextInput } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import styles from "./styles";
+import { useTheme } from "../ContextAPI/themeContext";
+import { getStyles } from "./styles";
 
 const Lab3 = () => {
+  const { isDarkTheme } = useTheme();
+  const styles = getStyles(isDarkTheme);
+
   const [link, setLink] = useState("");
+
+  useEffect(() => {
+    console.log(isDarkTheme);
+    console.log(styles.qr);
+  }, [isDarkTheme]);
 
   const memoQR = useMemo(() => {
     return (
-      <QRCode value={link ? link : "https://www.google.com/"} size={228} />
+      <QRCode
+        value={link ? link : "https://www.google.com/"}
+        size={228}
+        color={"black"}
+        backgroundColor={isDarkTheme? "#c0c0c0":"white"}
+      />
     );
-  }, [link]);
+  }, [link, isDarkTheme]);
 
   return (
     <View style={styles.container}>
