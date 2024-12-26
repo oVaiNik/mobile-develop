@@ -10,7 +10,6 @@ import {
 
 const Lab3Non = () => {
   const [filterText, setFilterText] = useState("");
-  const [delayedFilterText, setDelayedFilterText] = useState("");
   const [newName, setNewName] = useState("");
   const [names, setNames] = useState([
     "Alice",
@@ -24,26 +23,26 @@ const Lab3Non = () => {
     "Ivy",
     "Jack",
   ]);
-
   const [filteredNames, setFilteredNames] = useState(names);
 
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setDelayedFilterText(filterText);
-    }, 3000); // Задержка в 3 секунды
-
-    return () => clearTimeout(timeout); 
-  }, [filterText]);
-
  
+  const mediumFunction = () => {
+    let total = 0;
+    for (let i = 0; i < 10000000; i++) {  
+        total += Math.sqrt(i);  
+    }
+    return total;
+};
+
   useEffect(() => {
+
+    mediumFunction();
     setFilteredNames(
       names.filter((name) =>
-        name.toLowerCase().includes(delayedFilterText.toLowerCase())
+        name.toLowerCase().includes(filterText.toLowerCase())
       )
     );
-  }, [delayedFilterText, names]);
+  }, [filterText, names]);
 
   const addName = () => {
     if (newName.trim()) {
@@ -58,7 +57,7 @@ const Lab3Non = () => {
         <Text style={styles.headerText}>Лабораторная 3 (медленный поиск)</Text>
       </View>
 
-      <Text style={styles.title}>Фильтр имен (с задержкой 3 секунды)</Text>
+      <Text style={styles.title}>Фильтр имен</Text>
       <TextInput
         style={styles.input}
         placeholder="Введите имя для фильтрации"

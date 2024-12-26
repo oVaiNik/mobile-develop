@@ -24,9 +24,17 @@ const Lab3 = () => {
     "Jack",
   ]);
 
-  // Быстрая фильтрация через useMemo
+  const mediumFunction = () => {
+    let total = 0;
+    for (let i = 0; i < 10000000; i++) {  
+        total += Math.sqrt(i);  
+    }
+    return total;
+};
+
+
   const filteredNames = useMemo(() => {
-    console.log("Фильтрация через useMemo");
+    mediumFunction();
     return names.filter((name) =>
       name.toLowerCase().includes(filterText.toLowerCase())
     );
