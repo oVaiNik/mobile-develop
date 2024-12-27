@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, } from "react-native";
+import { useTheme } from '../ThemeContext';
 
 export default function Lab1() {
+    const { isDarkTheme } = useTheme();
     const [color, setColor] = useState("skyblue");
     const getRandomColor = () => {
         const letters = "0123456789ABCDEF";
@@ -15,9 +17,9 @@ export default function Lab1() {
         setColor(getRandomColor());
     };
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#F5FCFF' }]}>
             <View style={[styles.colorBlock, { backgroundColor: color }]} />
-            <TouchableOpacity style={styles.button} onPress={changeColor}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: isDarkTheme ? '#555' : 'blue' }]} onPress={changeColor}>
                 <Text style={styles.buttonText}>Сменить цвет</Text>
             </TouchableOpacity>
         </SafeAreaView>
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     buttonText: {
-        color: "white",
         fontSize: 16,
+        color: '#fff',
     },
 });

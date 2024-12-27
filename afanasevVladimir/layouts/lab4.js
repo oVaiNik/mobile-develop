@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useTheme } from "../ThemeContext.js";
 
 const ThemeToggle = () => {
@@ -10,11 +10,24 @@ const ThemeToggle = () => {
       <Text style={{ color: isDarkTheme ? "white" : "black" }}>
         {isDarkTheme ? "Темная тема" : "Светлая тема"}
       </Text>
-      <Button title="Переключить тему" onPress={toggleTheme} />
+      <TouchableOpacity style={[styles.button, { backgroundColor: isDarkTheme ? '#555' : 'blue' }]} onPress={toggleTheme}>
+        <Text style={ styles.buttonText }>Переключить тему</Text>
+      </TouchableOpacity>
       
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+},
+buttonText: {
+    fontSize: 16,
+    color: '#fff',
+},
+});
 
 export default ThemeToggle;

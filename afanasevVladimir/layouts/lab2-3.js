@@ -46,7 +46,7 @@ const Lab2 = () => {
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#F5FCFF' }]}>
       <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Прогноз погоды</Text>
       <TextInput
-        style={[styles.input, { borderColor: isDarkTheme ? '#fff' : '#000' }]}
+        style={[styles.input, { borderColor: isDarkTheme ? '#fff' : '#000', color: isDarkTheme ? '#fff' : '#000' }]}
         placeholder="Введите город"
         placeholderTextColor={isDarkTheme ? '#ccc' : '#666'}
         value={city}
