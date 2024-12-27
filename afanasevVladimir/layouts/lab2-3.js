@@ -43,10 +43,10 @@ const Lab2 = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#F5FCFF' }]}>
       <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Прогноз погоды</Text>
       <TextInput
-        style={[styles.input, { borderColor: isDarkTheme ? '#fff' : '#000' }]}
+        style={[styles.input, { borderColor: isDarkTheme ? '#fff' : '#000', color: isDarkTheme ? '#fff' : '#000' }]}
         placeholder="Введите город"
         placeholderTextColor={isDarkTheme ? '#ccc' : '#666'}
         value={city}
@@ -75,7 +75,7 @@ const Lab2 = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
+    paddingTop: 100,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   button: {
+    backgroundColor: "blue",
     padding: 10,
     borderRadius: 5,
   },
