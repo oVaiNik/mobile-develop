@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#F5FCFF",
     },
     colorBlock: {
         width: 200,
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     button: {
+        backgroundColor: "blue",
         padding: 10,
         borderRadius: 5,
     },

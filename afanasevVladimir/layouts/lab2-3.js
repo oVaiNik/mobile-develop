@@ -43,7 +43,7 @@ const Lab2 = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#F5FCFF' }]}>
       <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Прогноз погоды</Text>
       <TextInput
         style={[styles.input, { borderColor: isDarkTheme ? '#fff' : '#000' }]}
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   button: {
+    backgroundColor: "blue",
     padding: 10,
     borderRadius: 5,
   },
