@@ -12,11 +12,11 @@ const AppTabs = () => {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Lab1" component={Lab1} />
+        <Tab.Screen name="Lab2" component={Lab2} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
