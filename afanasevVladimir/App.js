@@ -32,14 +32,6 @@ const AppTabs = () => {
   );
 };
 
-const App = () => {
-  return (
-    <ThemeProvider>
-      <AppTabs />
-    </ThemeProvider>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -48,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default AppTabs;
