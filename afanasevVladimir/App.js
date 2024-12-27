@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View } from 'react-native';
 
 import Lab1 from "./layouts/lab1";
-import Lab2 from "./layouts/lab2";
 
 const Tab = createBottomTabNavigator();
 
@@ -13,7 +12,6 @@ const AppTabs = () => {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Lab1" component={Lab1} />
-        <Tab.Screen name="Lab2" component={Lab2} />
       </Tab.Navigator>
     </NavigationContainer>
   );
