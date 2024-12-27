@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View } from 'react-native';
 
 import Lab1 from "./layouts/lab1";
+import Lab2 from "./layouts/lab2";
 
 const Tab = createBottomTabNavigator();
 
