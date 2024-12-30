@@ -1,68 +1,72 @@
-import React, { useState, useMemo } from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import axios from "axios";
+import { useTheme } from '../ThemeContext';
 
-const Calculator = () => {
-  const [num1, setNum1] = useState('');
-  const [num2, setNum2] = useState('');
-  const [operation, setOperation] = useState('+');
-  const [useMemoEnabled, setUseMemoEnabled] = useState(true); // Состояние для переключения
+const Lab2 = () => {
+  const { isDarkTheme } = useTheme();
+  const [weatherData, setWeatherData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [city, setCity] = useState("London");
+  const [inputCity, setInputCity] = useState(""); // новое состояние для ввода
+  const [apiKey, setApiKey] = useState("e8c3b87a59554acb99190346241912");
 
-  // Функция для выполнения вычислений
-  const calculate = (n1, n2, op) => {
-    const number1 = parseFloat(n1);
-    const number2 = parseFloat(n2);
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      if (!apiKey) return;
 
-    if (isNaN(number1) || isNaN(number2)) return 0;
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`
+        );
+        setWeatherData([response.data]); // сохраняем данные о погоде
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    switch (op) {
-      case '+':
-        return number1 + number2;
-      case '-':
-        return number1 - number2;
-      case '*':
-        return number1 * number2;
-      case '/':
-        return number2 !== 0 ? number1 / number2 : 'Ошибка: деление на ноль';
-      default:
-        return 0;
+    fetchWeatherData();
+  }, [city, apiKey]);
+
+  const handleCityChange = () => {
+    if (inputCity) {
+      setCity(inputCity); // обновляем city только при нажатии на кнопку
     }
   };
 
-  // Используем useMemo для кэширования результата, если включен режим useMemo
-  const result = useMemo(() => calculate(num1, num2, operation), [num1, num2, operation]);
-
-  // Вычисляем результат без useMemo, если он отключен
-  const resultWithoutMemo = calculate(num1, num2, operation);
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Калькулятор</Text>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#F5FCFF' }]}>
+      <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Прогноз погоды</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Первое число"
-        keyboardType="numeric"
-        value={num1}
-        onChangeText={setNum1}
+        style={[styles.input, { borderColor: isDarkTheme ? '#fff' : '#000', color: isDarkTheme ? '#fff' : '#000' }]}
+        placeholder="Введите город"
+        placeholderTextColor={isDarkTheme ? '#ccc' : '#666'}
+        value={inputCity}
+        onChangeText={setInputCity} // обновляем состояние inputCity
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Второе число"
-        keyboardType="numeric"
-        value={num2}
-        onChangeText={setNum2}
-      />
-      <View style={styles.buttonContainer}>
-        <Button title="+" onPress={() => setOperation('+')} />
-        <Button title="-" onPress={() => setOperation('-')} />
-        <Button title="*" onPress={() => setOperation('*')} />
-        <Button title="/" onPress={() => setOperation('/')} />
-      </View>
-      <Text style={styles.result}>
-        Результат: {useMemoEnabled ? result : resultWithoutMemo}
-      </Text>
-      <Button
-        title={`Переключить на ${useMemoEnabled ? 'без useMemo' : 'с useMemo'}`}
-        onPress={() => setUseMemoEnabled(!useMemoEnabled)}
+      <TouchableOpacity 
+        style={[styles.button, { backgroundColor: isDarkTheme ? '#555' : 'blue' }]} 
+        onPress={handleCityChange} // вызываем функцию при нажатии
+      >
+        <Text style={styles.buttonText}>Узнать погоду</Text>
+      </TouchableOpacity>
+      <FlatList
+        data={weatherData} // используем данные о погоде напрямую
+        keyExtractor={(item) => item.location.name} // уникальный ключ по имени локации
+        renderItem={({ item }) => (
+          <View style={[styles.weatherItem, { backgroundColor: isDarkTheme ? '#444' : '#fff' }]}>
+            <Text style={[styles.location, { color: isDarkTheme ? '#fff' : '#000' }]}>{item.location.name}</Text>
+            <Text style={[styles.temperature, { color: isDarkTheme ? '#fff' : '#000' }]}>{item.current.temp_c} °C</Text>
+            <Text style={[styles.condition, { color: isDarkTheme ? '#fff' : '#000' }]}>{item.current.condition.text}</Text>
+          </View>
+        )}
       />
     </View>
   );
@@ -70,33 +74,45 @@ const Calculator = () => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 100,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
     height: 40,
     borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    width: '100%',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
     marginBottom: 20,
+    paddingHorizontal: 10,
   },
-  result: {
-    fontSize: 20,
-    marginTop: 20,
+  weatherItem: {
+    padding: 15,
+    borderBottomColor: "#ccc",
+  },
+  location: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  temperature: {
+    fontSize: 16,
+  },
+  condition: {
+    fontSize: 14,
+  },
+  button: {
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
   },
 });
 
-export default Calculator;
+export default Lab3;
