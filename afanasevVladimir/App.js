@@ -28,7 +28,7 @@ const AppTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Icon name="color-lens" color={color} size={size} />
           ),
-          tabBarLabel: () => null, // Устанавливаем tabBarLabel в null
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
@@ -38,7 +38,7 @@ const AppTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Icon name="cloud" color={color} size={size} />
           ),
-          tabBarLabel: () => null, // Устанавливаем tabBarLabel в null
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
@@ -48,7 +48,7 @@ const AppTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <Icon name={isDarkTheme ? "switch-right" : "switch-left"} color={color} size={size} />
           ),
-          tabBarLabel: () => null, // Устанавливаем tabBarLabel в null
+          tabBarLabel: () => null,
         }}
       />
     </Tab.Navigator>
