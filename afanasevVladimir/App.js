@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ThemeProvider, useTheme } from "./ThemeContext.js";
 import Lab1 from "./layouts/lab1";
 import Lab2 from "./layouts/lab2-3";
+import Lab3 from "./layouts/lab3";
 import Lab4 from "./layouts/lab4";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -41,12 +42,24 @@ const AppTabs = () => {
           tabBarLabel: () => null,
         }}
       />
+
+      <Tab.Screen
+        name="Lab3"
+        component={Lab3}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="coin" color={color} size={size} />
+          ),
+          tabBarLabel: () => null,
+        }}
+      />
+
       <Tab.Screen
         name="Lab4"
         component={Lab4}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name={isDarkTheme ? "switch-right" : "switch-left"} color={color} size={size} />
+            <Icon name="switch-right" color={color} size={size} />
           ),
           tabBarLabel: () => null,
         }}
