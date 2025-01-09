@@ -146,7 +146,7 @@ const Lab3 = () => {
                     return (
                         <View style={[
                             styles.rateContainer, {
-                                backgroundColor: isDarkTheme ? "#555" : "white",
+                                backgroundColor: isDarkTheme ? "#444" : "white",
                             },
                         ]}>
                             <Text style={[

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import axios from "axios";
 import { useTheme } from '../ThemeContext';
@@ -6,29 +6,25 @@ import { useTheme } from '../ThemeContext';
 const Lab2 = () => {
   const { isDarkTheme } = useTheme();
   const [weatherData, setWeatherData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [city, setCity] = useState("London");
-  const [apiKey, setApiKey] = useState("e8c3b87a59554acb99190346241912");
+  const [apiKey] = useState("e8c3b87a59554acb99190346241912");
 
-  useEffect(() => {
-    const fetchWeatherData = async () => {
-      if (!apiKey) return;
+  const fetchWeatherData = async () => {
+    if (!apiKey) return;
 
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`
-        );
-        setWeatherData([response.data]);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWeatherData();
-  }, [city, apiKey]);
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`
+      );
+      setWeatherData([response.data]);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const memoizedWeatherData = useMemo(() => {
     return weatherData.map((item) => ({
@@ -54,7 +50,7 @@ const Lab2 = () => {
       />
       <TouchableOpacity 
         style={[styles.button, { backgroundColor: isDarkTheme ? '#555' : 'blue' }]} 
-        onPress={() => setCity(city)}
+        onPress={fetchWeatherData} 
       >
         <Text style={styles.buttonText}>Узнать погоду</Text>
       </TouchableOpacity>
