@@ -48,7 +48,7 @@ const AppTabs = () => {
         component={Lab3}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="coin" color={color} size={size} />
+            <Icon name="currency-bitcoin" color={color} size={size} />
           ),
           tabBarLabel: () => null,
         }}
